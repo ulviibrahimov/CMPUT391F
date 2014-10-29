@@ -7,6 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body>
-
+It's a pretty empty template!
 </body>
 </html>
