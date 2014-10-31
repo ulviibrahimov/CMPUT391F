@@ -11,9 +11,9 @@ public class UtilHelper {
     public static String readHtmlFile(String fileName) {
         String out = "";
         try {
-            out = readFile("webapps/CMPUT391F/html/"+fileName);    
+            out = readFile("webapps/CMPUT391F/Sources/html/"+fileName+".html");    
         } catch (Exception e){
-            out = "</p>404 - Failed to read resource: " + (new File("webapps/CMPUT391F/html/"+fileName)).getAbsolutePath() + "<br>" + e;
+            out = "</p>404 - Failed to read resource: " + (new File("webapps/CMPUT391F/html/"+fileName+".html")).getAbsolutePath() + "<br>" + e;
         }
         return out;
     }
@@ -30,5 +30,12 @@ public class UtilHelper {
             throw e;
         }
         return out;
+    }
+
+    public static String htmlReplace(String html, String[] replacements) {
+        for(int i=0; i < replacements.length; i++) {
+            html = html.replace("<!--#"+i+"#-->", replacements[i]);
+        }
+        return html;
     }
 }
