@@ -11,7 +11,7 @@
 <p>To login successfully, you need to submit a valid userid and password</p>
 <table>
 <tbody><tr valign="TOP" align="LEFT">
-<td><b><i>Username:</i></b></td>
+<td><b><i>Userid:</i></b></td>
 <td><input type="text" name="USERID"><br></td>
 </tr>
 <tr valign="TOP" align="LEFT">
