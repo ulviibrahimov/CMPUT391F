@@ -40,7 +40,7 @@
 	
         	try{
 	        	//establish the connection 
-		        conn = DriverManager.getConnection(dbstring,"ulvi","6755711ibrahimov");
+		        conn = DriverManager.getConnection(dbstring,"ulvi","***************");
         		conn.setAutoCommit(false);
 	        }
         	catch(Exception ex){
