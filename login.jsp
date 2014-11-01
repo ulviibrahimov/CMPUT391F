@@ -18,8 +18,8 @@
 	        //get the user input from the login page
         	String userName = (request.getParameter("USERID")).trim();
 	        String passwd = (request.getParameter("PASSWD")).trim();
-        	out.println("<p>Your input User Name is "+userName+"</p>");
-        	out.println("<p>Your input password is "+passwd+"</p>");
+        	//out.println("<p>Your input User Name is "+userName+"</p>");
+        	//out.println("<p>Your input password is "+passwd+"</p>");
 
 
 	        //establish the connection to the underlying database
@@ -53,7 +53,6 @@
         	Statement stmt = null;
 	        ResultSet rset = null;
         	String sql = "select password from users where user_name = '"+userName+"'";
-	        out.println(sql);
         	try{
 	        	stmt = conn.createStatement();
 		        rset = stmt.executeQuery(sql);
