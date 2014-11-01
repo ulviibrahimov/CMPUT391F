@@ -10,23 +10,13 @@
     </description>
 
     <servlet>
-        <servlet-name>uploadServlet</servlet-name>
-        <servlet-class>Upload</servlet-class>
+        <servlet-name>RestServlet</servlet-name>
+        <servlet-class>RestController</servlet-class>
     </servlet>
 
     <servlet-mapping>
-        <servlet-name>uploadServlet</servlet-name>
-        <url-pattern>/upload</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
-        <servlet-name>UploadSelectServlet</servlet-name>
-        <servlet-class>UploadSelect</servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>UploadSelectServlet</servlet-name>
-        <url-pattern>/uploadSelect</url-pattern>
+        <servlet-name>RestServlet</servlet-name>
+        <url-pattern>/RestService</url-pattern>
     </servlet-mapping>
 
 </web-app>

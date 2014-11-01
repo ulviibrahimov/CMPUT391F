@@ -1,2 +1,1 @@
-javac UtilHelper.java
-javac Upload.java
+javac RestController.java

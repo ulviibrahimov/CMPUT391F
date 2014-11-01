@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
+import javax.servlet.http.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,10 +28,9 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.io.IOUtils;
 
 
-public class Upload extends HttpServlet {
+public class RestController extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
-    private String uploadField = "selected-file";
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -38,62 +38,79 @@ public class Upload extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
 
-        String html = UtilHelper.readHtmlFile("UploadPage");
-        out.println(html);
+        out.write(request.toString());
     }
 
+    @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         response.setContentType("text/html");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
+		
+		String result = "";
 
-        String html = UtilHelper.readHtmlFile("UploadPage");
-		String r = "<br>Upload status:<br>" + this.parseAndUpload(request);
+			// Works!! (debugging)
+			// Iterator<Part> parts = request.getParts().iterator();
+			// Part p;
+			// while (parts.hasNext()) {
+			// 	p = parts.next();
+			// 	result += p.getName() +" "
+			// 	+p.getHeader("content-disposition")+" "
+			// 	+getContent(p)
+			// 	+"<br>";
+			// }
 
-		String replacements[] = {r};
-		html = UtilHelper.htmlReplace(html, replacements);
-		out.println(html);
-
+		// Route the request to the appropriate function.
+		Part functionPart = request.getPart("function");
+		if (functionPart == null) {
+			result = "No 'function' key passed into post request data";
+		} else {
+			String function = getContent(functionPart);
+			switch (function) {
+				case "uploadOne":
+					result = "<br>Upload status:<br>" + this.parseAndUpload(request);
+					break;
+				default:
+					result = "Requested function is not mapped.";
+					break;
+			}
+		}
+		
+		out.write(result);
     }
 
+    private static String getContent(Part p) throws IOException {
+        Scanner s = new Scanner(p.getInputStream(), "UTF-8").useDelimiter("\\A");
+        return s.hasNext() ? s.next() : "";
+	}
+
+	private static String getFileName(Part part) {
+	    String partHeader = part.getHeader("content-disposition");
+	    for (String content : part.getHeader("content-disposition").split(";")) {
+	        if (content.trim().startsWith("filename")) {
+	            return content.substring(
+	                    content.indexOf('=') + 1).trim().replace("\"", "");
+	        }
+	    }
+	    return "";
+	}
+
     private String parseAndUpload(HttpServletRequest request) {
-    	String r = "";
 		try {
 			if (!ServletFileUpload.isMultipartContent(request)) {
 				return "Unexpected form submisssion."; // Not a file upload request
 			}
 
-			// Create a factory for disk-based file items
-			DiskFileItemFactory factory = new DiskFileItemFactory();
+			// Works!!
+			Iterator<Part> parts = request.getParts().iterator();
+			Part p;
+			while (parts.hasNext()) {
+				p = parts.next();
 
-			// Configure a repository (to ensure a secure temp location is used)
-			ServletContext servletContext = this.getServletConfig().getServletContext();
-			File repository = (File) servletContext.getAttribute("javax.servlet.context.tempdir");
-			factory.setRepository(repository);
-
-			// Create a new file upload handler
-			ServletFileUpload upload = new ServletFileUpload(factory);
-
-			// Parse the request
-			List<FileItem> items = upload.parseRequest(request);			
-			Iterator<FileItem> iter = items.iterator();
-			while (iter.hasNext()) {
-			    FileItem item = iter.next();
-
-			    if (item.isFormField()) {
-			        // It is a non-file field.  getFieldName and getString, for name and value.
-			        
-			        //r+="Field<br>&nbsp;&nbsp;FieldName: "+item.getFieldName()+"<br>&nbsp;&nbsp;String: "+item.getString()+"<br>";
-			    } else {
-			        // It is a file field.  getFieldName and getName, for name and filename.
-			        
-			        //r+="NotField<br>&nbsp;&nbsp;FieldName: "+item.getFieldName()+"<br>&nbsp;&nbsp;Name: " + item.getName() +"<br>&nbsp;&nbsp;content Type: "+ item.getContentType()
-			        // +"<br>&nbsp;&nbsp;String: "+item.getString()
-			        //+"<br>";
-
-			        if (item.getFieldName().equals(this.uploadField)) {
-			        	String fileName = item.getName();
+				switch (p.getName()) {
+					case "file":
+						String fileName = getFileName(p);
 			        	if (fileName.length() == 0) {
 			        		return "No file Selected.";
 			        	}
@@ -102,22 +119,23 @@ public class Upload extends HttpServlet {
 			        	if (!extension.equals(".jpg") && !extension.equals(".gif")) {
 			        		return "Invalid file.  Only image files (.jpg and .gif) are accepted.";
 			        	}
-			        	if (uploadImage(item)) {
-			        		return "Successfully uploaded "+item.getName()+".";
+			        	if (uploadImage(p)) {
+			        		return "Successfully uploaded "+fileName+".";
 			        	} else {
-			        		return "Failed to upload "+item.getName()+".";
+			        		return "Failed to upload "+fileName+".";
 			        	}
-			        }
+			        default:
+			        	break;
 				}
+
 			}
 		} catch( Exception ex ) {
 		    return "Exception occurred: " + ex;
 		}
-
-		return "Form field, "+this.uploadField+", not found.";
+		return "Failed to find a file to upload.";
 	}
 
-	private static boolean uploadImage(FileItem imageItem) {
+	private static boolean uploadImage(Part p) {
 
 		    // File uploadedFile = new File(...);
 		 //    	imageItem.write(uploadedFile);
