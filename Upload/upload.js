@@ -12,12 +12,23 @@ $(document).ready(function() {
 
 	// Handles submit for upload form
 	$("#upload-form").on("submit", function(event) {
-		event.stopPropagation();
-		console.log(event);
-		// var data = new FormData(this[0]);
+		$("#upload-results").empty().append("Uploading...");
+		
+		// Validate!  Make sure a file is selected, and it's extension is correct.
+
+		//if (fileName.length() == 0) {
+		//         		return "No file Selected.";
+		//         	}
+		//         	String extension = fileName.substring(fileName.length()-4).toLowerCase();
+		//         	//r+="&nbsp;&nbspExtension: "+extension+"<br>";
+		//         	if (!extension.equals(".jpg") && !extension.equals(".gif")) {
+		//         		return "Invalid file.  Only image files (.jpg and .gif) are accepted.";
+		//         	}
+
+
 		var data = new FormData();
 		data.append("function", "uploadOne");
-		data.append("file", $("#selected-file")[0].files[0]);
+		data.append("selected-file", $("#selected-file")[0].files[0]);
 		data.append("texty", $("#texty").val());
 
 
