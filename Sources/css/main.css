@@ -78,16 +78,21 @@ div.nav-option {
 
 	background-color: #FFFFFF;
 
-	/*-webkit-transition-property: all; /* Safari */
-    -webkit-transition-duration: 2s; /* Safari */
-    /*transition-property: all;*/
-    transition-duration: 2s;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
 }
 .radio-horizontal {
 	float: left;
 	margin-right: 15px;
 }
-.hidden {
+
+.collapsable {
+	height: 0px;
+    -webkit-transition-duration: 0.3s;
+    transition-duration: 0.3s;
+}
+
+.collapsable > * {
 	display: none;
 }
 
