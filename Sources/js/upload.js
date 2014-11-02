@@ -16,14 +16,14 @@ $(document).ready(function() {
 			if ($(this).is(':checked')) {
 				if (this.value == "group") {
 					// Expand the group selector
-					$('tr.collapsable.group-selector').height('22px');
+					$('tr.collapsible.group-selector').height('22px');
 					setTimeout(function() {
-						$('tr.collapsable.group-selector > *').show();
+						$('tr.collapsible.group-selector > *').show();
 					}, 200);
 				} else {
 					// Hide the group selector
-					$('tr.collapsable.group-selector > *').hide();
-					$('tr.collapsable.group-selector').height('0px');
+					$('tr.collapsible.group-selector > *').hide();
+					$('tr.collapsible.group-selector').height('0px');
 				}
 			}
 		});

@@ -81,21 +81,34 @@ div.nav-option {
     -webkit-transition-duration: 0.3s;
     transition-duration: 0.3s;
 }
-.radio-horizontal {
-	float: left;
-	margin-right: 15px;
-}
 
-.collapsable {
+
+.collapsible {
 	height: 0px;
     -webkit-transition-duration: 0.3s;
     transition-duration: 0.3s;
 }
 
-.collapsable > * {
+.collapsible > * {
 	display: none;
 }
 
-input[type="text"], input[type="password"] {    
+tr > td:first-child {
+	/*text-align: right;*/
+	/*font-style: italic;*/
+	font-weight: bold;
+}
+
+input, select, .radio-horizontal {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+table input:not([type="radio"]), select {   
 	width: 231px; 
+}
+
+.radio-horizontal {
+	float: left;
+	margin-right: 15px;
 }
