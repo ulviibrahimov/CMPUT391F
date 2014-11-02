@@ -1,5 +1,5 @@
 /*
- *
+ * Handles all the client-side logic for the upload page.
  */
 
 "use strict";  // Makes bad syntax into actual errors

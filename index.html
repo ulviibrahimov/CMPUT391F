@@ -1,26 +1,23 @@
-<!DOCTYPE HTML><html lang="en">
+<!DOCTYPE HTML>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<link rel="stylesheet" type="text/css" href="Sources/css/main.css">
-
-<title>LUX Image Hosting</title>
+	<meta charset="UTF-8">
+	<script type="text/javascript" src="/CMPUT391F/Sources/js/jquery-1.11.1.min.js" defer></script>
+	<script type="text/javascript" src="/CMPUT391F/Sources/js/jquery.cookie.min.js" defer></script>
+	<script type="text/javascript" src="/CMPUT391F/Sources/js/buildHeader.js" defer></script>
+	<link rel="stylesheet" type="text/css" href="/CMPUT391F/Sources/css/main.css">
+	<title>LUX Image Hosting</title>
 </head>
 <body>
-	<div id="header">
-		<img class="logo" src="Sources/images/lux.png">
-		<img class="logo" src="Sources/images/ih.png">
-	</div>	
-<p>
-<h3>LUX Image Hosting</H3>
 
-<h3>Pages:</h3>
+	<h3>Pages:</h3>
 
+	<ul>
+	<li><a href="login.jsp">Login page</a>
+	<!-- Below is redirected by the web.xml file in WEB-INF to a specified java class in WEB-INF/classes! -->
+	<!-- <li><a href="Upload/doUpload">Upload Here!</a>  -->
+	<li><a href="Upload">Upload Here!</a>
+	</ul>
 
-<ul>
-<li><a href="login.jsp">Login page</a>
-<!-- Below is redirected by the web.xml file in WEB-INF to a specified java class in WEB-INF/classes! -->
-<!-- <li><a href="Upload/doUpload">Upload Here!</a>  -->
-<li><a href="Upload">Upload Here!</a>
-</ul>
-
-</body></html>
+</body>
+</html>
