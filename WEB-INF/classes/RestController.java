@@ -32,7 +32,6 @@ import org.apache.commons.io.IOUtils;
 public class RestController extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
-	private int connectionConfigNum = 2;
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
@@ -134,7 +133,7 @@ public class RestController extends HttpServlet {
 			//  connect to the oracle database
 			// 1 gywnne DB but must enable tunnel first (can't have both sql developer and java connected)
 			// 2 Local db
-			Connection conn = this.getConnection();
+			Connection conn = getConnection();
 			Statement stmt = conn.createStatement();
 
 			// Generate a unique pic_id using an SQL sequence
@@ -178,12 +177,13 @@ public class RestController extends HttpServlet {
 	/*
      *   To connect to the database specified by connectionConfigNum
      */
-    public Connection getConnection() throws Exception {
-    	int con = this.connectionConfigNum;
+    public static Connection getConnection() throws Exception {
+        String configParam[] = UtilHelper.getConfiguration();
+
+        String dbstring = configParam[0];
+        String username = configParam[1];
+        String password = configParam[2];
         String drivername = "oracle.jdbc.driver.OracleDriver";
-        String username = UtilHelper.readFile(con+"username.txt");
-        String password = UtilHelper.readFile(con+"password.txt");
-        String dbstring = UtilHelper.readFile(con+"connection.txt");
 
         return getConnected(drivername,dbstring, username,password);
     }

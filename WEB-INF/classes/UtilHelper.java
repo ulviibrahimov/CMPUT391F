@@ -2,9 +2,6 @@
 import java.io.*;
 import java.util.*;
 
-
-import java.sql.*;
-
 public class UtilHelper {
 
     /**
@@ -24,16 +21,12 @@ public class UtilHelper {
     /**
      * Reads a file relative to the CMPUT391 directory and returns a String.
      */
-    public static String readFile(String fileName) throws Exception {
+    public static String readFile(String fileName) throws IOException {
         File inFile = new File("webapps/CMPUT391F/"+fileName);
-        // throw new Exception(inFile.getAbsolutePath());
+
         String out = "";
-        try {
-            Scanner scanner = new Scanner(new FileInputStream(inFile));
-            out = scanner.useDelimiter("\\Z").next();
-        } catch (Exception e){
-            throw e;
-        }
+        Scanner scanner = new Scanner(new FileInputStream(inFile));
+        out = scanner.useDelimiter("\\Z").next();
         return out;
     }
 
@@ -42,5 +35,31 @@ public class UtilHelper {
             html = html.replace("<!--#"+i+"#-->", replacements[i]);
         }
         return html;
+    }
+
+    /*
+     * Returns the 3 lines following START found in "CMPUT391F/connectionConfig.txt"
+     */
+    public static String[] getConfiguration() throws IOException {
+        String config = UtilHelper.readFile("connectionConfig.txt");
+
+        // Retrieve configuration specified by con
+        StringTokenizer st = new StringTokenizer(config, System.getProperty("line.separator"));
+        String token;
+        while (st.hasMoreTokens()) {
+            token = st.nextToken();
+            if (token.equals("START")) {
+                // Found our config
+                break;
+            }
+        }
+
+        String[] out = new String[3];
+
+        for (int i = 0; i < out.length; i++) {
+            out[i] = st.nextToken();
+        }
+
+        return out;
     }
 }

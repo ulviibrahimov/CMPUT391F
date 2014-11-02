@@ -1,0 +1,10 @@
+// Format is:
+// connection config begins after START
+// Following line is the db connection string (Eg. jdbc:oracle:thin:@127.0.0.1:1525:crs)
+// Following line is username
+// Last line is password
+
+START
+jdbc:oracle:thin:@127.0.0.1:1525:crs
+livojevi
+NotMyRealPassword
