@@ -1,0 +1,76 @@
+<html><head>
+<title>Signup</title>
+<style type="text/css"></style></head>
+<script>
+function validateForm() {
+    var u = document.forms["SignupForm"]["USERNAME"].value;
+    var p = document.forms["SignupForm"]["PASSWD"].value;
+    var f = document.forms["SignupForm"]["FIRSTNAME"].value;
+    var l = document.forms["SignupForm"]["LASTNAME"].value;
+    var e = document.forms["SignupForm"]["email"].value;
+    if (u==null || u=="") {
+        alert("Username must be filled out");
+        return false;
+    }
+    
+    else if (p==null || p=="") {
+        alert("Password must be filled out");
+        return false;
+    }
+    else if (f==null || f=="") {
+        alert("First name must be filled out");
+        return false;
+    }
+    else if (l==null || l=="") {
+        alert("Last name must be filled out");
+        return false;
+    }
+    
+    else if (e==null || e=="") {
+        alert("Email must be filled out");
+        return false;
+    }
+}
+</script>
+<body>
+
+<h1><center>Signup</center></h1>
+
+<form name="SignupForm" action="signup.jsp" method="post" onsubmit="return validateForm()">
+
+<p>Please, fill out the form below to get your free account</p>
+<table>
+<tbody><tr valign="TOP" align="LEFT">
+<td><b><i>Username:</i></b></td>
+<td><input type="text" name="USERNAME" maxlength="24"><br></td>
+</tr>
+<tr valign="TOP" align="LEFT">
+<td><b><i>Password:</i></b></td>
+<td><input type="password" name="PASSWD" maxlength="24"></td>
+</tr>
+<tbody><tr valign="TOP" align="LEFT">
+<td><b><i>First name:</i></b></td>
+<td><input type="text" name="FIRSTNAME" maxlength="24"><br></td>
+</tr>
+<tbody><tr valign="TOP" align="LEFT">
+<td><b><i>Last name:</i></b></td>
+<td><input type="text" name="LASTNAME" maxlength="24"><br></td>
+</tr>
+<tbody><tr valign="TOP" align="LEFT">
+<td><b><i>Address:</i></b></td>
+<td><input type="text" name="address" maxlength="128"><br></td>
+</tr>
+<tbody><tr valign="TOP" align="LEFT">
+<td><b><i>Email:</i></b></td>
+<td><input type="text" name="email" maxlength="128"><br></td>
+</tr>
+<tbody><tr valign="TOP" align="LEFT">
+<td><b><i>Phone:</i></b></td>
+<td><input type="text" name="phone" maxlength="10"><br></td>
+</tr>
+
+</tbody></table>
+
+<input type="submit" name="signupSubmit" value="Register">
+</form>
+</body></html>
