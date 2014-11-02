@@ -8,21 +8,61 @@
 	<script type="text/javascript" src="/CMPUT391F/Sources/js/upload.js" defer></script>
 	<link rel="stylesheet" type="text/css" href="/CMPUT391F/Sources/css/main.css">
 	<title>Upload Images</title>
-	<script type="text/javascript" src="/CMPUT391F/Sources/js/buildHeader.js"></script>
 </head>
 <body>
 	<br>
 	<br>
 	<div class="section">
+		<h1><center>Upload Images</center></h1>
+
 		<form id="upload-form" name="upload-image" enctype="multipart/form-data" >
-			<b>Select Image:
-			<input id="selected-file" name="selected-file" type="file" accept=".jpg, .gif" size="30"></td>
-			<br><br><input id="texty" name="texty" type="text" value="Upload">
-			<br><br><input type="submit" name="submit-button" value="Upload">
+						
+permitted,subject,place,when,description,thumbnail,photo)
+	        <p>Please, fill out the form below to get your free account</p>
+	        <table>
+		        <tbody>
+		        	<tr valign="TOP" align="LEFT">
+				        <td><b><i>Select Image:</i></b></td>
+				        <td><input id="selected-file" name="selected-file" type="file" accept=".jpg, .gif"></td>
+			        </tr>
+			        <tr valign="TOP" align="LEFT">
+				        <td><b><i>Image Permission:</i></b></td>
+				        <td>
+				        	<div class="radio-horizontal"><input type="radio" name="permitted" value="public"> Private</div>
+							<div class="radio-horizontal"><input type="radio" name="permitted" value="private"> Public</div>
+							<div class="radio-horizontal"><input type="radio" name="permitted" value="group"> Group</div>
+						</td>
+			        </tr>
+					<tr class="hidden group-selector" valign="TOP" align="LEFT">
+				        <td ><b><i>Select Group:</i></b></td>
+				        <td ><input type="text" name="FIRSTNAME" maxlength="24" size="34"><br></td>
+			        </tr>
+			        <tr valign="TOP" align="LEFT">
+				        <td><b><i>Last name:</i></b></td>
+				        <td><input type="text" name="LASTNAME" maxlength="24" size="34"><br></td>
+			        </tr>
+			        <tr valign="TOP" align="LEFT">
+				        <td><b><i>Address:</i></b></td>
+				        <td><input type="text" name="address" maxlength="128"><br></td>
+			        </tr>
+			        <tr valign="TOP" align="LEFT">
+				        <td><b><i>Email:</i></b></td>
+				        <td><input type="text" name="email" maxlength="128"><br></td>
+			        </tr>
+			        <tr valign="TOP" align="LEFT">
+				        <td><b><i>Phone:</i></b></td>
+				        <td><input type="text" name="phone" maxlength="10"><br></td>
+			        </tr>
+
+		        </tbody>
+		    </table>
+
+	        <input type="submit" name="submit-button" value="Upload">
 		</form>
 		<br>
 		<br>
 		<div id="upload-results"></div>	
 	</div>
+
 </body>
 </html>

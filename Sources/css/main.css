@@ -77,4 +77,20 @@ div.nav-option {
 	border-radius: 25px;
 
 	background-color: #FFFFFF;
+
+	/*-webkit-transition-property: all; /* Safari */
+    -webkit-transition-duration: 2s; /* Safari */
+    /*transition-property: all;*/
+    transition-duration: 2s;
+}
+.radio-horizontal {
+	float: left;
+	margin-right: 15px;
+}
+.hidden {
+	display: none;
+}
+
+input[type="text"], input[type="password"] {    
+	width: 231px; 
 }

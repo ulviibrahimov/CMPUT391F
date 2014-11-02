@@ -9,6 +9,21 @@
 // window.onload = function () {
 $(document).ready(function() {
 
+	// Hides and shows the group selector
+	$('input[name="permitted"]').change(function(e) {
+		console.log("blah");
+		$('input[name="permitted"]').each(function(index, value) {
+			if ($(this).is(':checked')) {
+				if (this.value == "group") {
+					// Expand the group selector
+					$('tr.group-selector').show();
+				} else {
+					// Hide the group selector
+					$('tr.group-selector').hide();
+				}
+			}
+		});
+	});
 
 	// Handles submit for upload form
 	$("#upload-form").on("submit", function(event) {
