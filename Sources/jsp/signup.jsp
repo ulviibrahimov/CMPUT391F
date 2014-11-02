@@ -27,7 +27,7 @@
         	Connection conn = null;
 	
 	        String driverName = "oracle.jdbc.driver.OracleDriver";
-            	String dbstring = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
+            	String dbstring = "jdbc:oracle:thin:@127.0.0.1:1521:xe";
 	
 	        try{
 		        //load and register the driver
@@ -41,7 +41,7 @@
 	
         	try{
 	        	//establish the connection 
-		        conn = DriverManager.getConnection(dbstring,"ulvi","*****");
+		        conn = DriverManager.getConnection(dbstring,"user","******");
         		conn.setAutoCommit(false);
 	        }
         	catch(Exception ex){
@@ -67,7 +67,7 @@
 	        	uCount = (urset.getInt(1));
 	        
 	        if (uCount>0){ 
-	        	String uredirectURL = "./signup.html";
+	        	String uredirectURL = "/CMPUT391F/signup.html";
         		response.sendRedirect(uredirectURL);
 
 	        }
@@ -89,7 +89,7 @@
         	while(erset != null && erset.next())
 	        	eCount = (erset.getInt(1));
 	        if (eCount>0 && uCount==0){ 
-	        	String eredirectURL = "./signup.html";
+	        	String eredirectURL = "/CMPUT391F/signup.html";
         		response.sendRedirect(eredirectURL);
 
 	        }
@@ -108,7 +108,7 @@
 		        stmt.executeUpdate(sqlusers);
 		        stmt.executeUpdate(sqlpersons);
 		        out.println("<p><b>Signup Successful!</b></p>");
-		        response.sendRedirect("./login.html");
+		        response.sendRedirect("/CMPUT391F/login.html");
         	}
 	
 	        catch(Exception ex){

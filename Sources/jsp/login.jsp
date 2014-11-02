@@ -23,7 +23,7 @@
         	Connection conn = null;
 	
 	        String driverName = "oracle.jdbc.driver.OracleDriver";
-            	String dbstring = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
+            	String dbstring = "jdbc:oracle:thin:@localhost:1521:xe";
 	
 	        try{
 		        //load and register the driver
@@ -37,7 +37,7 @@
 	
         	try{
 	        	//establish the connection 
-		        conn = DriverManager.getConnection(dbstring,"ulvi","*******");
+		        conn = DriverManager.getConnection(dbstring,"user","******");
         		conn.setAutoCommit(false);
 	        }
         	catch(Exception ex){
@@ -68,7 +68,7 @@
 		        out.println("<p><b>Your Login is Successful!</b></p>");
         	else{
 	        	out.println("<p><b>Either your userName or Your password is inValid!</b></p>");
-				String redirectURL = "./login.html";
+				String redirectURL = "/CMPUT391F/login.html";
         		response.sendRedirect(redirectURL);
         	}
                 try{

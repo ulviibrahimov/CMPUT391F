@@ -35,7 +35,7 @@ $(document).ready(function() {
 		// TODO Need to send some security info with request to confirm legitimacy
 
 	    $.ajax({
-		    url: "../RestService",
+		    url: "/CMPUT391F/RestService",
 		    data: data,
 		    type: 'POST',
 		    xhr: function() {  // Custom XMLHttpRequest

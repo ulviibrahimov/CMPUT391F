@@ -1,26 +1,37 @@
-<html><head>
-<title>Login</title>
-<style type="text/css"></style></head>
+<html>
+<head>
+	<script type="text/javascript" src="/CMPUT391F/Sources/js/jquery-1.11.1.min.js" defer></script>
+	<script type="text/javascript" src="/CMPUT391F/Sources/js/jquery.cookie.min.js" defer></script>
+	<script type="text/javascript" src="/CMPUT391F/Sources/js/buildHeader.js" defer></script>
+	<link rel="stylesheet" type="text/css" href="/CMPUT391F/Sources/css/main.css">
+	<title>Login</title>
+	<style type="text/css"></style>
+</head>
 
 <body>
 <!--This is the login page-->
-<h1><center>Login</center></h1>
+<br>
+<br>
 
-<form name="LoginForm" action="login.jsp" method="post">
+	<div class="section">
+		<h1><center>Login</center></h1>
+		<form name="LoginForm" action="/CMPUT391F/Sources/jsp/login.jsp" method="post">
 
-<p>To login successfully, you need to submit a valid userid and password</p>
-<table>
-<tbody><tr valign="TOP" align="LEFT">
-<td><b><i>Username:</i></b></td>
-<td><input type="text" name="USERNAME"><br></td>
-</tr>
-<tr valign="TOP" align="LEFT">
-<td><b><i>Password:</i></b></td>
-<td><input type="password" name="PASSWD"></td>
-</tr>
-</tbody></table>
+			<p>To login successfully, you need to submit a valid userid and password</p>
+			<table>
+			<tbody><tr valign="TOP" align="LEFT">
+			<td><b><i>Username:</i></b></td>
+			<td><input type="text" name="USERNAME"><br></td>
+			</tr>
+			<tr valign="TOP" align="LEFT">
+			<td><b><i>Password:</i></b></td>
+			<td><input type="password" name="PASSWD"></td>
+			</tr>
+			</tbody></table>
 
-<input type="submit" name="loginSubmit" value="LOGIN">
-<a href="./signup.html">Register</a>
-</form>
-</body></html>
+			<input type="submit" name="loginSubmit" value="LOGIN">
+			<a href="/CMPUT391F/signup.html">Register</a>
+		</form>
+	</div>
+</body>
+</html>

@@ -1,18 +1,70 @@
 html, body {
-	margin:0;
+	margin: 0;
 	width: 100%;
-
-    /*background-color: aqua;*/
+    background-color: #246093;
+    /*background-color: #77A0C3;*/
 }
 #header {
-	margin:0;
+	margin: 0;
+	width: 100%;
+}
+#header-upper {
+	margin: 0;
 	width: 100%;
 
-    background: -webkit-linear-gradient(black, #05A);
-    background: -o-linear-gradient(red, #05A);
-    background: -moz-linear-gradient(red, #05A);
-    background: linear-gradient(black, #05A);
+    background: -webkit-linear-gradient(rgb(41, 42, 71), #05A);
+    background: -o-linear-gradient(rgb(41, 42, 71), #05A);
+    background: -moz-linear-gradient(rgb(41, 42, 71), #05A);
+    background: linear-gradient(rgb(41, 42, 71), #05A);
 }
+#header-lower {
+	margin: 0;
+	width: 100%;
+	overflow: hidden;
+
+	border-style: solid;
+	border-width: 6px;
+	border-color: #000;
+	
+	border-left: none;
+	border-right: none;
+
+	background-color: #FFFFFF;
+
+/*    background: -webkit-linear-gradient(rgb(65, 121, 186), #CBE1E5, rgb(116, 123, 129));
+    background: -o-linear-gradient(rgb(65, 121, 186), #CBE1E5, rgb(116, 123, 129));
+    background: -moz-linear-gradient(rgb(65, 121, 186), #CBE1E5, rgb(116, 123, 129));
+    background: linear-gradient(rgb(65, 121, 186), #CBE1E5, rgb(116, 123, 129));
+*/}
 .logo {
-	margin:0px;
+	margin: 0px;
+}
+
+/*div.nav-options {
+	display: table;
+	margin-left: auto;
+    margin-right: auto;
+}*/
+
+div.nav-option {
+	float: left;
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.section {
+	display: table;
+	margin-left: auto;
+    margin-right: auto;
+
+	padding: 20px;
+
+	border-style: solid;
+	border-width: 3px;
+	border-color: #000;
+	border-radius: 25px;
+
+	background-color: #FFFFFF;
 }
