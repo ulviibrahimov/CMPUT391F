@@ -17,6 +17,11 @@ html, body {
     background: -moz-linear-gradient(rgb(41, 42, 71), #05A);
     background: linear-gradient(rgb(41, 42, 71), #05A);
 }
+#header-upper a {
+	margin-left: 5px;
+	margin-right: 5px;
+}
+
 #header-lower {
 	margin: 0;
 	width: 100%;
@@ -40,11 +45,15 @@ html, body {
 	margin: 0px;
 }
 
-/*div.nav-options {
-	display: table;
-	margin-left: auto;
-    margin-right: auto;
-}*/
+div.nav-options {
+	/*display: table;*/
+	margin-left: 10px;
+    /*margin-right: auto;*/
+
+    font-size: 19px;
+    font-style: bold;
+    /*font-variant: small-caps;*/
+}
 
 div.nav-option {
 	float: left;
