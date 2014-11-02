@@ -11,6 +11,7 @@ html, body {
 #header-upper {
 	margin: 0;
 	width: 100%;
+	height: 90px;
 
     background: -webkit-linear-gradient(rgb(41, 42, 71), #05A);
     background: -o-linear-gradient(rgb(41, 42, 71), #05A);
