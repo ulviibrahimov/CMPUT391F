@@ -5,18 +5,15 @@
 <style type="text/css"></style></head>
 
 <body>
-<!--A simple example to demonstrate how to use JSP to 
-    connect and query a database. 
-    @author  Hong-Yu Zhang, University of Alberta
- -->
+
 <%@ page import="java.sql.*" %>
 <% 
 
-        if(request.getParameter("Submit") != null)
+        if(request.getParameter("loginSubmit") != null)
         {
 
 	        //get the user input from the login page
-        	String userName = (request.getParameter("USERID")).trim();
+        	String userName = (request.getParameter("USERNAME")).trim();
 	        String passwd = (request.getParameter("PASSWD")).trim();
         	//out.println("<p>Your input User Name is "+userName+"</p>");
         	//out.println("<p>Your input password is "+passwd+"</p>");
@@ -40,7 +37,7 @@
 	
         	try{
 	        	//establish the connection 
-		        conn = DriverManager.getConnection(dbstring,"ulvi","***************");
+		        conn = DriverManager.getConnection(dbstring,"ulvi","*******");
         		conn.setAutoCommit(false);
 	        }
         	catch(Exception ex){
@@ -69,9 +66,11 @@
         	//display the result
 	        if(passwd.equals(truepwd))
 		        out.println("<p><b>Your Login is Successful!</b></p>");
-        	else
+        	else{
 	        	out.println("<p><b>Either your userName or Your password is inValid!</b></p>");
-
+				String redirectURL = "./login.html";
+        		response.sendRedirect(redirectURL);
+        	}
                 try{
                         conn.close();
                 }
