@@ -12,59 +12,61 @@
 <body>
 	<br>
 	<br>
-	<div class="section">
+	<div class="section hcenter">
 		<h1><center>Upload Images</center></h1>
 
 		<form id="upload-form" name="upload-image" enctype="multipart/form-data" >
 
-	        <p>Select an image or a folder contianing images to upload!</p>
+	        <p class="hcenter">Select an image or a folder contianing images to upload!</p>
 	        <table>
 		        <tbody>
-		        	<tr valign="CENTER">
+		        	<tr>
 				        <td>Select Image:</td>
-				        <td><input id="selected-file" name="selected-file" type="file" accept=".jpg, .gif"></td>
+				        <td>
+				        	<input name="selected-file" type="file" accept=".jpg, .gif">
+				        	<div class="selected-file validation"></div>
+				        </td>
 			        </tr>
-			        <tr valign="CENTER">
+			        <tr>
 				        <td>Permission:</td>
 				        <td>
-				        	<div class="radio-horizontal"><input type="radio" name="permitted" value="public"> Private</div>
-							<div class="radio-horizontal"><input type="radio" name="permitted" value="private"> Public</div>
-							<div class="radio-horizontal"><input type="radio" name="permitted" value="group"> Group</div>
+				        	<div class="radio-horizontal"><input type="radio" name="permitted" value="2" checked> Private</div>
+							<div class="radio-horizontal"><input type="radio" name="permitted" value="1"> Public</div>
+							<div class="radio-horizontal" style='margin-right:3px;'><input type="radio" name="permitted" value="group"> Group</div>
+							<div class="permission validation"></div>
 						</td>
 			        </tr>
-					<tr class="collapsible group-selector" valign="CENTER">
+					<tr class="collapsible group-selector">
 				        <td >Select Group:</td>
 				        <td >
-				        	<select id="group-dropdown" name="group-id">
+				        	<select name="group-id">
 							   <option value="no-groups">No Groups Found</option>
 							 </select> 
 				        </td>
 			        </tr>
-			        <tr valign="CENTER">
+			        <tr>
 				        <td>Subject:</td>
-				        <td><input type="text" name="subject" maxlength="128"><br></td>
+				        <td><input type="text" name="subject" maxlength="128"></td>
 			        </tr>
-			        <tr valign="CENTER">
-				        <td>Location Taken:</td>
-				        <td><input type="text" name="location" maxlength="128"><br></td>
-			        </tr>
-			        <tr valign="CENTER">
+			        <tr>
 				        <td>Date Taken:</td>
-				        <td><input type="date" name="date"><br></td>
+				        <td><input type="date" name="date"></td>
 			        </tr>
-			        <tr valign="CENTER">
+			        <tr>
+				        <td>Location Taken:</td>
+				        <td><input type="text" name="location" maxlength="128"></td>
+			        </tr>
+			        <tr>
 				        <td>Description:</td>
-				        <td><input type="text" name="description" maxlength="2048"><br></td>
+				        <td><textarea name="description" maxlength="2048" rows="15"></textarea></td>
 			        </tr>
-
 		        </tbody>
 		    </table>
 
-	        <input type="submit" name="submit-button" value="Upload">
+	        <input class="hcenter" type="submit" name="submit-button" value="Upload">
 		</form>
-		<br>
-		<br>
-		<div id="upload-results"></div>	
+
+		<div id="upload-results" class="hcenter"></div>	
 	</div>
 
 </body>

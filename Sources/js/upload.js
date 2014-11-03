@@ -11,19 +11,14 @@ $(document).ready(function() {
 
 	// Hides and shows the group selector
 	$('input[name="permitted"]').change(function(e) {
-		console.log("blah");
 		$('input[name="permitted"]').each(function(index, value) {
 			if ($(this).is(':checked')) {
 				if (this.value == "group") {
 					// Expand the group selector
-					$('tr.collapsible.group-selector').height('22px');
-					setTimeout(function() {
-						$('tr.collapsible.group-selector > *').show();
-					}, 200);
+					expand($('tr.collapsible.group-selector'), $('table tr:first-child').height());
 				} else {
 					// Hide the group selector
-					$('tr.collapsible.group-selector > *').hide();
-					$('tr.collapsible.group-selector').height('0px');
+					collapse($('tr.collapsible.group-selector'));
 				}
 			}
 		});
@@ -31,19 +26,51 @@ $(document).ready(function() {
 
 	// Handles submit for upload form
 	$("#upload-form").on("submit", function(event) {
-		$("#upload-results").empty().append("Uploading...");
 		
-		// Validate!  Make sure a file is selected, and it's extension is correct.
+		// Validate!
+		var passed = true;
 
-		//if (fileName.length() == 0) {
-		//         		return "No file Selected.";
-		//         	}
-		//         	String extension = fileName.substring(fileName.length()-4).toLowerCase();
-		//         	//r+="&nbsp;&nbspExtension: "+extension+"<br>";
-		//         	if (!extension.equals(".jpg") && !extension.equals(".gif")) {
-		//         		return "Invalid file.  Only image files (.jpg and .gif) are accepted.";
-		//         	}
+		// Make sure a file is selected, and it's extension is correct.
+		var fileName = $('input[name="selected-file"]').val();
+		if (fileName.length <= 4) {
+			// No file selected
+    		$('.selected-file.validation').empty().append('* Please select a valid file.');
+    		passed = false;
+    	} else if (fileName.substring(fileName.length-4).toLowerCase() != ".jpg" && fileName.substring(fileName.length-4).toLowerCase() != ".gif") {
+    		// Invalid extension
+			$('.selected-file.validation').empty().append('* Only .jpg and .gif are accepted.');
+    		passed = false;
+    	} else {
+    		$('.selected-file.validation').empty();	
+    	}
 
+    	// Check for valid permission
+    	var permission_id = 0;
+    	$('input[name="permitted"]').each(function(index, entry) {
+			if ($(entry).is(':checked')) {
+				permission_id = entry.value;
+			}
+		});
+		if (permission_id == 0) {
+			$('.permission.validation').empty().append('* Please select a permission level.');
+			passed = false;
+		} else if (permission_id == "group") {
+			permission_id = $('select[name="group-id"]').val();
+			if (permission_id == "no-groups") {
+				$('.permission.validation').empty().append('* No groups found is not valid.');
+				passed = false;
+			} else {
+				$('.permission.validation').empty();	
+			}
+		}
+
+    	// Did we pass validation?
+    	if (!passed) {
+    		return false;
+    	}
+
+    	// Start upload
+		$("#upload-results").empty().append('Uploading...');
 
 		var data = new FormData();
 		data.append("function", "uploadOne");
@@ -85,4 +112,15 @@ function progressHandlingFunction(e){
         $('progress').attr({value:e.loaded,max:e.total});
     }
 }
-	
+
+function collapse($collapsible) {
+	$collapsible.find('> *').hide();
+	$collapsible.height('0px');
+}
+
+function expand($collapsible, height) {
+	$collapsible.height(height);
+	setTimeout(function() {
+		$collapsible.find('> *').show();
+	}, 200);
+}

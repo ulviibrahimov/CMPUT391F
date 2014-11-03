@@ -66,8 +66,6 @@ div.nav-option {
 
 .section {
 	display: table;
-	margin-left: auto;
-    margin-right: auto;
 
 	padding: 20px;
 
@@ -81,6 +79,11 @@ div.nav-option {
     -webkit-transition-duration: 0.3s;
     transition-duration: 0.3s;
 }
+.hcenter {
+	display: table;
+	margin-left: auto;
+	margin-right: auto;
+}
 
 
 .collapsible {
@@ -93,22 +96,39 @@ div.nav-option {
 	display: none;
 }
 
+/* table row identifiers */
 tr > td:first-child {
 	/*text-align: right;*/
 	/*font-style: italic;*/
 	font-weight: bold;
+	vertical-align: top;
 }
 
-input, select, .radio-horizontal {
-	margin-top: 5px;
-	margin-bottom: 5px;
+/* spacing between table rows */
+tr > td > * {
+	margin-bottom: 10px;
 }
 
+/* widths for most inputs */
 table input:not([type="radio"]), select {   
 	width: 231px; 
+	float: left;
 }
 
-.radio-horizontal {
+/* space all radio buttons evenly across width defined for inputs */
+tr .radio-horizontal {
 	float: left;
-	margin-right: 15px;
+	margin-right: 14px;
+}
+
+/* textarea should be bigger */
+table textarea {
+	width: 460px;
+}
+
+/* validation error styling */
+.validation {
+	/*font-weight: bold;*/
+	color: red;
+	vertical-align: top;
 }
