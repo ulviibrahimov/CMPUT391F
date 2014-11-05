@@ -131,8 +131,6 @@ public class RestController extends HttpServlet {
 			InputStream inStream = getFileValue("selected-file", map);
 
 			//  connect to the oracle database
-			// 1 gywnne DB but must enable tunnel first (can't have both sql developer and java connected)
-			// 2 Local db
 			Connection conn = getConnection();
 			Statement stmt = conn.createStatement();
 

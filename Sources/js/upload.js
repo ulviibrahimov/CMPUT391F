@@ -74,7 +74,7 @@ $(document).ready(function() {
 
 		var data = new FormData();
 		data.append("function", "uploadOne");
-		data.append("selected-file", $("#selected-file")[0].files[0]);
+		data.append("selected-file", $('input[name="selected-file"]')[0].files[0]);
 		data.append("texty", $("#texty").val());
 
 
