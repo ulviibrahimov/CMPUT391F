@@ -3,6 +3,7 @@
  * and http://commons.apache.org/proper/commons-fileupload/
  * 
  */
+package services;
 
 import java.util.*;
 import java.io.*;
@@ -31,7 +32,6 @@ import org.apache.commons.fileupload.servlet.*;
 import org.apache.commons.fileupload.FileItem;
 
 import org.apache.commons.io.IOUtils;
-
 
 public class RestController extends HttpServlet {
 	
@@ -105,7 +105,7 @@ public class RestController extends HttpServlet {
 			inStream.close();
 
 			//  connect to the oracle database
-			Connection conn = getConnection();
+			Connection conn = UtilHelper.getConnection();
 			Statement stmt = conn.createStatement();
 
 			// Generate a unique pic_id using an SQL sequence
@@ -156,22 +156,6 @@ public class RestController extends HttpServlet {
 
 		return result + "Upload successful.";
 	}
-
-	/*
-     *   To connect to the database specified by connectionConfigNum
-     */
-    public static Connection getConnection() throws Exception {
-        String configParam[] = UtilHelper.getConfiguration();
-
-        String dbstring = configParam[0];
-        String username = configParam[1];
-        String password = configParam[2];
-        String drivername = "oracle.jdbc.driver.OracleDriver";
-
-		Class drvClass = Class.forName(drivername); 
-        DriverManager.registerDriver((Driver) drvClass.newInstance());
-        return (DriverManager.getConnection(dbstring,username,password));
-    }
 
     /*
      * shrink image by a factor of n, and return the shrinked image

@@ -1,2 +1,2 @@
-javac UtilHelper.java
-javac RestController.java
+javac services/UtilHelper.java
+javac services/RestController.java

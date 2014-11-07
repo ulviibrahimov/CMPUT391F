@@ -1,11 +1,9 @@
 <html><head>
-
-
-<title>Signup Result</title>
-<style type="text/css"></style></head>
-
+	<title>Signup Result</title>
+	<style type="text/css"></style>
+</head>
 <body>
-
+<%@ page import="services.UtilHelper" %>
 <%@ page import="java.sql.*" %>
 <%@ page import="java.util.Date" %>
 
@@ -26,27 +24,11 @@
 	        //establish the connection to the underlying database
         	Connection conn = null;
 	
-	        String driverName = "oracle.jdbc.driver.OracleDriver";
-            	String dbstring = "jdbc:oracle:thin:@127.0.0.1:1521:xe";
-	
-	        try{
-		        //load and register the driver
-        		Class drvClass = Class.forName(driverName); 
-	        	DriverManager.registerDriver((Driver) drvClass.newInstance());
-        	}
-	        catch(Exception ex){
-		        out.println("<hr>" + ex.getMessage() + "<hr>");
-	
-	        }
-	
         	try{
-	        	//establish the connection 
-		        conn = DriverManager.getConnection(dbstring,"user","******");
-        		conn.setAutoCommit(false);
+        		conn = UtilHelper.getConnection();
 	        }
         	catch(Exception ex){
-	        
-		        out.println("<hr>" + ex.getMessage() + "<hr>");
+		        out.println("<hr>Exception: " + ex.getMessage() + "<hr>");
         	}
         	
 			//checking if username already exists
@@ -126,10 +108,6 @@
         }
  
 %>
-
-
-
-
 
 
 </body></html>

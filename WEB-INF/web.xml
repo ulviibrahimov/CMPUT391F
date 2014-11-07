@@ -11,14 +11,7 @@
 
     <servlet>
         <servlet-name>RestServlet</servlet-name>
-        <servlet-class>RestController</servlet-class>
-
-        <!-- <multipart-config>
-            <location>C:/Users/MechanicalSlug/Documents/school/sem10(fall2014)/CMPUT 391/Project/Tomcat8.0/webapps/CMPUT391F/LUX</location>
-            <max-file-size>20848820</max-file-size>
-            <max-request-size>418018841</max-request-size>
-            <file-size-threshold>1048576</file-size-threshold>
-        </multipart-config> -->
+        <servlet-class>services.RestController</servlet-class>
     </servlet>
 
     <servlet-mapping>

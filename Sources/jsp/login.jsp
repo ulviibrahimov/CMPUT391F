@@ -7,6 +7,7 @@
 <body>
 
 <%@ page import="java.sql.*" %>
+<%@ page import="services.UtilHelper" %>
 <% 
 
         if(request.getParameter("loginSubmit") != null)
@@ -38,23 +39,8 @@
 	        //establish the connection to the underlying database
         	Connection conn = null;
 	
-	        String driverName = "oracle.jdbc.driver.OracleDriver";
-            	String dbstring = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
-	
-	        try{
-		        //load and register the driver
-        		Class drvClass = Class.forName(driverName); 
-	        	DriverManager.registerDriver((Driver) drvClass.newInstance());
-        	}
-	        catch(Exception ex){
-		        out.println("<hr>" + ex.getMessage() + "<hr>");
-	
-	        }
-	
         	try{
-	        	//establish the connection 
-		        conn = DriverManager.getConnection(dbstring,"ulvi","6755711ibrahimov");
-        		conn.setAutoCommit(false);
+        		conn = UtilHelper.getConnection();
 	        }
         	catch(Exception ex){
 	        

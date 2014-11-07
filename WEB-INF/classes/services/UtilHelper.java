@@ -1,6 +1,8 @@
+package services;
 
 import java.io.*;
 import java.util.*;
+import java.sql.*;
 
 public class UtilHelper {
 
@@ -30,13 +32,6 @@ public class UtilHelper {
         return out;
     }
 
-    public static String htmlReplace(String html, String[] replacements) {
-        for(int i=0; i < replacements.length; i++) {
-            html = html.replace("<!--#"+i+"#-->", replacements[i]);
-        }
-        return html;
-    }
-
     /*
      * Returns the 3 lines following START found in "CMPUT391F/connectionConfig.txt"
      */
@@ -61,5 +56,21 @@ public class UtilHelper {
         }
 
         return out;
+    }
+
+    /*
+     *   To connect to the database specified in "CMPUT391F/connectionConfig.txt"
+     */
+    public static Connection getConnection() throws Exception {
+        String configParam[] = getConfiguration();
+
+        String dbstring = configParam[0];
+        String username = configParam[1];
+        String password = configParam[2];
+        String drivername = "oracle.jdbc.driver.OracleDriver";
+
+        Class drvClass = Class.forName(drivername); 
+        DriverManager.registerDriver((Driver) drvClass.newInstance());
+        return (DriverManager.getConnection(dbstring,username,password));
     }
 }
