@@ -16,23 +16,23 @@
         	String userName = (request.getParameter("USERNAME")).trim();
 	        String passwd = (request.getParameter("PASSWD")).trim();
 
-			Cookie[] cookies = request.getCookies();
-		    boolean foundCookie = false;
-
-		    for(int i = 0; i < cookies.length; i++) { 
-		        Cookie c = cookies[i];
-		        if (c.getName().equals(userName)) {
-		            foundCookie = true;
-		            //planning to redirect to home page
-		        }
-		    }  
-			//if there is no cookie with the current user name, create new one
-		    if (!foundCookie) {
-		        Cookie c = new Cookie(userName, session.getId()+"");
-		        c.setMaxAge(24*60*60);
-		        c.setPath("/");
-		        response.addCookie(c); 
-		    }
+		Cookie[] cookies = request.getCookies();
+		boolean foundCookie = false;
+		
+		for(int i = 0; i < cookies.length; i++) { 
+		Cookie c = cookies[i];
+		if (c.getName().equals(userName)) {
+		    foundCookie = true;
+		    //planning to redirect to home page
+		}
+		}  
+		//if there is no cookie with the current user name, create new one
+		if (!foundCookie) {
+		Cookie c = new Cookie(userName, session.getId()+"");
+		c.setMaxAge(24*60*60);
+		c.setPath("/");
+		response.addCookie(c); 
+		}
 
 			
 	        //establish the connection to the underlying database
