@@ -72,10 +72,25 @@ $(document).ready(function() {
     	// Start upload
 		$("#upload-results").empty().append('Uploading...');
 
+		// Get all our data in a FormData object
 		var data = new FormData();
+		$('input').each(function(index, element) {
+			var type = this.type;
+			if (type == "group" || type == "radio") {
+				// Don't add anything, just continue
+			} else if (type == "file") {
+				data.append(this.name, this.files[0]);
+			} else {
+				data.append(this.name, this.value);
+			}
+		});
+
+		// Add the group id and description
+		data.append("group-id", permission_id);
+		data.append('description', $('textarea').val());
+		// Add function so the RESTController knows what to do with the data
 		data.append("function", "uploadOne");
-		data.append("selected-file", $("#selected-file")[0].files[0]);
-		data.append("texty", $("#texty").val());
+		
 
 
 		// TODO Need to send some security info with request to confirm legitimacy

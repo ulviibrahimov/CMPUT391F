@@ -7,7 +7,11 @@
 import java.util.*;
 import java.io.*;
 
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
+
 import java.sql.*;
+import java.sql.PreparedStatement;
 import oracle.sql.*;
 import oracle.jdbc.*;
 
@@ -79,6 +83,114 @@ public class RestController extends HttpServlet {
 		}
     }
 
+    private String uploadFile(Map<String,List<FileItem>> map) {
+    	String result = "";
+    	
+    	try {
+			// Get all input fields
+			int groupId = Integer.parseInt(getTextValue("group-id", map));
+			String subject = getTextValue("subject", map);
+			java.sql.Date date = java.sql.Date.valueOf(getTextValue("date", map));
+			String location = getTextValue("location", map);
+			String description = getTextValue("description", map);
+			
+			// Get images			
+			String fileType = getFileType("selected-file", map);
+			if (!fileType.equals("jpg") && !fileType.equals("gif")) {
+	    		throw new Exception("Invalid file.  Only image files (.jpg and .gif) are accepted.");
+	    	}
+	    	InputStream inStream = getFileValue("selected-file", map);
+			BufferedImage photo = ImageIO.read(inStream);
+		    BufferedImage thumbnail = shrink(photo, 10);
+			inStream.close();
+
+			//  connect to the oracle database
+			Connection conn = getConnection();
+			Statement stmt = conn.createStatement();
+
+			// Generate a unique pic_id using an SQL sequence
+		    ResultSet rset1 = stmt.executeQuery("SELECT pic_id_seq.nextval from dual");
+		    rset1.next();
+		    int pic_id = rset1.getInt(1);
+
+		    // TODO add real username
+
+			// Insert row into table with an empty blob.
+		    PreparedStatement stm = conn.prepareStatement("INSERT INTO images (PHOTO_ID, OWNER_NAME, PERMITTED, SUBJECT, PLACE, TIMING, DESCRIPTION, THUMBNAIL, PHOTO) "
+		    	+ "VALUES(?, ?, ?, ?, ?, ?, ?, empty_blob(), empty_blob())");
+		    stm.setInt(1, pic_id);
+	    	stm.setString(2, "test");
+	    	stm.setInt(3, groupId);
+	    	stm.setString(4, subject);
+	    	stm.setString(5, location);
+	    	stm.setDate(6, date);
+	    	stm.setString(7, description);
+	    	stm.executeUpdate();
+
+		    // Retrieve the lob_locator 
+		    // Note that you must use "FOR UPDATE" in the select statement
+		    String cmd = "SELECT * FROM images WHERE photo_id = "+pic_id+" FOR UPDATE";
+		    ResultSet rset = stmt.executeQuery(cmd);
+		    rset.next();
+		    BLOB photoBlob = ((OracleResultSet)rset).getBLOB("PHOTO");
+		    BLOB thumbBlob = ((OracleResultSet)rset).getBLOB("THUMBNAIL");
+			
+			OutputStream outStream;
+
+			// Write photo
+			outStream = photoBlob.setBinaryStream(1);
+		    ImageIO.write(photo, fileType, outStream);
+		    outStream.close();
+
+		    // Write thumbnail
+		    outStream = thumbBlob.setBinaryStream(1);
+		    ImageIO.write(thumbnail, fileType, outStream);
+		    outStream.close();
+
+            stmt.executeUpdate("commit");
+            conn.close();
+
+		} catch( Exception ex ) {
+		    return result + "Exception occurred: " + ex;
+		}
+
+		return result + "Upload successful.";
+	}
+
+	/*
+     *   To connect to the database specified by connectionConfigNum
+     */
+    public static Connection getConnection() throws Exception {
+        String configParam[] = UtilHelper.getConfiguration();
+
+        String dbstring = configParam[0];
+        String username = configParam[1];
+        String password = configParam[2];
+        String drivername = "oracle.jdbc.driver.OracleDriver";
+
+		Class drvClass = Class.forName(drivername); 
+        DriverManager.registerDriver((Driver) drvClass.newInstance());
+        return (DriverManager.getConnection(dbstring,username,password));
+    }
+
+    /*
+     * shrink image by a factor of n, and return the shrinked image
+     */
+    public static BufferedImage shrink(BufferedImage image, int n) {
+
+        int w = image.getWidth() / n;
+        int h = image.getHeight() / n;
+
+        BufferedImage shrunkImage =
+            new BufferedImage(w, h, image.getType());
+
+        for (int y=0; y < h; ++y)
+            for (int x=0; x < w; ++x)
+                shrunkImage.setRGB(x, y, image.getRGB(x*n, y*n));
+
+        return shrunkImage;
+    }
+
     /*
      * Gets a string from the form field represented by key.  The key value pair is removed from the map.
      */
@@ -100,6 +212,33 @@ public class RestController extends HttpServlet {
 	    	throw new Exception("Unexpected value type for '"+key+"'.  Expected: simple text");
 	    }
 	    return item.getString();
+    }
+
+	/*
+     * Gets the filetype for a file from a form represented by key.
+     */
+	private static String getFileType(String key, Map<String,List<FileItem>> map) throws Exception{
+    	List<FileItem> funcItems = map.get(key);
+
+	    // Check that key does exist
+	    if (funcItems == null) {
+	    	throw new Exception("No '"+key+"'' key passed into post request data.");
+		}
+
+		// Check for key value
+	    Iterator<FileItem> i = funcItems.iterator();
+	    if (!i.hasNext()) {
+	    	throw new Exception("Malformed '"+key+"'value.");
+	    }
+	    FileItem item = i.next();
+	    if (item.isFormField()) {
+	    	throw new Exception("Unexpected value type for '"+key+"'.  Expected: file content");
+	    }
+	    String name = item.getName();
+    	if (name.length() == 0) {
+    		throw new Exception("Invalid file name for key: "+key);
+    	}
+    	return name.substring(name.lastIndexOf(".")+1).toLowerCase();
     }
 
 	/*
@@ -125,77 +264,6 @@ public class RestController extends HttpServlet {
 	    return item.getInputStream();
     }
 
-    private String uploadFile(Map<String,List<FileItem>> map) {
-    	String result = "";
-		try {
-			InputStream inStream = getFileValue("selected-file", map);
-
-			//  connect to the oracle database
-			// 1 gywnne DB but must enable tunnel first (can't have both sql developer and java connected)
-			// 2 Local db
-			Connection conn = getConnection();
-			Statement stmt = conn.createStatement();
-
-			// Generate a unique pic_id using an SQL sequence
-		    ResultSet rset1 = stmt.executeQuery("SELECT pic_id_seq.nextval from dual");
-		    rset1.next();
-		    int pic_id = rset1.getInt(1);
-
-		    // TODO add real username
-
-			//Insert an empty blob into the table first. Note that you have to 
-		    //use the Oracle specific function empty_blob() to create an empty blob
-		    stmt.execute("INSERT INTO images (PHOTO_ID, OWNER_ID, PHOTO) VALUES("+pic_id+",'test',empty_blob())");
-
-		    // to retrieve the lob_locator 
-		    // Note that you must use "FOR UPDATE" in the select statement
-		    String cmd = "SELECT * FROM images WHERE photo_id = "+pic_id+" FOR UPDATE";
-		    ResultSet rset = stmt.executeQuery(cmd);
-		    rset.next();
-		    BLOB myBlob = ((OracleResultSet)rset).getBLOB("PHOTO");
-
-		    //Write the image to the blob object
-		    OutputStream outStream = myBlob.setBinaryStream(1);
-		    int size = myBlob.getBufferSize();
-		    byte[] buffer = new byte[size];
-		    int length = -1;
-		    while ((length = inStream.read(buffer)) != -1) {
-				outStream.write(buffer, 0, length);
-			}
-		    inStream.close();
-		    outStream.close();
-
-            stmt.executeUpdate("commit");
-
-            conn.close();
-		} catch( Exception ex ) {
-		    return result + "Exception occurred: " + ex;
-		}
-		return "Upload successful.";
-	}
-
-	/*
-     *   To connect to the database specified by connectionConfigNum
-     */
-    public static Connection getConnection() throws Exception {
-        String configParam[] = UtilHelper.getConfiguration();
-
-        String dbstring = configParam[0];
-        String username = configParam[1];
-        String password = configParam[2];
-        String drivername = "oracle.jdbc.driver.OracleDriver";
-
-        return getConnected(drivername,dbstring, username,password);
-    }
-
-    /*
-     *   To connect to the specified database
-     */
-    public static Connection getConnected(String drivername, String dbstring, String username, String password) throws Exception {
-        Class drvClass = Class.forName(drivername); 
-        DriverManager.registerDriver((Driver) drvClass.newInstance());
-        return (DriverManager.getConnection(dbstring,username,password));
-    }
 }
 
 
