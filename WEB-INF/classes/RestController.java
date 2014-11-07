@@ -83,79 +83,6 @@ public class RestController extends HttpServlet {
 		}
     }
 
-    /*
-     * Gets a string from the form field represented by key.  The key value pair is removed from the map.
-     */
-	private static String getTextValue(String key, Map<String,List<FileItem>> map) throws Exception{
-    	List<FileItem> funcItems = map.remove(key);
-
-	    // Check that key does exist
-	    if (funcItems == null) {
-	    	throw new Exception("No '"+key+"'' key passed into post request data.");
-		}
-
-		// Check for key value
-	    Iterator<FileItem> i = funcItems.iterator();
-	    if (!i.hasNext()) {
-	    	throw new Exception("Malformed '"+key+"'value.");
-	    }
-	    FileItem item = i.next();
-	    if (!item.isFormField()) {
-	    	throw new Exception("Unexpected value type for '"+key+"'.  Expected: simple text");
-	    }
-	    return item.getString();
-    }
-
-	/*
-     * Gets the filetype for a file from a form represented by key.
-     */
-	private static String getFileType(String key, Map<String,List<FileItem>> map) throws Exception{
-    	List<FileItem> funcItems = map.get(key);
-
-	    // Check that key does exist
-	    if (funcItems == null) {
-	    	throw new Exception("No '"+key+"'' key passed into post request data.");
-		}
-
-		// Check for key value
-	    Iterator<FileItem> i = funcItems.iterator();
-	    if (!i.hasNext()) {
-	    	throw new Exception("Malformed '"+key+"'value.");
-	    }
-	    FileItem item = i.next();
-	    if (item.isFormField()) {
-	    	throw new Exception("Unexpected value type for '"+key+"'.  Expected: file content");
-	    }
-	    String name = item.getName();
-    	if (name.length() == 0) {
-    		throw new Exception("Invalid file name for key: "+key);
-    	}
-    	return name.substring(name.lastIndexOf(".")+1).toLowerCase();
-    }
-
-	/*
-     * Gets the InputStream for a file from a form represented by key.
-     */
-	private static InputStream getFileValue(String key, Map<String,List<FileItem>> map) throws Exception{
-    	List<FileItem> funcItems = map.get(key);
-
-	    // Check that key does exist
-	    if (funcItems == null) {
-	    	throw new Exception("No '"+key+"'' key passed into post request data.");
-		}
-
-		// Check for key value
-	    Iterator<FileItem> i = funcItems.iterator();
-	    if (!i.hasNext()) {
-	    	throw new Exception("Malformed '"+key+"'value.");
-	    }
-	    FileItem item = i.next();
-	    if (item.isFormField()) {
-	    	throw new Exception("Unexpected value type for '"+key+"'.  Expected: file content");
-	    }
-	    return item.getInputStream();
-    }
-
     private String uploadFile(Map<String,List<FileItem>> map) {
     	String result = "";
     	
@@ -241,19 +168,14 @@ public class RestController extends HttpServlet {
         String password = configParam[2];
         String drivername = "oracle.jdbc.driver.OracleDriver";
 
-        return getConnected(drivername,dbstring, username,password);
-    }
-
-    /*
-     *   To connect to the specified database
-     */
-    public static Connection getConnected(String drivername, String dbstring, String username, String password) throws Exception {
-        Class drvClass = Class.forName(drivername); 
+		Class drvClass = Class.forName(drivername); 
         DriverManager.registerDriver((Driver) drvClass.newInstance());
         return (DriverManager.getConnection(dbstring,username,password));
     }
 
-    //shrink image by a factor of n, and return the shrinked image
+    /*
+     * shrink image by a factor of n, and return the shrinked image
+     */
     public static BufferedImage shrink(BufferedImage image, int n) {
 
         int w = image.getWidth() / n;
@@ -268,6 +190,80 @@ public class RestController extends HttpServlet {
 
         return shrunkImage;
     }
+
+    /*
+     * Gets a string from the form field represented by key.  The key value pair is removed from the map.
+     */
+	private static String getTextValue(String key, Map<String,List<FileItem>> map) throws Exception{
+    	List<FileItem> funcItems = map.remove(key);
+
+	    // Check that key does exist
+	    if (funcItems == null) {
+	    	throw new Exception("No '"+key+"'' key passed into post request data.");
+		}
+
+		// Check for key value
+	    Iterator<FileItem> i = funcItems.iterator();
+	    if (!i.hasNext()) {
+	    	throw new Exception("Malformed '"+key+"'value.");
+	    }
+	    FileItem item = i.next();
+	    if (!item.isFormField()) {
+	    	throw new Exception("Unexpected value type for '"+key+"'.  Expected: simple text");
+	    }
+	    return item.getString();
+    }
+
+	/*
+     * Gets the filetype for a file from a form represented by key.
+     */
+	private static String getFileType(String key, Map<String,List<FileItem>> map) throws Exception{
+    	List<FileItem> funcItems = map.get(key);
+
+	    // Check that key does exist
+	    if (funcItems == null) {
+	    	throw new Exception("No '"+key+"'' key passed into post request data.");
+		}
+
+		// Check for key value
+	    Iterator<FileItem> i = funcItems.iterator();
+	    if (!i.hasNext()) {
+	    	throw new Exception("Malformed '"+key+"'value.");
+	    }
+	    FileItem item = i.next();
+	    if (item.isFormField()) {
+	    	throw new Exception("Unexpected value type for '"+key+"'.  Expected: file content");
+	    }
+	    String name = item.getName();
+    	if (name.length() == 0) {
+    		throw new Exception("Invalid file name for key: "+key);
+    	}
+    	return name.substring(name.lastIndexOf(".")+1).toLowerCase();
+    }
+
+	/*
+     * Gets the InputStream for a file from a form represented by key.
+     */
+	private static InputStream getFileValue(String key, Map<String,List<FileItem>> map) throws Exception{
+    	List<FileItem> funcItems = map.get(key);
+
+	    // Check that key does exist
+	    if (funcItems == null) {
+	    	throw new Exception("No '"+key+"'' key passed into post request data.");
+		}
+
+		// Check for key value
+	    Iterator<FileItem> i = funcItems.iterator();
+	    if (!i.hasNext()) {
+	    	throw new Exception("Malformed '"+key+"'value.");
+	    }
+	    FileItem item = i.next();
+	    if (item.isFormField()) {
+	    	throw new Exception("Unexpected value type for '"+key+"'.  Expected: file content");
+	    }
+	    return item.getInputStream();
+    }
+
 }
 
 
