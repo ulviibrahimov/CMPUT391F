@@ -15,15 +15,31 @@
 	        //get the user input from the login page
         	String userName = (request.getParameter("USERNAME")).trim();
 	        String passwd = (request.getParameter("PASSWD")).trim();
-        	//out.println("<p>Your input User Name is "+userName+"</p>");
-        	//out.println("<p>Your input password is "+passwd+"</p>");
 
+			Cookie[] cookies = request.getCookies();
+		    boolean foundCookie = false;
 
+		    for(int i = 0; i < cookies.length; i++) { 
+		        Cookie c = cookies[i];
+		        if (c.getName().equals(userName)) {
+		            foundCookie = true;
+		            //planning to redirect to home page
+		        }
+		    }  
+			//if there is no cookie with the current user name, create new one
+		    if (!foundCookie) {
+		        Cookie c = new Cookie(userName, session.getId()+"");
+		        c.setMaxAge(24*60*60);
+		        c.setPath("/");
+		        response.addCookie(c); 
+		    }
+
+			
 	        //establish the connection to the underlying database
         	Connection conn = null;
 	
 	        String driverName = "oracle.jdbc.driver.OracleDriver";
-            	String dbstring = "jdbc:oracle:thin:@localhost:1521:xe";
+            	String dbstring = "jdbc:oracle:thin:@gwynne.cs.ualberta.ca:1521:CRS";
 	
 	        try{
 		        //load and register the driver
@@ -37,7 +53,7 @@
 	
         	try{
 	        	//establish the connection 
-		        conn = DriverManager.getConnection(dbstring,"user","******");
+		        conn = DriverManager.getConnection(dbstring,"ulvi","6755711ibrahimov");
         		conn.setAutoCommit(false);
 	        }
         	catch(Exception ex){
