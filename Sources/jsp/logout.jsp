@@ -13,11 +13,11 @@
 			//out.println(cookies[i].getName());
 			Cookie dCookie = new Cookie(cookies[i].getName(),null);
 			dCookie.setMaxAge(0);
-     		dCookie.setPath("/");
-     		response.addCookie(dCookie);
-     		//destroying current session, beacuse session id is a cookie value for each user
-     		if(session!=null){
-     			session.invalidate();
+     			dCookie.setPath("/");
+     			response.addCookie(dCookie);
+     			//destroying current session, beacuse session id is a cookie value for each user
+     			if(session!=null){
+     				session.invalidate();
      		}
      		//response.sendRedirect("/CMPUT391F/login.html");
 		}
