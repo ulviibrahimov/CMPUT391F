@@ -9,6 +9,8 @@
 // window.onload = function () {
 $(document).ready(function() {
 
+	$('#date-taken').datepicker(); // Sets date picker on all browsers
+
 	// Hides and shows the group selector
 	$('input[name="permitted"]').change(function(e) {
 		$('input[name="permitted"]').each(function(index, value) {
@@ -29,19 +31,18 @@ $(document).ready(function() {
 		
 		// Validate!
 		var passed = true;
+		$('.validation').empty();	
 
 		// Make sure a file is selected, and it's extension is correct.
 		var fileName = $('input[name="selected-file"]').val();
 		if (fileName.length <= 4) {
 			// No file selected
-    		$('.selected-file.validation').empty().append('* Please select a valid file.');
+    		$('.selected-file.validation').append('* Please select a valid file.');
     		passed = false;
     	} else if (fileName.substring(fileName.length-4).toLowerCase() != ".jpg" && fileName.substring(fileName.length-4).toLowerCase() != ".gif") {
     		// Invalid extension
-			$('.selected-file.validation').empty().append('* Only .jpg and .gif are accepted.');
+			$('.selected-file.validation').append('* Only .jpg and .gif are accepted.');
     		passed = false;
-    	} else {
-    		$('.selected-file.validation').empty();	
     	}
 
     	// Check for valid permission
@@ -52,25 +53,15 @@ $(document).ready(function() {
 			}
 		});
 		if (permission_id == 0) {
-			$('.permission.validation').empty().append('* Please select a permission level.');
+			$('.permission.validation').append('* Please select a permission level.');
 			passed = false;
 		} else if (permission_id == "group") {
 			permission_id = $('select[name="group-id"]').val();
 			if (permission_id == "no-groups") {
-				$('.permission.validation').empty().append('* No groups found is not valid.');
+				$('.permission.validation').append('* No groups found is not valid.');
 				passed = false;
-			} else {
-				$('.permission.validation').empty();	
 			}
 		}
-
-    	// Did we pass validation?
-    	if (!passed) {
-    		return false;
-    	}
-
-    	// Start upload
-		$("#upload-results").empty().append('Uploading...');
 
 		// Get all our data in a FormData object
 		var data = new FormData();
@@ -80,16 +71,50 @@ $(document).ready(function() {
 				// Don't add anything, just continue
 			} else if (type == "file") {
 				data.append(this.name, this.files[0]);
+			} else if (this.name == "date") {
+				if (this.value == "") {
+					// Empty / null date
+					data.append(this.name, this.value);
+				} else {
+					// There is input on date, check for validity
+					var d = new Date(this.value);
+					if (d == "Invalid Date") {
+						$('.date.validation').append('* Invalid date.');
+						passed = false;
+					} else {
+						// Transform date to correct format
+						var month = (d.getMonth()+1);
+						if ((month+"").length < 2) {
+							month = "0" + month;
+						}
+						var date = d.getDate();
+						if ((date+"").length < 2) {
+							date = "0" + date;
+						}
+						var val = d.getFullYear() + "-" + month + "-" + date;
+						data.append(this.name, val);
+					}
+				}
 			} else {
 				data.append(this.name, this.value);
 			}
 		});
+
+		// Did we pass validation?
+    	if (!passed) {
+    		return false;
+    	}
+
+    	// Start upload
+		$("#upload-results").empty().append('Uploading...');
 
 		// Add the group id and description
 		data.append("group-id", permission_id);
 		data.append('description', $('textarea').val());
 		// Add function so the RESTController knows what to do with the data
 		data.append("function", "uploadOne");
+
+		data.append("date-taken", "");
 		
 
 

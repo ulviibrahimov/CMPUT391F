@@ -110,7 +110,11 @@ public class RestController extends HttpServlet {
 			// Get all input fields
 			int groupId = Integer.parseInt(getTextValue("group-id", map));
 			String subject = getTextValue("subject", map);
-			java.sql.Date date = java.sql.Date.valueOf(getTextValue("date", map)); // TODO must make no date okay!!!
+			String dateTemp = getTextValue("date",map);
+			java.sql.Date date = null;
+			if (!dateTemp.equals("")) {
+				date = java.sql.Date.valueOf(dateTemp);
+			}
 			String location = getTextValue("location", map);
 			String description = getTextValue("description", map);
 
@@ -211,13 +215,13 @@ public class RestController extends HttpServlet {
 
 	    // Check that key does exist
 	    if (funcItems == null) {
-	    	throw new Exception("No '"+key+"'' key passed into post request data.");
+	    	throw new Exception("No '"+key+"' key passed into post request data.");
 		}
 
 		// Check for key value
 	    Iterator<FileItem> i = funcItems.iterator();
 	    if (!i.hasNext()) {
-	    	throw new Exception("Malformed '"+key+"'value.");
+	    	throw new Exception("Malformed '"+key+"' value.");
 	    }
 	    FileItem item = i.next();
 	    if (!item.isFormField()) {
