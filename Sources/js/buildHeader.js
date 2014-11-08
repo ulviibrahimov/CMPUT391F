@@ -47,6 +47,8 @@ $(document).ready(function() {
 		var cur = window.location.href;
 		var page = cur.substring(cur.lastIndexOf("/")+1);
 		if (page == "upload.html") {
+			// Create redirect cookie first
+			$.cookie("redirect", page, {path: "/CMPUT391F"});
 			window.location.href = cur.substring(0, cur.lastIndexOf("/")) + "/login.html";
 		}
 	}

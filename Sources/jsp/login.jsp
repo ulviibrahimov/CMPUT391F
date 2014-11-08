@@ -68,10 +68,10 @@
 			     		// Delete the redirect cookie now that we will redirect
 			     		Cookie dCookie = new Cookie("redirect",null);
 						dCookie.setMaxAge(0);
-		     			dCookie.setPath("/");
+		     			dCookie.setPath("/CMPUT391F");
 		     			response.addCookie(dCookie);
 
-		     			//response.sendRedirect("/CMPUT391F/" + redirectAddress);
+		     			response.sendRedirect("/CMPUT391F/" + redirectAddress);
 		     			return;
 					}
 				} 
@@ -82,7 +82,7 @@
 	    	} else{
 	        	out.println("<p><b>Either your userName or Your password is inValid!</b></p>");
 				String redirectURL = "/CMPUT391F/login.html";
-        		//response.sendRedirect(redirectURL);
+        		response.sendRedirect(redirectURL);
         	}
                 try{
                         conn.close();
