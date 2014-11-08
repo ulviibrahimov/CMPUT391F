@@ -44,19 +44,8 @@ public class RestController extends HttpServlet {
         PrintWriter out = response.getWriter();
 // String result = "";
 		try {
-			// TODO verify session
-
 			// @SuppressWarnings("unchecked")
 			Map<String, String[]> map = request.getParameterMap();
-
-			// String[] y = map.keySet().toArray(new String[0]);
-			// String b = "<br>";
-			// int i = 0;
-			// while (i < y.length) {
-			// 	b+=y[i]+"<br>";
-			// 	i++;
-			// }
-			
 
 			String function = getParamValue("function", map)[0];
 
@@ -88,7 +77,8 @@ public class RestController extends HttpServlet {
 		}
 
 		try {
-			// TODO verify session
+			// Get username for passing
+			String userName = getUserName(request);
 
 			// Get map of request parts
 		    Map<String,List<FileItem>> map = (new ServletFileUpload(new DiskFileItemFactory())).parseParameterMap(request);
@@ -98,37 +88,32 @@ public class RestController extends HttpServlet {
 		    // Route the request to the appropriate function.
 			String result;
 		    if (function.equals("uploadOne")) {
-				result = "<br>Upload status:<br>" + uploadFile(map);
+				result = "<br>Upload status:<br>" + uploadFile(userName, map);
 			} else {
 				result = "Requested function is not mapped.";
 			}
 			out.write(result);
 
 		} catch (Exception e) {
-			out.write("Exception occurred: " + e);
+			out.write("!Exception occurred: " + e);
 			return;
 		}
     }
 
-	private static String getUserName(HttpServletRequest request) {
-		String name = (String) request.getSession().getAttribute("user");
-		if (name == null) {
-			return "";
-		}
-		return name;
-	}
+    private static String uploadFile(String userName, Map<String,List<FileItem>> map) {
+    	if (userName == "") {
+    		return "Upload Failed. User not logged in.";
+    	}
 
-    private static String uploadFile(Map<String,List<FileItem>> map) {
-    	String result = "";
-    	
+		String result = "";
     	try {
 			// Get all input fields
 			int groupId = Integer.parseInt(getTextValue("group-id", map));
 			String subject = getTextValue("subject", map);
-			java.sql.Date date = java.sql.Date.valueOf(getTextValue("date", map));
+			java.sql.Date date = java.sql.Date.valueOf(getTextValue("date", map)); // TODO must make no date okay!!!
 			String location = getTextValue("location", map);
 			String description = getTextValue("description", map);
-			
+
 			// Get images			
 			String fileType = getFileType("selected-file", map);
 			if (!fileType.equals("jpg") && !fileType.equals("gif")) {
@@ -143,6 +128,14 @@ public class RestController extends HttpServlet {
 			Connection conn = UtilHelper.getConnection();
 			Statement stmt = conn.createStatement();
 
+    		// Verify username
+			PreparedStatement stm = conn.prepareStatement("SELECT user_name FROM users WHERE user_name = ?");
+		    stm.setString(1, userName);
+		    ResultSet rset2 = stm.executeQuery();
+		    if (rset2.next() == false) {
+		    	throw new Exception("Invalid user name.");
+		    }
+
 			// Generate a unique pic_id using an SQL sequence
 		    ResultSet rset1 = stmt.executeQuery("SELECT pic_id_seq.nextval from dual");
 		    rset1.next();
@@ -151,10 +144,10 @@ public class RestController extends HttpServlet {
 		    // TODO add real username
 
 			// Insert row into table with an empty blob.
-		    PreparedStatement stm = conn.prepareStatement("INSERT INTO images (PHOTO_ID, OWNER_NAME, PERMITTED, SUBJECT, PLACE, TIMING, DESCRIPTION, THUMBNAIL, PHOTO) "
+		    stm = conn.prepareStatement("INSERT INTO images (PHOTO_ID, OWNER_NAME, PERMITTED, SUBJECT, PLACE, TIMING, DESCRIPTION, THUMBNAIL, PHOTO) "
 		    	+ "VALUES(?, ?, ?, ?, ?, ?, ?, empty_blob(), empty_blob())");
 		    stm.setInt(1, pic_id);
-	    	stm.setString(2, "test");
+	    	stm.setString(2, userName);
 	    	stm.setInt(3, groupId);
 	    	stm.setString(4, subject);
 	    	stm.setString(5, location);
@@ -195,7 +188,7 @@ public class RestController extends HttpServlet {
     /*
      * shrink image by a factor of n, and return the shrinked image
      */
-    public static BufferedImage shrink(BufferedImage image, int n) {
+    private static BufferedImage shrink(BufferedImage image, int n) {
 
         int w = image.getWidth() / n;
         int h = image.getHeight() / n;
@@ -300,6 +293,15 @@ public class RestController extends HttpServlet {
 	    }
 	    return value;
     }
+
+    private static String getUserName(HttpServletRequest request) {
+		HttpSession session = request.getSession();	
+    	String name = (String) session.getAttribute("user");
+		if (name == null) {
+			return "";
+		}
+		return name;
+	}
 }
 
 
