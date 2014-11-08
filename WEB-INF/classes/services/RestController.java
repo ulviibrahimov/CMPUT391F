@@ -42,8 +42,37 @@ public class RestController extends HttpServlet {
         response.setContentType("text/html");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
+// String result = "";
+		try {
+			// TODO verify session
 
-        out.write("Get is kinda empty");
+			// @SuppressWarnings("unchecked")
+			Map<String, String[]> map = request.getParameterMap();
+
+			// String[] y = map.keySet().toArray(new String[0]);
+			// String b = "<br>";
+			// int i = 0;
+			// while (i < y.length) {
+			// 	b+=y[i]+"<br>";
+			// 	i++;
+			// }
+			
+
+			String function = getParamValue("function", map)[0];
+
+		    // Route the request to the appropriate function.
+			String result;
+		    if (function.equals("userName")) {
+				result = getUserName(request);
+			} else {
+				result = "Requested function is not mapped.";
+			}
+			out.write(result);
+
+		} catch (Exception e) {
+			out.write("Exception occurred!!!: " + e);
+			return;
+		}
     }
 
     @Override
@@ -52,8 +81,6 @@ public class RestController extends HttpServlet {
         response.setContentType("text/html");
         response.setCharacterEncoding("UTF-8");
         PrintWriter out = response.getWriter();
-		
-		
 
 		if (!ServletFileUpload.isMultipartContent(request)) {
 			out.write("Unexpected form submisssion."); // Not a file upload request
@@ -83,7 +110,15 @@ public class RestController extends HttpServlet {
 		}
     }
 
-    private String uploadFile(Map<String,List<FileItem>> map) {
+	private static String getUserName(HttpServletRequest request) {
+		String name = (String) request.getSession().getAttribute("user");
+		if (name == null) {
+			return "";
+		}
+		return name;
+	}
+
+    private static String uploadFile(Map<String,List<FileItem>> map) {
     	String result = "";
     	
     	try {
@@ -248,6 +283,23 @@ public class RestController extends HttpServlet {
 	    return item.getInputStream();
     }
 
+    /*
+     * Gets the String array value for the specified key.
+     */
+	private static String[] getParamValue(String key, Map<String, String[]> map) throws Exception{
+    	String[] value = map.get(key);
+
+	    // Check that key does exist
+	    if (value == null) {
+	    	throw new Exception("No '"+key+"' key passed into request data.");
+		}
+
+		// Check for key value
+	    if (value.length == 0) {
+	    	throw new Exception("No value found for key, '"+key+"'.");
+	    }
+	    return value;
+    }
 }
 
 

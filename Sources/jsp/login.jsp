@@ -9,32 +9,13 @@
 <%@ page import="java.sql.*" %>
 <%@ page import="services.UtilHelper" %>
 <% 
-
+		response.setContentType("text/html");
         if(request.getParameter("loginSubmit") != null)
         {
 
 	        //get the user input from the login page
         	String userName = (request.getParameter("USERNAME")).trim();
 	        String passwd = (request.getParameter("PASSWD")).trim();
-
-		Cookie[] cookies = request.getCookies();
-		boolean foundCookie = false;
-		
-		for(int i = 0; i < cookies.length; i++) { 
-		Cookie c = cookies[i];
-		if (c.getName().equals(userName)) {
-		    foundCookie = true;
-		    //planning to redirect to home page
-		}
-		}  
-		//if there is no cookie with the current user name, create new one
-		if (!foundCookie) {
-		Cookie c = new Cookie(userName, session.getId()+"");
-		c.setMaxAge(24*60*60);
-		c.setPath("/");
-		response.addCookie(c); 
-		}
-
 			
 	        //establish the connection to the underlying database
         	Connection conn = null;
@@ -66,12 +47,42 @@
         	while(rset != null && rset.next())
 	        	truepwd = (rset.getString(1)).trim();
         	//display the result
-	        if(passwd.equals(truepwd))
-		        out.println("<p><b>Your Login is Successful!</b></p>");
-        	else{
+	        if(passwd.equals(truepwd)) {
+	        	// On authenticate succes
+
+	        	if (session.getAttribute("user") != null) {
+					// We are already logged in, we should do something here, especially if we start storing more than the username in session
+	        	}
+
+	        	// Add username to session - indicates that the user is logged in
+	            session.setAttribute("user", userName);
+
+	            // Check for redirect
+	            boolean redirect = false;
+				Cookie[] cookies = request.getCookies();
+				for(int i = 0; i < cookies.length; i++) { 
+					if (cookies[i].getName().equals("redirect")) {
+			     		redirect = true;
+						String redirectAddress = cookies[i].getValue();
+
+			     		// Delete the redirect cookie now that we will redirect
+			     		Cookie dCookie = new Cookie("redirect",null);
+						dCookie.setMaxAge(0);
+		     			dCookie.setPath("/");
+		     			response.addCookie(dCookie);
+
+		     			//response.sendRedirect("/CMPUT391F/" + redirectAddress);
+		     			return;
+					}
+				} 
+				if (redirect == false) {
+		            response.sendRedirect("/CMPUT391F");
+		            return;
+		        }
+	    	} else{
 	        	out.println("<p><b>Either your userName or Your password is inValid!</b></p>");
 				String redirectURL = "/CMPUT391F/login.html";
-        		response.sendRedirect(redirectURL);
+        		//response.sendRedirect(redirectURL);
         	}
                 try{
                         conn.close();
