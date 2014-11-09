@@ -53,6 +53,8 @@ public class RestController extends HttpServlet {
 			String result;
 		    if (function.equals("userName")) {
 				result = getUserName(request);
+			} else if (function.equals("groups")) {
+				result = getGroups(request);
 			} else {
 				result = "Requested function is not mapped.";
 			}
@@ -128,7 +130,7 @@ public class RestController extends HttpServlet {
 		    BufferedImage thumbnail = shrink(photo, 10);
 			inStream.close();
 
-			//  connect to the oracle database
+			// Connect to the oracle database
 			Connection conn = UtilHelper.getConnection();
 			Statement stmt = conn.createStatement();
 
@@ -187,6 +189,43 @@ public class RestController extends HttpServlet {
 		}
 
 		return result + "Upload successful.";
+	}
+
+	private static String getGroups(HttpServletRequest request) {
+		String result = "";
+    	String userName = getUserName(request);
+    	
+    	try {
+    		// Connect to the oracle database
+			Connection conn = UtilHelper.getConnection();
+
+	    	// Verify username
+			PreparedStatement stm = conn.prepareStatement("SELECT user_name FROM users WHERE user_name = ?");
+		    stm.setString(1, userName);
+		    ResultSet rset2 = stm.executeQuery();
+		    if (rset2.next() == false) {
+		    	throw new Exception("Invalid user name.");
+		    }
+
+		    // Get groups that user is a part of
+			stm = conn.prepareStatement("SELECT groups.group_id, group_name "
+				+ "FROM (groups INNER JOIN group_lists ON groups.group_id = group_lists.group_id) "
+				+ "WHERE friend_id = ?");
+		    stm.setString(1, userName);
+
+		    // Build the result
+		    ResultSet rset = stm.executeQuery();
+		    while (rset.next() == true) {
+		    	result += "<option value='" + (String) rset.getString("group_id") + "'>" + (String) rset.getString("group_name") + "</option>";
+		    }
+
+		    conn.close();
+
+	    } catch( Exception ex ) {
+		    return result + "Exception occurred: " + ex;
+		}
+
+		return result;
 	}
 
     /*

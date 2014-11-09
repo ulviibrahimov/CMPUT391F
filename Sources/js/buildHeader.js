@@ -21,27 +21,27 @@ $(document).ready(function() {
 
 	// Find out if logged in
 	$.ajax({
-		    url: "/CMPUT391F/RestService",
-		    data: 'function=userName',
-		    type: 'GET',
+	    url: "/CMPUT391F/RestService",
+	    data: 'function=userName',
+	    type: 'GET',
 
-		    success: function(response){
-		        console.log(response);
-		        $(".login-bubble").empty();
-		        if (response == "") {
-		        	// Not logged in
-		        	redirect();
-			        $(".login-bubble").append('<a href="/CMPUT391F/login.html">Login</a>' + '<a class="vertical-divider"></a>' + '<a href="/CMPUT391F/signup.html">Register</a>');
-		        } else {
-		        	$(".login-bubble").append('Welcome: ' + response + '<a class="vertical-divider"></a>' + '<a href="/CMPUT391F/Sources/jsp/logout.jsp">Log Out</a>');
-		        	$('div.section').show();
-		        }
-		    },
-		    //Options to tell jQuery not to process data or worry about content-type.
-	        cache: false,
-	        contentType: false,
-	        processData: false
-		});
+	    success: function(response){
+	        console.log(response);
+	        $(".login-bubble").empty();
+	        if (response == "") {
+	        	// Not logged in
+	        	redirect();
+		        $(".login-bubble").append('<a href="/CMPUT391F/login.html">Login</a>' + '<a class="vertical-divider"></a>' + '<a href="/CMPUT391F/signup.html">Register</a>');
+	        } else {
+	        	$(".login-bubble").append('Welcome: ' + response + '<a class="vertical-divider"></a>' + '<a href="/CMPUT391F/Sources/jsp/logout.jsp">Log Out</a>');
+	        	$('div.section').show();
+	        }
+	    },
+	    //Options to tell jQuery not to process data or worry about content-type.
+        cache: false,
+        contentType: false,
+        processData: false
+	});
 
 	function redirect() {
 		var cur = window.location.href;
