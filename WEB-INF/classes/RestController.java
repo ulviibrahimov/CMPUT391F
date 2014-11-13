@@ -3,7 +3,7 @@
  * and http://commons.apache.org/proper/commons-fileupload/
  * 
  */
-package services;
+import services.UtilHelper;
 
 import java.util.*;
 import java.io.*;
@@ -103,9 +103,9 @@ public class RestController extends HttpServlet {
     }
 
     private static String uploadFile(String userName, Map<String,List<FileItem>> map) {
-    	if (userName == "") {
+    	/*if (userName == "") {
     		return "Upload Failed. User not logged in.";
-    	}
+    	}*/
 
 		String result = "";
     	try {
@@ -129,11 +129,9 @@ public class RestController extends HttpServlet {
 			BufferedImage photo = ImageIO.read(inStream);
 		    BufferedImage thumbnail = shrink(photo, 10);
 			inStream.close();
-
 			// Connect to the oracle database
 			Connection conn = UtilHelper.getConnection();
 			Statement stmt = conn.createStatement();
-
     		// Verify username
 			PreparedStatement stm = conn.prepareStatement("SELECT user_name FROM users WHERE user_name = ?");
 		    stm.setString(1, userName);

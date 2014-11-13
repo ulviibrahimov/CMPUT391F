@@ -11,7 +11,7 @@
 
     <servlet>
         <servlet-name>RestServlet</servlet-name>
-        <servlet-class>RestController</servlet-class>
+        <servlet-class>services.RestController</servlet-class>
     </servlet>
 
     <servlet-mapping>

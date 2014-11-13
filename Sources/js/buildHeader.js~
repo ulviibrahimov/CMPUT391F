@@ -1,4 +1,4 @@
-"use strict";  // Makes bad syntax into actual errors
+/*"use strict";  // Makes bad syntax into actual errors
 
 $(document).ready(function() {
 	$('body').prepend( 
@@ -52,4 +52,4 @@ $(document).ready(function() {
 			window.location.href = cur.substring(0, cur.lastIndexOf("/")) + "/login.html";
 		}
 	}
-});
+});*/

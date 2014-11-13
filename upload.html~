@@ -15,7 +15,7 @@
 <body>
 	<br>
 	<br>
-	<div class="section hcenter" style="display:none">
+	<div class="section hcenter" >
 		<h1><center>Upload Images</center></h1>
 
 		<form id="upload-form" name="upload-image" enctype="multipart/form-data" >
