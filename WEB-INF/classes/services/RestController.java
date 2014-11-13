@@ -55,6 +55,8 @@ public class RestController extends HttpServlet {
 				result = getUserName(request);
 			} else if (function.equals("groups")) {
 				result = getGroups(request);
+			} else if (function.equals("singleImage")) {
+				result = getSingleImage(request);
 			} else {
 				result = "Requested function is not mapped.";
 			}
@@ -191,6 +193,9 @@ public class RestController extends HttpServlet {
 		return result + "Upload successful.";
 	}
 
+	/*
+     * returns an html option list contain group ids and names.
+     */
 	private static String getGroups(HttpServletRequest request) {
 		String result = "";
     	String userName = getUserName(request);
@@ -226,6 +231,13 @@ public class RestController extends HttpServlet {
 		}
 
 		return result;
+	}
+
+	/*
+     * returns privledge level for the signed in user and data about the image.
+     */
+	private static String getSingleImage(HttpServletRequest request) {
+		return "Whee";
 	}
 
     /*
