@@ -9,9 +9,6 @@ DROP TABLE group_lists;
 DROP TABLE groups;
 DROP TABLE persons;
 DROP TABLE users;
-DROP SEQUENCE pic_id_seq;
-
-CREATE SEQUENCE pic_id_seq;
 
 CREATE TABLE users (
    user_name varchar(24),
@@ -70,3 +67,10 @@ CREATE TABLE images (
    FOREIGN KEY(owner_name) REFERENCES users,
    FOREIGN KEY(permitted) REFERENCES groups
 );
+
+
+-- Our custom SQL setup commands
+
+DROP SEQUENCE pic_id_seq;
+
+CREATE SEQUENCE pic_id_seq;

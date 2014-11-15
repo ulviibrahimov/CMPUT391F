@@ -55,6 +55,8 @@ public class RestController extends HttpServlet {
 				result = getUserName(request);
 			} else if (function.equals("groups")) {
 				result = getGroups(request);
+			} else if (function.equals("singleImage")) {
+				result = getSingleImage(request);
 			} else {
 				result = "Requested function is not mapped.";
 			}
@@ -103,9 +105,9 @@ public class RestController extends HttpServlet {
     }
 
     private static String uploadFile(String userName, Map<String,List<FileItem>> map) {
-    	/*if (userName == "") {
+    	if (userName == "") {
     		return "Upload Failed. User not logged in.";
-    	}*/
+    	}
 
 		String result = "";
     	try {
@@ -129,9 +131,11 @@ public class RestController extends HttpServlet {
 			BufferedImage photo = ImageIO.read(inStream);
 		    BufferedImage thumbnail = shrink(photo, 10);
 			inStream.close();
+
 			// Connect to the oracle database
 			Connection conn = UtilHelper.getConnection();
 			Statement stmt = conn.createStatement();
+
     		// Verify username
 			PreparedStatement stm = conn.prepareStatement("SELECT user_name FROM users WHERE user_name = ?");
 		    stm.setString(1, userName);
@@ -189,6 +193,9 @@ public class RestController extends HttpServlet {
 		return result + "Upload successful.";
 	}
 
+	/*
+     * returns an html option list contain group ids and names.
+     */
 	private static String getGroups(HttpServletRequest request) {
 		String result = "";
     	String userName = getUserName(request);
@@ -224,6 +231,13 @@ public class RestController extends HttpServlet {
 		}
 
 		return result;
+	}
+
+	/*
+     * returns privledge level for the signed in user and data about the image.
+     */
+	private static String getSingleImage(HttpServletRequest request) {
+		return "Whee";
 	}
 
     /*

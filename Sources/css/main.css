@@ -94,6 +94,8 @@ div.nav-option {
 
 .section {
 	display: table;
+	
+	margin-top: 15px;
 
 	padding: 20px;
 
@@ -152,8 +154,14 @@ tr .radio-horizontal {
 }
 
 /* textarea should be bigger */
-table textarea {
+table textarea, .text-display {
 	width: 460px;
+}
+
+.text-display {	
+	float: left;
+	word-wrap:break-word;
+	margin-bottom: 9px;
 }
 
 /* validation error styling */

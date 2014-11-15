@@ -14,7 +14,7 @@ public class UtilHelper {
         String out = "";
         try {
             out = readFile("Sources/html/"+fileName+".html");    
-        } catch (Exception e){
+        } catch (Exception e) {
             out = "</p>404 - Failed to read resource: " + (new File("webapps/CMPUT391F/html/"+fileName+".html")).getAbsolutePath() + "<br>" + e;
         }
         return out;
