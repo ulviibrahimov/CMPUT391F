@@ -17,9 +17,12 @@ public class GetBigPic extends HttpServlet
 	//  construct the query  from the client's QueryString
 	String picid  = request.getQueryString();
 	String query;
-
+	String[] parts=picid.split("!");
+	String id = parts[0];
+	String name=parts[1];
+	String type=parts[2];
 	query = "select subject, place from images where photo_id="
-	        + picid.substring(3);
+	        + picid.substring(3,5);
 
 	//ServletOutputStream out = response.getOutputStream();
 	PrintWriter out = response.getWriter();
@@ -53,10 +56,15 @@ public class GetBigPic extends HttpServlet
 			"<link rel=\"stylesheet\" type=\"text/css\" href=\"/CMPUT391F/Sources/css/main.css\">"+
 			"<title>LUX Image Hosting</title></head><body>");
                 out.println("<center><h3> "+title+ " </h3>" +
-			"<img src = \"GetOnePic?"+picid+"\">" +
+			"<img src = \"GetOnePic?"+id+"\">" +
 			"<h3>" + title +"  at " + place + " </h3>" +
-			"</body></html>"+
-			"<P><a href=\"PictureBrowse\"> Return </a>");
+			"</body></html>");
+		if (type.contains("3"))
+			out.println("<P><a href=\"publicPicBrowse?"+name+"\"> Return </a>");
+		else if (type.contains("2"))
+			out.println("<P><a href=\"groupPicBrowse?"+name+"\">  Return </a>");
+		else
+			out.println("<P><a href=\"myPicBrowse?"+name+"\">  Return </a>");
             }
 	    else
 	      out.println("<html> Pictures are not avialable</html>");
