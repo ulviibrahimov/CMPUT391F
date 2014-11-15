@@ -13,7 +13,7 @@ $(document).ready(function() {
 
 			+'<div id="header-lower"><div class="nav-options">'
 				+'<div class="nav-option left"><a href="/CMPUT391F">Home</a></div>'
-				+'<div class="nav-option left"><a href="/CMPUT391F/myimages.html">My Images</a></div>'
+				+'<div class="nav-option left"><a href="/CMPUT391F/Sources/jsp/myimages.jsp?public">My Images</a></div>'
 				+'<div class="nav-option left"><a href="/CMPUT391F/upload.html">Upload</a></div>'
 				+'<div class="nav-option left"><a href="/CMPUT391F/search.html">Search</a></div>'
 		+'</div></div></div>'
@@ -28,12 +28,21 @@ $(document).ready(function() {
 	    success: function(response){
 	        console.log(response);
 	        $(".login-bubble").empty();
+		$(".nav-options").empty();
 	        if (response == "") {
 	        	// Not logged in
 	        	redirect();
 		        $(".login-bubble").append('<a href="/CMPUT391F/login.html">Login</a>' + '<a class="vertical-divider"></a>' + '<a href="/CMPUT391F/signup.html">Register</a>');
+			$(".nav-options").append('<div class="nav-option left"><a href="/CMPUT391F">Home</a></div>'
+				+'<div class="nav-option left"><a href="/CMPUT391F/Sources/jsp/myimages.jsp?public">My Images</a></div>'
+				+'<div class="nav-option left"><a href="/CMPUT391F/upload.html">Upload</a></div>'
+				+'<div class="nav-option left"><a href="/CMPUT391F/search.html">Search</a></div>');
 	        } else {
-	        	$(".login-bubble").append('Welcome: ' + response + '<a class="vertical-divider"></a>' + '<a href="/CMPUT391F/Sources/jsp/logout.jsp">Log Out</a>');
+	        	$(".login-bubble").append('Welcome:' + response +'<a class="vertical-divider"></a>' + '<a href="/CMPUT391F/Sources/jsp/logout.jsp">Log Out</a>');
+			$(".nav-options").append('<div class="nav-option left"><a href="/CMPUT391F">Home</a></div>'
+				+'<div class="nav-option left"><a href="/CMPUT391F/Sources/jsp/myimages.jsp?'+response+'">My Images</a></div>'
+				+'<div class="nav-option left"><a href="/CMPUT391F/upload.html">Upload</a></div>'
+				+'<div class="nav-option left"><a href="/CMPUT391F/search.html">Search</a></div>');
 	        	$('div.section').show();
 	        }
 	    },

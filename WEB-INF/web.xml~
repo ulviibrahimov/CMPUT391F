@@ -11,12 +11,65 @@
 
     <servlet>
         <servlet-name>RestServlet</servlet-name>
-        <servlet-class>services.RestController</servlet-class>
+        <servlet-class>RestController</servlet-class>
     </servlet>
 
     <servlet-mapping>
         <servlet-name>RestServlet</servlet-name>
         <url-pattern>/RestService</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>PictureBrowse</servlet-name>
+        <servlet-class>PictureBrowse</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>PictureBrowse</servlet-name>
+        <url-pattern>/PictureBrowse</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>GetOnePic</servlet-name>
+        <servlet-class>GetOnePic</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetOnePic</servlet-name>
+        <url-pattern>/GetOnePic</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>GetBigPic</servlet-name>
+        <servlet-class>GetBigPic</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>GetBigPic</servlet-name>
+        <url-pattern>/GetBigPic</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>myPicBrowse</servlet-name>
+        <servlet-class>myPicBrowse</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>myPicBrowse</servlet-name>
+        <url-pattern>/myPicBrowse</url-pattern>
+    </servlet-mapping>
+    <servlet>
+        <servlet-name>myPicBrowse</servlet-name>
+        <servlet-class>myPicBrowse</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>myPicBrowse</servlet-name>
+        <url-pattern>/myPicBrowse</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>groupPicBrowse</servlet-name>
+        <servlet-class>groupPicBrowse</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>groupPicBrowse</servlet-name>
+        <url-pattern>/groupPicBrowse</url-pattern>
     </servlet-mapping>
 
 </web-app>

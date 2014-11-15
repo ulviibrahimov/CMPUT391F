@@ -1,3 +1,5 @@
+
+<%@ page import="java.sql.*" import="java.util.*" %>
 <!DOCTYPE HTML>
 <html lang="en">
 <head>
@@ -14,9 +16,20 @@
 	<br>
 	<div class="section hcenter">
         <h1><center>Images</center></h1>
-
         <p>
-        	<a href="/CMPUT391F/myPicBrowse">My Images</a>
+		<%!  
+		        Date theDate = new Date();  
+		        Date getDate()  {
+			System.out.println( "In getDate() method" );  
+			return theDate;  
+			String theType="";
+			String findType(){
+				String theType  = request.getQueryString();
+				return theType;  
+			}
+		%> 
+
+        	<a href="/CMPUT391F/myPicBrowse?<%= getDate() %> ">My Images</a>
 		<a href="/CMPUT391F/publicPicBrowse">Public Images</a>
 		<a href="/CMPUT391F/groupPicBrowse">Group Images</a>
         </p>

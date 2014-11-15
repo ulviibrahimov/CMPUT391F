@@ -70,17 +70,8 @@ public class UtilHelper {
         String username = configParam[1];
         String password = configParam[2];
         String drivername = "oracle.jdbc.driver.OracleDriver";
-	System.out.println(dbstring+username);
         Class drvClass = Class.forName(drivername); 
         DriverManager.registerDriver((Driver) drvClass.newInstance());
         return (DriverManager.getConnection(dbstring,username,password));
     }
-	public static void main(String[] args){
-		try {
-		getConfiguration();
-		}
-		catch (Exception e){
-		System.err.print(e);
-		}
-	}
 }
