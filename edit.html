@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<script type="text/javascript" src="/CMPUT391F/Sources/js/jquery-1.9.1.min.js" defer></script>
+	<script type="text/javascript" src="/CMPUT391F/Sources/js/jquery.cookie.min.js" defer></script>
+	<script type="text/javascript" src="/CMPUT391F/Sources/js/jquery-ui.min.js" defer></script>
+	<script type="text/javascript" src="/CMPUT391F/Sources/js/buildHeader.js" defer></script>
+	<script type="text/javascript" src="/CMPUT391F/Sources/js/upload.js" defer></script>
+	<link rel="stylesheet" type="text/css" href="/CMPUT391F/Sources/css/main.css">
+	<link rel="stylesheet" type="text/css" href="/CMPUT391F/Sources/css/jquery-ui.min.css">
+	<link rel="stylesheet" type="text/css" href="/CMPUT391F/Sources/css/jquery-ui.theme.css">
+	<title>Edit Description</title>
+</head>
+<body>
+	<div class="section hcenter" style="display:none">
+		<h1><center>Edit Description</center></h1>
+
+		<form id="upload-form" name="upload-image" enctype="multipart/form-data" >
+
+	        <table>
+		        <tbody>
+			        <tr>
+				        <td>Permission:</td>
+				        <td>
+				        	<div class="radio-horizontal"><input type="radio" name="permitted" value="2" checked> Private</div>
+							<div class="radio-horizontal"><input type="radio" name="permitted" value="1"> Public</div>
+							<div class="radio-horizontal" style='margin-right:3px;'><input type="radio" name="permitted" value="group" disabled> Group</div>
+							<div class="permission-validation" style="vertical-align: top"></div>
+						</td>
+			        </tr>
+					<tr class="collapsible group-selector">
+				        <td >Select Group:</td>
+				        <td >
+				        	<select name="group-id">
+							 </select> 
+				        </td>
+			        </tr>
+			        <tr>
+				        <td>Subject:</td>
+				        <td><input type="text" name="subject" maxlength="128"></td>
+			        </tr>
+			        <tr>
+				        <td>Date Taken:</td>
+				        <td><input id="date-taken" type="text" name="date" placeholder="mm/dd/yyyy"> <div class="date validation"></div></td>
+			        </tr>
+			        <tr>
+				        <td>Location Taken:</td>
+				        <td><input type="text" name="location" maxlength="128"></td>
+			        </tr>
+			        <tr>
+				        <td>Description:</td>
+				        <td><textarea name="description" maxlength="2048" rows="15"></textarea></td>
+			        </tr>
+		        </tbody>
+		    </table>
+
+	        <input class="hcenter" type="submit" name="submit-button" value="Upload">
+		</form>
+		<br>
+		<div id="upload-results" class="hcenter"></div>	
+	</div>
+
+</body>
+</html>

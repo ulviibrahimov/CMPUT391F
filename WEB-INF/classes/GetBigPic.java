@@ -21,7 +21,7 @@ public class GetBigPic extends HttpServlet
 	String id = parts[0];
 	String name=parts[1];
 	String type=parts[2];
-	query = "select subject, place from images where photo_id="
+	query = "select subject, place, timing, description, owner_name from images where photo_id="
 	        + picid.substring(3,5);
 
 	//ServletOutputStream out = response.getOutputStream();
@@ -42,11 +42,14 @@ public class GetBigPic extends HttpServlet
 	    Statement stmt = conn.createStatement();
 	    ResultSet rset = stmt.executeQuery(query);
 	    response.setContentType("text/html");
-            String title, place;
+            String title, place, time, descrip, owner;
 
 	    if ( rset.next() ) {
 	        title = rset.getString("subject");
 	        place = rset.getString("place");
+		time = rset.getString("timing");
+		descrip= rset.getString("description");
+		owner = rset.getString("owner_name");
 		out.println("<!DOCTYPE HTML><html lang=\"en\">"+
 			"<head><meta charset=\"UTF-8\">"+
 			"<script type=\"text/javascript\" src=\"/CMPUT391F/Sources/js/jquery-1.9.1.min.js\" defer></script>"+
@@ -54,17 +57,27 @@ public class GetBigPic extends HttpServlet
 			"<script type=\"text/javascript\" src=\"/CMPUT391F/Sources/js/buildHeader.js\" defer></script>"+
 			"<script type=\"text/javascript\" src=\"/CMPUT391F/Sources/js/myImages.js\" defer></script>"+
 			"<link rel=\"stylesheet\" type=\"text/css\" href=\"/CMPUT391F/Sources/css/main.css\">"+
-			"<title>LUX Image Hosting</title></head><body>");
-                out.println("<center><h3> "+title+ " </h3>" +
-			"<img src = \"GetOnePic?"+id+"\">" +
-			"<h3>" + title +"  at " + place + " </h3>" +
-			"</body></html>");
+			"<title>LUX Image Hosting</title></head><body><br><br><div class=\"section hcenter\">");
+		//out.println("<FORM NAME=\"edit\" METHOD=\"POST\">");
+                out.println("<h1><center> Subject: "+title+ "</center></h1>");
+		//<INPUT TYPE=\"BUTTON\" NAME=\"editSubject\" VALUE = \"Edit\" ONCLICK=\"editSubject()\">);
+		out.println("<img src = \"GetOnePic?"+id+"\">");
+		out.println("<h3> Owner: " + owner + " </h3>");
+		out.println("<h3> Place: " + place + " </h3>");
+		out.println("<h3> Time: " + time + " </h3>");
+		out.println("<h3> Description: " + descrip + " </h3>");
+
+		if (name.compareTo(owner)==0){
+			out.println("<P><a href=\"/CMPUT391F/edit.html?"+picid+"\"> Edit </a>");
+		}
+
 		if (type.contains("3"))
 			out.println("<P><a href=\"publicPicBrowse?"+name+"\"> Return </a>");
 		else if (type.contains("2"))
 			out.println("<P><a href=\"groupPicBrowse?"+name+"\">  Return </a>");
 		else
 			out.println("<P><a href=\"myPicBrowse?"+name+"\">  Return </a>");
+		out.println("</body></html>");
             }
 	    else
 	      out.println("<html> Pictures are not avialable</html>");
@@ -81,5 +94,11 @@ public class GetBigPic extends HttpServlet
 	}
     }
 
-
+/*	public void doPost(HttpServletRequest request,
+		HttpServletResponse response)
+		throws ServletException, IOException {
+		if (request.getParameter("editSubject")!=null){
+			System.out.println("<h3> Owner: ALALALA!!!! </h3>");
+		}
+	}*/
 }

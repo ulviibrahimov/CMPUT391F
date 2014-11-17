@@ -31,11 +31,10 @@ public class PictureBrowse extends HttpServlet implements SingleThreadModel {
 		"<script type=\"text/javascript\" src=\"/CMPUT391F/Sources/js/myImages.js\" defer></script>"+
 		"<link rel=\"stylesheet\" type=\"text/css\" href=\"/CMPUT391F/Sources/css/main.css\">"+
 		"<title>LUX Image Hosting</title></head><body>");
-	out.println("<center>");
+	out.println("<br><br><div class=\"section hcenter\"><center><h3> Images</h3>");
 	name=request.getQueryString().trim();
 
 	if (!name.contains("public") || type==3){
-	out.println("<h3> Images</h3>");
 
 	/*
 	 *   to execute the given query
