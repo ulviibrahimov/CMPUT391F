@@ -14,7 +14,7 @@
 
 	<br>
 	<br>
-	<div class="section hcenter">
+	<div class="section hcenter" style="display:none">
         <h1><center>Images</center></h1>
 
 		
