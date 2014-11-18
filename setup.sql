@@ -72,5 +72,7 @@ CREATE TABLE images (
 -- Our custom SQL setup commands
 
 DROP SEQUENCE pic_id_seq;
-
 CREATE SEQUENCE pic_id_seq;
+
+DROP SEQUENCE group_id_seq;
+CREATE SEQUENCE group_id_seq START WITH 3;

@@ -8,33 +8,27 @@
 // if we want to wait for all images to load as well, use below line instead of $(document).ready
 // window.onload = function () {
 $(document).ready(function() {
+	var cur = window.location.href;
+	var requestedGroup = cur.substring(cur.indexOf('?')+1);
 
-	// Sets date picker on all browsers
-	$('#date-taken').datepicker();
+	if (requestedGroup == '') {
+		// New group
+		setupNew();
+	} else {
+		setupEdit();
+	}
 
-	// Populates the group dropdown
-	populateGroups();
-
-	// Hides and shows the group selector
-	$('input[name="permitted"]').change(function(e) {
-		$('input[name="permitted"]').each(function(index, value) {
-			if ($(this).is(':checked')) {
-				if (this.value == "group") {
-					// Expand the group selector
-					expand($('tr.collapsible.group-selector'), $('table tr:first-child').height());
-				} else {
-					// Hide the group selector
-					collapse($('tr.collapsible.group-selector'));
-				}
-			}
-		});
+	$('#change-name').on('click', function(event) {
+		var cur = window.location.href;
+		baseAdd = cur.substring(0, cur.indexOf('CMPUT391F/')+10);
+		window.location.href = baseAdd + "manageGroup.html?";
 	});
 
-	// Handles submit for upload form
-	$("#upload-form").on("submit", function(event) {
-		handleSubmit();
-	    return false;
-	});
+	// // Handles submit for upload form
+	// $("#upload-form").on("submit", function(event) {
+	// 	handleSubmit();
+	//     return false;
+	// });
 	
 });
 
@@ -60,7 +54,7 @@ function expand($collapsible, height) {
 function populateGroups() {
 	$.ajax({
 	    url: "/CMPUT391F/RestService",
-	    data: 'function=groupOptions',
+	    data: 'function=groups',
 	    type: 'GET',
 
 	    success: function(response){
@@ -80,6 +74,10 @@ function populateGroups() {
         contentType: false,
         processData: false
 	});
+}
+
+function setupNew() {
+	$('#group-name').append("Create New Group");
 }
 
 function handleSubmit() {

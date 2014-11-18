@@ -14,6 +14,7 @@ $(document).ready(function() {
 			+'<div id="header-lower"><div class="nav-options">'
 				+'<div class="nav-option left"><a href="/CMPUT391F">Home</a></div>'
 				+'<div class="nav-option left"><a href="/CMPUT391F/Sources/jsp/myimages.jsp?public">View Images</a></div>'
+				+'<div class="nav-option left"><a href="/CMPUT391F/groups.html">Groups</a></div>'
 				+'<div class="nav-option left"><a href="/CMPUT391F/upload.html">Upload</a></div>'
 				+'<div class="nav-option left"><a href="/CMPUT391F/search.html">Search</a></div>'
 		+'</div></div></div>'
@@ -45,14 +46,23 @@ $(document).ready(function() {
 	function redirect() {
 		var cur = window.location.href;
 		var page = cur.substring(cur.indexOf('CMPUT391F/')+10);
-		var pageNoQuery = page.substring(0, page.indexOf('?'));
+		var pageNoQuery;
+		if (page.indexOf('?') >= 0) {
+			pageNoQuery = page.substring(0, page.indexOf('?'));
+		} else { 
+			pageNoQuery = page;
+		}
+		
 		var redirectPages = new Array(
 		"upload.html",
 		"Sources/jsp/myimages.jsp",
 		"myPicBrowse",
 		"publicPicBrowse",
-		"groupPicBrowse"
+		"groupPicBrowse",
+		"newGroup.html",
+		"manageGroup.html"
 		);
+		
 		if (redirectPages.indexOf(pageNoQuery) >= 0) {
 			// Create redirect cookie first
 			$.cookie("redirect", page, {path: "/CMPUT391F"});

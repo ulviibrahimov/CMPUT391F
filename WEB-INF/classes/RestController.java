@@ -50,11 +50,15 @@ public class RestController extends HttpServlet {
 			String function = getParamValue("function", map)[0];
 
 		    // Route the request to the appropriate function.
-			String result;
+			String result = "";
 		    if (function.equals("userName")) {
 				result = getUserName(request);
-			} else if (function.equals("groups")) {
-				result = getGroups(request);
+			} else if (function.equals("groupOptions")) {
+				result = getGroupOptions(request);
+			} else if (function.equals("groupOwned")) {
+
+			} else if (function.equals("groupBelong")) {
+
 			} else if (function.equals("singleImage")) {
 				result = getSingleImage(request);
 			} else {
@@ -93,6 +97,8 @@ public class RestController extends HttpServlet {
 			String result;
 		    if (function.equals("uploadOne")) {
 				result = "<br>Upload status:<br>" + uploadFile(userName, map);
+			} else if (function.equals("createGroup")) {
+				result = createGroup(userName, map);
 			} else {
 				result = "Requested function is not mapped.";
 			}
@@ -136,21 +142,13 @@ public class RestController extends HttpServlet {
 			Connection conn = UtilHelper.getConnection();
 			Statement stmt = conn.createStatement();
 
-    		// Verify username
-			PreparedStatement stm = conn.prepareStatement("SELECT user_name FROM users WHERE user_name = ?");
-		    stm.setString(1, userName);
-		    ResultSet rset2 = stm.executeQuery();
-		    if (rset2.next() == false) {
-		    	throw new Exception("Invalid user name.");
-		    }
-
 			// Generate a unique pic_id using an SQL sequence
 		    ResultSet rset1 = stmt.executeQuery("SELECT pic_id_seq.nextval from dual");
 		    rset1.next();
 		    int pic_id = rset1.getInt(1);
 
 			// Insert row into table with an empty blob.
-		    stm = conn.prepareStatement("INSERT INTO images (PHOTO_ID, OWNER_NAME, PERMITTED, SUBJECT, PLACE, TIMING, DESCRIPTION, THUMBNAIL, PHOTO) "
+		    PreparedStatement stm = conn.prepareStatement("INSERT INTO images (PHOTO_ID, OWNER_NAME, PERMITTED, SUBJECT, PLACE, TIMING, DESCRIPTION, THUMBNAIL, PHOTO) "
 		    	+ "VALUES(?, ?, ?, ?, ?, ?, ?, empty_blob(), empty_blob())");
 		    stm.setInt(1, pic_id);
 	    	stm.setString(2, userName);
@@ -191,10 +189,56 @@ public class RestController extends HttpServlet {
 		return result + "Upload successful.";
 	}
 
+    private static String createGroup(String userName, Map<String,List<FileItem>> map) {
+    	if (userName == "") {
+    		return "Group Creation Failed. User not logged in.";
+    	}
+
+		String result = "";
+    	try {
+			// Get all input fields
+			String groupName = getTextValue("group-name", map);
+			String dateTemp = getTextValue("date", map);
+			java.sql.Date date = null;
+			if (!dateTemp.equals("")) {
+				date = java.sql.Date.valueOf(dateTemp);
+			}
+
+			// Connect to the oracle database
+			Connection conn = UtilHelper.getConnection();
+			Statement stmt = conn.createStatement();
+
+			// Generate a unique pic_id using an SQL sequence
+		    ResultSet rset1 = stmt.executeQuery("SELECT group_id_seq.nextval from dual");
+		    rset1.next();
+		    int group_id = rset1.getInt(1);
+
+			// Insert row into table with an empty blob.
+		    PreparedStatement stm = conn.prepareStatement("INSERT INTO groups (GROUP_ID, USER_NAME, GROUP_NAME, DATE_CREATED) VALUES(?, ?, ?, ?)");
+		    stm.setInt(1, group_id);
+	    	stm.setString(2, userName);
+	    	stm.setString(3, groupName);
+	    	stm.setDate(4, date);
+	    	stm.executeUpdate();
+
+            conn.close();
+
+            // Success!
+            result = group_id + "";
+
+		} catch (SQLIntegrityConstraintViolationException intEx) {
+			return result + "* Group name already in use.";
+		} catch (Exception ex) {
+		    return result + "* Group Creation Failed.  Exception occurred: " + ex;
+		}
+
+		return result;
+	}
+
 	/*
      * returns an html option list contain group ids and names.
      */
-	private static String getGroups(HttpServletRequest request) {
+	private static String getGroupOptions(HttpServletRequest request) {
 		String result = "";
     	String userName = getUserName(request);
     	

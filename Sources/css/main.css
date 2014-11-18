@@ -116,8 +116,6 @@ div.nav-option {
 	margin-left: auto;
 	margin-right: auto;
 }
-
-
 .collapsible {
 	height: 0px;
     -webkit-transition-duration: 0.3s;
@@ -169,4 +167,10 @@ table textarea, .text-display {
 	/*font-weight: bold;*/
 	color: red;
 	vertical-align: top;
+}
+.hspan {
+	width: 100%;
+}
+button {
+	margin-left:15px;
 }
