@@ -7,6 +7,7 @@
 <body>
 
 <%@ page import="java.sql.*" %>
+<%@ page import="java.net.URLDecoder" %>
 <%@ page import="services.UtilHelper" %>
 <% 
 		response.setContentType("text/html");
@@ -52,7 +53,7 @@
 					for(int i = 0; i < cookies.length; i++) { 
 						if (cookies[i].getName().equals("redirect")) {
 				     		redirect = true;
-							String redirectAddress = cookies[i].getValue();
+							String redirectAddress = URLDecoder.decode(cookies[i].getValue(), "UTF-8");
 
 				     		// Delete the redirect cookie now that we will redirect
 				     		Cookie dCookie = new Cookie("redirect",null);

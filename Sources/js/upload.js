@@ -107,7 +107,9 @@ function handleSubmit() {
 			permission_id = entry.value;
 		}
 	});
-	if (permission_id == 0) {
+	if (permission_id == 'group') {
+		permission_id = $('select[name="group-id"]').val();
+	} else if (permission_id == 0) {
 		$('.permission.validation').append('* Please select a permission level.');
 		passed = false;
 	}

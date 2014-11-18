@@ -28,7 +28,6 @@ public class PictureBrowse extends HttpServlet implements SingleThreadModel {
 		"<script type=\"text/javascript\" src=\"/CMPUT391F/Sources/js/jquery-1.9.1.min.js\" defer></script>"+
 		"<script type=\"text/javascript\" src=\"/CMPUT391F/Sources/js/jquery.cookie.min.js\" defer></script>"+
 		"<script type=\"text/javascript\" src=\"/CMPUT391F/Sources/js/buildHeader.js\" defer></script>"+
-		"<script type=\"text/javascript\" src=\"/CMPUT391F/Sources/js/myImages.js\" defer></script>"+
 		"<link rel=\"stylesheet\" type=\"text/css\" href=\"/CMPUT391F/Sources/css/main.css\">"+
 		"<title>LUX Image Hosting</title></head><body>");
 	out.println("<br><br><div class=\"section hcenter\"><center><h3> Images</h3>");
@@ -64,14 +63,14 @@ public class PictureBrowse extends HttpServlet implements SingleThreadModel {
 		times+=1;
 	    }
 		if (times==0){
-			out.println("<h3> No picture now.</h3>");
+			out.println("<h3> No pictures found.</h3>");
 		}
 	    stmt.close();
 	    conn.close();
 	} catch ( Exception ex ){ out.println(ex.toString() );}
 	}
 	else{
-	out.println("<h3> You are not loging in.</h3>");
+	out.println("<h3> You are not logged in.</h3>");
 	}
     	out.println("<P><a href=\"/CMPUT391F/Sources/jsp/myimages.jsp?"+name+"\"> Return </a>");
 	out.println("</body>");

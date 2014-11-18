@@ -34,7 +34,7 @@ $(document).ready(function() {
 	        	redirect();
 		        $(".login-bubble").append('<a href="/CMPUT391F/login.html">Login</a>' + '<a class="vertical-divider"></a>' + '<a href="/CMPUT391F/signup.html">Register</a>');
 			$(".nav-options").append('<div class="nav-option left"><a href="/CMPUT391F">Home</a></div>'
-				+'<div class="nav-option left"><a href="/CMPUT391F/Sources/jsp/myimages.jsp?public">My Images</a></div>'
+				+'<div class="nav-option left"><a href="/CMPUT391F/Sources/jsp/myimages.jsp?public">View Images</a></div>'
 				+'<div class="nav-option left"><a href="/CMPUT391F/upload.html">Upload</a></div>'
 				+'<div class="nav-option left"><a href="/CMPUT391F/search.html">Search</a></div>');
 	        } else {
@@ -54,11 +54,19 @@ $(document).ready(function() {
 
 	function redirect() {
 		var cur = window.location.href;
-		var page = cur.substring(cur.lastIndexOf("/")+1);
-		if (page == "upload.html") {
+		var page = cur.substring(cur.indexOf('CMPUT391F/')+10);
+		var pageNoQuery = page.substring(0, page.indexOf('?'));
+		var redirectPages = new Array(
+		"upload.html",
+		"Sources/jsp/myimages.jsp",
+		"myPicBrowse",
+		"publicPicBrowse",
+		"groupPicBrowse"
+		);
+		if (redirectPages.indexOf(pageNoQuery) >= 0) {
 			// Create redirect cookie first
 			$.cookie("redirect", page, {path: "/CMPUT391F"});
-			window.location.href = cur.substring(0, cur.lastIndexOf("/")) + "/login.html";
+			window.location.href = cur.substring(0, cur.indexOf("CMPUT391F/")+9) + "/login.html";
 		}
 	}
 });

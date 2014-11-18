@@ -149,8 +149,6 @@ public class RestController extends HttpServlet {
 		    rset1.next();
 		    int pic_id = rset1.getInt(1);
 
-		    // TODO add real username
-
 			// Insert row into table with an empty blob.
 		    stm = conn.prepareStatement("INSERT INTO images (PHOTO_ID, OWNER_NAME, PERMITTED, SUBJECT, PLACE, TIMING, DESCRIPTION, THUMBNAIL, PHOTO) "
 		    	+ "VALUES(?, ?, ?, ?, ?, ?, ?, empty_blob(), empty_blob())");
