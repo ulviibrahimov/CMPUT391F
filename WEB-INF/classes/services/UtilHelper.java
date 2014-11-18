@@ -24,7 +24,7 @@ public class UtilHelper {
      * Reads a file relative to the CMPUT391 directory and returns a String.
      */
     public static String readFile(String fileName) throws IOException {
-        File inFile = new File("catalina/webapps/CMPUT391F/"+fileName);
+        File inFile = new File("webapps/CMPUT391F/"+fileName);
 	//throw new IOException("EXPECTED FILE: "+inFile.getAbsolutePath());
 
         String out = "";
