@@ -19,14 +19,18 @@ public class GetBigPic extends HttpServlet
 	String query;
 	String[] parts=picid.split("!");
 	String id = parts[0];
-	String name=parts[1];
-	String type=parts[2];
+	//String name=parts[1];
+	String type=parts[1];
 	query = "select subject, place, timing, description, owner_name from images where photo_id="
 	        + picid.substring(3,5);
 
 	//ServletOutputStream out = response.getOutputStream();
 	PrintWriter out = response.getWriter();
-
+	HttpSession session = request.getSession();	
+    	String name = (String) session.getAttribute("user");
+	if (name == null) {
+		name="";
+	}
 	/*
 	 *   to execute the given query
 	 */
@@ -72,11 +76,11 @@ public class GetBigPic extends HttpServlet
 		}
 
 		if (type.contains("3"))
-			out.println("<P><a href=\"publicPicBrowse?"+name+"\"> Return </a>");
+			out.println("<P><a href=\"publicPicBrowse\"> Return </a>");
 		else if (type.contains("2"))
-			out.println("<P><a href=\"groupPicBrowse?"+name+"\">  Return </a>");
+			out.println("<P><a href=\"groupPicBrowse\">  Return </a>");
 		else
-			out.println("<P><a href=\"myPicBrowse?"+name+"\">  Return </a>");
+			out.println("<P><a href=\"myPicBrowse\">  Return </a>");
 		out.println("</body></html>");
             }
 	    else

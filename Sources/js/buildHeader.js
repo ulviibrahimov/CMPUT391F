@@ -13,7 +13,7 @@ $(document).ready(function() {
 
 			+'<div id="header-lower"><div class="nav-options">'
 				+'<div class="nav-option left"><a href="/CMPUT391F">Home</a></div>'
-				+'<div class="nav-option left"><a href="/CMPUT391F/Sources/jsp/myimages.jsp?public">View Images</a></div>'
+				+'<div class="nav-option left"><a href="/CMPUT391F/Sources/jsp/myimages.jsp">View Images</a></div>'
 				+'<div class="nav-option left"><a href="/CMPUT391F/upload.html">Upload</a></div>'
 				+'<div class="nav-option left"><a href="/CMPUT391F/search.html">Search</a></div>'
 		+'</div></div></div>'

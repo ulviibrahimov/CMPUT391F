@@ -31,9 +31,12 @@ public class PictureBrowse extends HttpServlet implements SingleThreadModel {
 		"<link rel=\"stylesheet\" type=\"text/css\" href=\"/CMPUT391F/Sources/css/main.css\">"+
 		"<title>LUX Image Hosting</title></head><body>");
 	out.println("<br><br><div class=\"section hcenter\" style=\"display:none\"><center><h3> Images</h3>");
-	name=request.getQueryString().trim();
+	HttpSession session = request.getSession();	
+    	name = (String) session.getAttribute("user");
+	if (name == null) {
+		name="";
+	}
 
-	if (!name.contains("public") || type==3){
 
 	/*
 	 *   to execute the given query
@@ -56,7 +59,7 @@ public class PictureBrowse extends HttpServlet implements SingleThreadModel {
 		p_id = (rset.getObject(1)).toString();
 
 	       // specify the servlet for the image
-               out.println("<a href=\"GetBigPic?big"+p_id+"!"+name+"!"+type+"\">");
+               out.println("<a href=\"GetBigPic?big"+p_id+"!"+type+"\">");
 	       // specify the servlet for the themernail
 	       out.println("<img src=\"GetOnePic?dis"+p_id +
 	                   "\"></a>");
@@ -68,11 +71,9 @@ public class PictureBrowse extends HttpServlet implements SingleThreadModel {
 	    stmt.close();
 	    conn.close();
 	} catch ( Exception ex ){ out.println(ex.toString() );}
-	}
-	else{
-	out.println("<h3> You are not logged in.</h3>");
-	}
-    	out.println("<P><a href=\"/CMPUT391F/Sources/jsp/myimages.jsp?"+name+"\"> Return </a>");
+
+
+    	out.println("<P><a href=\"/CMPUT391F/Sources/jsp/myimages.jsp\"> Return </a>");
 	out.println("</body>");
 	out.println("</html>");
     }

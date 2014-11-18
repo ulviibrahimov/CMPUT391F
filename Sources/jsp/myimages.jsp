@@ -18,30 +18,9 @@
         <h1><center>Images</center></h1>
 
 		
-	<a href="/CMPUT391F/myPicBrowse?<%
-		try{
-			String picid = request.getQueryString().trim();
-			out.println(picid);
-		}
+	<a href="/CMPUT391F/myPicBrowse">My Images</a>
 
-		catch(Exception e){out.println(e.getMessage());}
-           %>">My Images</a>
-
-	<a href="/CMPUT391F/publicPicBrowse?<%
-		try{
-			String picid = request.getQueryString().trim();
-			out.println(picid);
-		}
-
-		catch(Exception e){out.println(e.getMessage());}
-           %>">Public Images</a>
-	<a href="/CMPUT391F/groupPicBrowse?<%
-		try{
-			String picid = request.getQueryString().trim();
-			out.println(picid);
-		}
-
-		catch(Exception e){out.println(e.getMessage());}
-           %>">Group Images</a>
+	<a href="/CMPUT391F/publicPicBrowse">Public Images</a>
+	<a href="/CMPUT391F/groupPicBrowse">Group Images</a>
     </body>
 </html>
