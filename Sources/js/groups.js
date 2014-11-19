@@ -8,6 +8,10 @@
 // if we want to wait for all images to load as well, use below line instead of $(document).ready
 // window.onload = function () {
 $(document).ready(function() {
+
+	populateOwned();
+	populateBelong();
+
 	$('#create').on('click', function(event) {
 		var cur = window.location.href;
 		var baseAdd = cur.substring(0, cur.indexOf('CMPUT391F/')+10);
@@ -46,23 +50,50 @@ function expand($collapsible, height) {
 	}, 200);
 }
 
-// Populates the group dropdown
-function populateGroups() {
+function populateOwned() {
 	$.ajax({
 	    url: "/CMPUT391F/RestService",
-	    data: 'function=groups',
+	    data: 'function=groupOwned',
 	    type: 'GET',
 
 	    success: function(response){
-	        console.log("Groups: "+response);
-	        if (response == "") {
+	        var result = JSON.parse(response);
+	        if (result.result[0] == "fail") {
 	        	// No groups returned
-	        	$('.permission-validation').append('* No groups found');
+	        	$('#owned-groups').append('<tr><td>' + '<b>Failed to get groups.</b>' + '</td></tr>');
+	        	$('#owned-groups').append('<tr><td>' + result.reason[0] + '</td></tr>');
 	        } else {
-	        	$('select[name="group-id"]').empty();
-	        	$('select[name="group-id"]').append(response);
-	        	var $radGroup = $('input[type="radio"][value="group"]');
-	        	$radGroup[0].disabled = false;
+	        	delete result.result;
+	        	for (var k in result) {
+	        		$('#owned-groups').append('<tr><td>' + result[k][0] + '</td><td><button class="manage" type="button" data-id="' + k + '">Manage</button></td></tr>');	
+	        	}
+	        }
+	    },
+	    //Options to tell jQuery not to process data or worry about content-type.
+        cache: false,
+        contentType: false,
+        processData: false
+	});
+
+}
+
+function populateBelong() {
+	$.ajax({
+	    url: "/CMPUT391F/RestService",
+	    data: 'function=groupBelongNotOwn',
+	    type: 'GET',
+
+	    success: function(response){
+	        var result = JSON.parse(response);
+	        if (result.result[0] == "fail") {
+	        	// No groups returned
+	        	$('#belong-groups').append('<tr><td>' + '<b>Failed to get groups.</b>' + '</td></tr>');
+	        	$('#belong-groups').append('<tr><td>' + result.reason[0] + '</td></tr>');
+	        } else {
+	        	delete result.result;
+	        	for (var k in result) {
+	        		$('#belong-groups').append('<tr><td>' + result[k][0] + '</td><td><button class="leave" type="button" data-id="' + k + '">Leave</button></td></tr>');	
+	        	}
 	        }
 	    },
 	    //Options to tell jQuery not to process data or worry about content-type.

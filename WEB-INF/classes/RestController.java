@@ -59,9 +59,9 @@ public class RestController extends HttpServlet {
 			} else if (function.equals("groupOptions")) {
 				result = getGroupOptions(request);
 			} else if (function.equals("groupOwned")) {
-
-			} else if (function.equals("groupBelong")) {
-
+				result = getGroupsOwned(request);
+			} else if (function.equals("groupBelongNotOwn")) {
+				result = getGroupsBelong(request, false);
 			} else if (function.equals("getGroup")) {
 				result = getGroup(request, map);
 			} else if (function.equals("singleImage")) {
@@ -291,6 +291,123 @@ public class RestController extends HttpServlet {
 		}
 
 		return result;
+	}
+/*
+     * returns a json object containing groups owned by current user.
+     */
+	private static String getGroupsOwned(HttpServletRequest request) {
+		JSONObject result = new JSONObject();
+
+    	String userName = getUserName(request);
+    	if (userName == "") {
+    		result.append("result", "fail");
+    		result.append("reason", "User not logged in.");
+    		return result.toString();
+    	}
+		
+    	try {
+    		Map<String, String> groups = getUserOwnedGroups(userName);
+		    for (String k : groups.keySet()) {
+		    	result.append(k, groups.get(k));
+		    }
+		    result.append("result", "success");
+
+	    } catch( Exception ex ) {
+		    result.append("result", "fail");
+    		result.append("reason", "Exception Occurred: " + ex);
+    		return result.toString();
+		}
+
+		return result.toString();
+	}
+
+	/*
+     * returns a json object containing groups that current user belongs to but does not own.
+     */
+	private static String getGroupsBelong(HttpServletRequest request, boolean includeOwned) {
+		JSONObject result = new JSONObject();
+
+    	String userName = getUserName(request);
+    	if (userName == "") {
+    		result.append("result", "fail");
+    		result.append("reason", "User not logged in.");
+    		return result.toString();
+    	}
+		
+    	try {
+			Map<String, String> groups = getUserGroups(userName, includeOwned);
+			for (String k : groups.keySet()) {
+		    	result.append(k, groups.get(k));
+		    }
+		    result.append("result", "success");
+
+	    } catch( Exception ex ) {
+		    result.append("result", "fail");
+    		result.append("reason", "Exception Occurred: " + ex);
+    		return result.toString();
+		}
+
+		return result.toString();
+	}
+
+	/*
+     * returns a map of groups that the user belongs to.
+     */
+	private static Map<String, String> getUserGroups(String userName, boolean includeOwned) throws Exception {
+		Map<String, String> groups = new HashMap<String, String>();
+
+		// Connect to the oracle database
+		Connection conn = UtilHelper.getConnection();
+
+	    // Get groups that user is a part of
+		String baseStatement = "SELECT groups.group_id, group_name "
+			+ "FROM (groups INNER JOIN group_lists ON groups.group_id = group_lists.group_id) "
+			+ "WHERE friend_id = ?";
+		if (!includeOwned) {
+			baseStatement += " AND user_name <> ?";
+		}
+
+		PreparedStatement stm = conn.prepareStatement(baseStatement);
+	    stm.setString(1, userName);
+	    if (!includeOwned) {
+			stm.setString(2, userName);
+		}
+
+	    // Build the result
+	    ResultSet rset = stm.executeQuery();
+	    while (rset.next() == true) {
+	    	groups.put((String) rset.getString("group_id"), (String) rset.getString("group_name"));
+	    }
+
+	    conn.close();
+
+		return groups;
+	}
+
+	/*
+     * returns a map of groups that the user owns.
+     */
+	private static Map<String, String> getUserOwnedGroups(String userName) throws Exception {
+		Map<String, String> groups = new HashMap<String, String>();
+
+		// Connect to the oracle database
+		Connection conn = UtilHelper.getConnection();
+
+	    // Get groups that user is a part of
+		PreparedStatement stm = conn.prepareStatement("SELECT group_id, group_name "
+			+ "FROM groups "
+			+ "WHERE user_name = ?");
+	    stm.setString(1, userName);
+
+	    // Build the result
+	    ResultSet rset = stm.executeQuery();
+	    while (rset.next() == true) {
+	    	groups.put((String) rset.getString("group_id"), (String) rset.getString("group_name"));
+	    }
+
+	    conn.close();
+
+		return groups;
 	}
 
 	/*
