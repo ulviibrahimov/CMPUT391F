@@ -136,8 +136,8 @@ tr > td:first-child {
 }
 
 /* spacing between table rows */
-tr > td > * {
-	margin-bottom: 10px;
+tr > td {
+	padding-bottom: 10px;
 }
 
 /* widths for most inputs */

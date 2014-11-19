@@ -13,21 +13,6 @@ $(document).ready(function() {
 
 	populate(requestedGroup);
 
-	$('#transfer').on('click', function(event) {
-		var $this = $(this);
-		if ($this.hasClass('expanded')) {
-			$this.removeClass('expanded');
-			collapse($('.collapsible.transfer'));
-		} else {
-			$this.addClass('expanded');
-			expand($('.collapsible.transfer'), $('button').height() * 3);	
-		}
-	});
-
-	$('#confirm-transfer').on('click', function(event) {
-		handleTransfer();
-	});
-
 	$('#disband').on('click', function(event) {
 		var $this = $(this);
 		if ($this.hasClass('expanded')) {
@@ -52,7 +37,45 @@ $(document).ready(function() {
 		handleAdd();
 	});
 
-	$(".member").on("click", function(event) {
+	$('body').on('click', 'button.transfer', function(event) {
+		var $this = $(this);
+		if ($this.hasClass('expanded')) {
+			$this.removeClass('expanded');
+			collapse($this.parent().find('.collapsible.transfer'));
+		} else {
+			$this.addClass('expanded');
+			expand($this.parent().find('.collapsible.transfer'), $('button').height() * 3);	
+		}
+	});
+
+	$('body').on('click', '.cancel-transfer', function(event) {
+		var $this = $(this);
+		$this.parent().parent().find('button.transfer').removeClass('expanded');
+		collapse($this.parent());
+	});
+
+	$('body').on('click', '.confirm-transfer', function(event) {
+		handleTransfer();
+	});
+
+	$('body').on('click', 'button.remove', function(event) {
+		var $this = $(this);
+		if ($this.hasClass('expanded')) {
+			$this.removeClass('expanded');
+			collapse($this.parent().find('.collapsible.remove'));
+		} else {
+			$this.addClass('expanded');
+			expand($this.parent().find('.collapsible.remove'), $('button').height() * 3);	
+		}
+	});
+
+	$('body').on('click', '.cancel-remove', function(event) {
+		var $this = $(this);
+		$this.parent().parent().find('button.remove').removeClass('expanded');
+		collapse($this.parent());
+	});
+
+	$('body').on('click', '.confirm-remove', function(event) {
 		handleRemove();
 	});
 	
@@ -102,11 +125,28 @@ function populateFields(group) {
 	console.log(group);
 	$('#group-name').append(group.groupName[0]);
 
-	for (var i in group.members) {
-		$('#members').append('<div class="hdivider"></div>'
-		+ '<div><b>' + group.members[i].user + '</b>'
-		+ '<button class="member medium-button hright" type="button" data-member-id="' + group.members[i].user + '">Remove</button>'
-		+ '<p class="notice">' + group.members[i].notice + '</p></div>');
+	if (!group.members) {
+		$('.transfer').hide();
+	} else {
+		for (var i in group.members) {
+			if (group.members[i].user == $('.login-bubble').data('user')) {
+				$('#members').prepend('<div class="hdivider"></div>'
+					+ '<div><b>' + group.members[i].user + '</b>'
+					+ '<p class="notice">' + group.members[i].notice + '</p></div>');
+			} else {
+				$('#members').append('<div class="hdivider"></div>'
+					+ '<div data-member-id="' + group.members[i].user + '"><b>' + group.members[i].user + '</b>'
+					+ '<button class="remove medium-button hright" type="button">Remove</button>'
+					+ '<button class="hright transfer" type="button">Transfer Leadership</button>'
+					+ '<div class="collapsible hspan remove"><br><span>Remove ' + group.members[i].user + '?</span>'
+					+ '<button class="confirm-remove small-button" type="button">Yes</button>'
+					+ '<button class="cancel-remove small-button" type="button">No</button></div>'
+					+ '<div class="collapsible hspan transfer"><br><span>Transfer Leadership to ' + group.members[i].user + '?</span>'
+					+ '<button class="confirm-transfer small-button" type="button">Yes</button>'
+					+ '<button class="cancel-transfer small-button" type="button">No</button></div>'
+					+ '<p class="notice">' + group.members[i].notice + '</p></div>');
+			}
+		}
 	}
 }
 

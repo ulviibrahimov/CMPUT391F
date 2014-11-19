@@ -104,6 +104,8 @@ public class RestController extends HttpServlet {
 				result = "<br>Upload status:<br>" + uploadFile(userName, map);
 			} else if (function.equals("createGroup")) {
 				result = createGroup(userName, map);
+			} else if (function.equals("leaveGroup")) {
+				result = leaveGroup(userName, map);
 			} else {
 				result = "Requested function is not mapped.";
 			}
@@ -248,6 +250,52 @@ public class RestController extends HttpServlet {
 	}
 
 	/*
+	 * Attempts to remove a user from a group.
+	 */
+	private static String leaveGroup(String userName, Map<String,List<FileItem>> map) {
+    	if (userName == "") {
+    		return "User not logged in.";
+    	}
+
+		String result = "";
+    	try {
+			// Get all input fields
+			int groupId = Integer.parseInt(getTextValue("groupId", map));
+
+			// Connect to the oracle database
+			Connection conn = UtilHelper.getConnection();
+			PreparedStatement stm;
+			ResultSet rset;
+
+			// Ensure user is not group leader
+			stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");
+		    stm.setInt(1, groupId);
+	    	rset = stm.executeQuery();
+
+		    rset.next();
+		    String owner = rset.getString("user_name");
+
+		    if (owner.equals(userName)) {
+		    	return "User is group owner.  Please transfer leadership first or disband group.";
+		    }
+
+	    	stm = conn.prepareStatement("DELETE FROM group_lists WHERE group_id = ? AND friend_id = ?");
+		    stm.setInt(1, groupId);
+		    stm.setString(2, userName);
+	    	stm.executeUpdate();
+
+            conn.close();
+
+            result = groupId + "";
+
+		} catch (Exception ex) {
+		    return result + "Exception occurred: " + ex;
+		}
+
+		return result;
+	}
+
+	/*
 	 * Adds a user to a group.
 	 */
 	private static String addUserToGroup () {
@@ -360,7 +408,7 @@ public class RestController extends HttpServlet {
 		Connection conn = UtilHelper.getConnection();
 
 	    // Get groups that user is a part of
-		String baseStatement = "SELECT groups.group_id, group_name "
+		String baseStatement = "SELECT groups.group_id, group_name, user_name "
 			+ "FROM (groups INNER JOIN group_lists ON groups.group_id = group_lists.group_id) "
 			+ "WHERE friend_id = ?";
 		if (!includeOwned) {
@@ -376,8 +424,8 @@ public class RestController extends HttpServlet {
 	    // Build the result
 	    ResultSet rset = stm.executeQuery();
 	    while (rset.next() == true) {
-	    	groups.put((String) rset.getString("group_id"), (String) rset.getString("group_name"));
-	    }
+	    	groups.put((String) rset.getString("group_id"), ((String) rset.getString("group_name")) + " (Owner: " + ((String) rset.getString("user_name")) + ")");
+	    } 
 
 	    conn.close();
 
@@ -450,7 +498,6 @@ public class RestController extends HttpServlet {
 		    	}
 		    }
 
-
 		    // Get group members
 			stm = conn.prepareStatement("SELECT friend_id, notice "
 				+ "FROM group_lists "
@@ -460,13 +507,10 @@ public class RestController extends HttpServlet {
 		    // Build array of members
 		    rset = stm.executeQuery();
 		    while (rset.next() == true) {
-		    	String user = (String) rset.getString("friend_id");
-		    	if (!user.equals(userName)) {
-		    		JSONObject userObj = new JSONObject();
-		    		userObj.append("user", user);
-		    		userObj.append("notice", (String) rset.getString("notice"));
-		    		result.append("members", userObj);
-		    	}
+	    		JSONObject userObj = new JSONObject();
+	    		userObj.append("user", (String) rset.getString("friend_id"));
+	    		userObj.append("notice", (String) rset.getString("notice"));
+	    		result.append("members", userObj);
 		    }
 
 		    conn.close();
