@@ -29,7 +29,6 @@ CREATE TABLE persons (
    FOREIGN KEY (user_name) REFERENCES users
 );
 
-
 CREATE TABLE groups (
    group_id   int,
    user_name  varchar(24),
@@ -70,6 +69,9 @@ CREATE TABLE images (
 
 
 -- Our custom SQL setup commands
+
+INSERT INTO users values('admin', 'secret', SYSDATE);
+INSERT INTO persons values('admin', null, null, null, null, null);
 
 DROP SEQUENCE pic_id_seq;
 CREATE SEQUENCE pic_id_seq;
