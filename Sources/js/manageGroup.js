@@ -76,7 +76,8 @@ $(document).ready(function() {
 	});
 
 	$('body').on('click', '.confirm-remove', function(event) {
-		handleRemove();
+		var user = $(this).parent().parent().data('member-id');
+		handleRemove(user, requestedGroup);
 	});
 	
 });
@@ -129,7 +130,7 @@ function populateFields(group) {
 		$('.transfer').hide();
 	} else {
 		for (var i in group.members) {
-			if (group.members[i].user == $('.login-bubble').data('user')) {
+			if (group.members[i].owner) {
 				$('#members').prepend('<div class="hdivider"></div>'
 					+ '<div><b>' + group.members[i].user + '</b>'
 					+ '<p class="notice">' + group.members[i].notice + '</p></div>');
@@ -159,91 +160,14 @@ function handleDisband() {
 function handleAdd() {
 }
 
-function handleRemove() {
-}
-
-function handleSubmit() {
-		
-	// Validate!
-	var passed = true;
-	$('.validation').empty();	
-
-	// Make sure a file is selected, and it's extension is correct.
-	var fileName = $('input[name="selected-file"]').val();
-	if (fileName.length <= 4) {
-		// No file selected
-		$('.selected-file.validation').append('* Please select a valid file.');
-		passed = false;
-	} else if (fileName.substring(fileName.length-4).toLowerCase() != ".jpg" && fileName.substring(fileName.length-4).toLowerCase() != ".gif") {
-		// Invalid extension
-		$('.selected-file.validation').append('* Only .jpg and .gif are accepted.');
-		passed = false;
-	}
-
-	// Check for valid permission
-	var permission_id = 0;
-	$('input[name="permitted"]').each(function(index, entry) {
-		if ($(entry).is(':checked')) {
-			permission_id = entry.value;
-		}
-	});
-	if (permission_id == 'group') {
-		permission_id = $('select[name="group-id"]').val();
-	} else if (permission_id == 0) {
-		$('.permission.validation').append('* Please select a permission level.');
-		passed = false;
-	}
-
+function handleRemove(user, group) {
 	// Get all our data in a FormData object
 	var data = new FormData();
-	$('input').each(function(index, element) {
-		var type = this.type;
-		if (type == "group" || type == "radio") {
-			// Don't add anything, just continue
-		} else if (type == "file") {
-			data.append(this.name, this.files[0]);
-		} else if (this.name == "date") {
-			if (this.value == "") {
-				// Empty / null date
-				data.append(this.name, this.value);
-			} else {
-				// There is input on date, check for validity
-				var d = new Date(this.value);
-				if (d == "Invalid Date") {
-					$('.date.validation').append('* Invalid date.');
-					passed = false;
-				} else {
-					// Transform date to correct format
-					var month = (d.getMonth()+1);
-					if ((month+"").length < 2) {
-						month = "0" + month;
-					}
-					var date = d.getDate();
-					if ((date+"").length < 2) {
-						date = "0" + date;
-					}
-					var val = d.getFullYear() + "-" + month + "-" + date;
-					data.append(this.name, val);
-				}
-			}
-		} else {
-			data.append(this.name, this.value);
-		}
-	});
-
-	// Did we pass validation?
-	if (!passed) {
-		return false;
-	}
-
-	// Start upload
-	$("#upload-results").empty().append('Uploading...');
-
-	// Add the group id and description
-	data.append("group-id", permission_id);
-	data.append('description', $('textarea').val());
+	data.append('user', user);
+	data.append("group", group);
+	
 	// Add function so the RESTController knows what to do with the data
-	data.append("function", "uploadOne");
+	data.append("function", "removeUserFromGroup");
 
     $.ajax({
 	    url: "/CMPUT391F/RestService",

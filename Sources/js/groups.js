@@ -11,6 +11,7 @@ $(document).ready(function() {
 
 	populateOwned();
 	populateBelong();
+	populateAdmin();
 
 	$('#create').on('click', function(event) {
 		var cur = window.location.href;
@@ -74,7 +75,6 @@ function populateOwned() {
         contentType: false,
         processData: false
 	});
-
 }
 
 function populateBelong() {
@@ -103,6 +103,30 @@ function populateBelong() {
 	});
 }
 
+function populateAdmin() {
+	$.ajax({
+	    url: "/CMPUT391F/RestService",
+	    data: 'function=groupAdmin',
+	    type: 'GET',
+
+	    success: function(response){
+	        var result = JSON.parse(response);
+	        if (result.result[0] == "fail") {
+	        	// Probably not admin
+	        } else {
+	        	$('#admin-column').show();
+	        	for (var k in result.groups[0]) {
+	        		$('#admin-groups').append('<tr><td>' + result.groups[0][k][0] + '</td><td><button class="manage" type="button" data-id="' + k + '">Manage</button></td></tr>');	
+	        	}
+	        }
+	    },
+	    //Options to tell jQuery not to process data or worry about content-type.
+        cache: false,
+        contentType: false,
+        processData: false
+	});
+}
+
 function handleLeave(groupId) {
 
 	// Get all our data in a FormData object
@@ -115,13 +139,6 @@ function handleLeave(groupId) {
 	    url: "/CMPUT391F/RestService",
 	    data: data,
 	    type: 'POST',
-	    xhr: function() {  // Custom XMLHttpRequest
-            var myXhr = $.ajaxSettings.xhr();
-            if(myXhr.upload){ // Check if upload property exists
-                // myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // For handling the progress of the upload
-            }
-            return myXhr;
-        },
 	    success: function(response){
 	        console.log(response);
 	        var $pressedButton = $('button.leave[data-id="' + groupId + '"]');

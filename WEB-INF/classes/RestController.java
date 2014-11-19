@@ -62,6 +62,8 @@ public class RestController extends HttpServlet {
 				result = getGroupsOwned(request);
 			} else if (function.equals("groupBelongNotOwn")) {
 				result = getGroupsBelong(request, false);
+			} else if (function.equals("groupAdmin")) {
+				result = getGroupsAdmin(request);
 			} else if (function.equals("getGroup")) {
 				result = getGroup(request, map);
 			} else if (function.equals("singleImage")) {
@@ -262,29 +264,7 @@ public class RestController extends HttpServlet {
 			// Get all input fields
 			int groupId = Integer.parseInt(getTextValue("groupId", map));
 
-			// Connect to the oracle database
-			Connection conn = UtilHelper.getConnection();
-			PreparedStatement stm;
-			ResultSet rset;
-
-			// Ensure user is not group leader
-			stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");
-		    stm.setInt(1, groupId);
-	    	rset = stm.executeQuery();
-
-		    rset.next();
-		    String owner = rset.getString("user_name");
-
-		    if (owner.equals(userName)) {
-		    	return "User is group owner.  Please transfer leadership first or disband group.";
-		    }
-
-	    	stm = conn.prepareStatement("DELETE FROM group_lists WHERE group_id = ? AND friend_id = ?");
-		    stm.setInt(1, groupId);
-		    stm.setString(2, userName);
-	    	stm.executeUpdate();
-
-            conn.close();
+			removeUserFromGroup(userName, groupId, null);
 
             result = groupId + "";
 
@@ -293,6 +273,42 @@ public class RestController extends HttpServlet {
 		}
 
 		return result;
+	}
+
+	/*
+	 * Attempts to revome specified user from group_list.  Optionally checks if the group owner matches expectedOwner.  
+	 * Pass null to expectedOwner if you wish to bypass this check.
+	 */
+	private static void removeUserFromGroup(String userName, int groupId, String expectedOwner) throws Exception{
+
+			// Connect to the oracle database
+			Connection conn = UtilHelper.getConnection();
+			PreparedStatement stm;
+			ResultSet rset;
+
+			stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");
+		    stm.setInt(1, groupId);
+	    	rset = stm.executeQuery();
+
+		    rset.next();
+		    String owner = rset.getString("user_name");
+
+			// Ensure user to be removed is not group leader
+		    if (owner.equals(userName)) {
+		    	throw new Exception("User is group owner.  Please transfer leadership first or disband group.");
+		    }
+
+		    // Ensure owner is as espected
+		    if (expectedOwner != null && !expectedOwner.equals("admin") && !expectedOwner.equals(owner)) {
+		    	throw new Exception("User does not have persmission to remove " + userName + ".");
+		    }
+
+	    	stm = conn.prepareStatement("DELETE FROM group_lists WHERE group_id = ? AND friend_id = ?");
+		    stm.setInt(1, groupId);
+		    stm.setString(2, userName);
+	    	stm.executeUpdate();
+
+            conn.close();
 	}
 
 	/*
@@ -459,6 +475,47 @@ public class RestController extends HttpServlet {
 	}
 
 	/*
+     * returns a map of groups that the user owns.
+     */
+	private static String getGroupsAdmin(HttpServletRequest request) {
+		JSONObject result = new JSONObject();
+
+		String userName = getUserName(request);
+    	if (!userName.equals("admin")) {
+    		result.append("result", "fail");
+    		result.append("reason", "User not admin.");
+    		return result.toString();
+    	}
+
+		try {
+			// Connect to the oracle database
+			Connection conn = UtilHelper.getConnection();
+
+		    // Get all groups
+			PreparedStatement stm = conn.prepareStatement("SELECT group_id, group_name "
+				+ "FROM groups "
+				+ "WHERE group_id <> 1 AND group_id <> 2");
+
+		    // Build the result
+		    JSONObject groups = new JSONObject();
+		    ResultSet rset = stm.executeQuery();
+		    while (rset.next() == true) {
+		    	groups.append((String) rset.getString("group_id"), (String) rset.getString("group_name"));
+		    }
+		    result.append("groups", groups);
+		    result.append("result", "success");
+
+		    conn.close();
+		} catch (Exception ex) {
+			result.append("result", "fail");
+    		result.append("reason", "Exception Occurred: " + ex);
+    		return result.toString();
+		}
+
+		return result.toString();
+	}
+
+	/*
      * returns a json object containing group data.
      */
 	private static String getGroup(HttpServletRequest request, Map<String, String[]> map) {
@@ -487,9 +544,10 @@ public class RestController extends HttpServlet {
 		    stm.setInt(1, groupId);
 
 			rset = stm.executeQuery();
+			String owner = "";
 		    while (rset.next() == true) {
-		    	String owner = (String) rset.getString("user_name");
-		    	if (owner.equals(userName)) {
+		    	owner = (String) rset.getString("user_name");
+		    	if (userName.equals(owner) || userName.equals("admin")) {
 		    		result.append("groupName", (String) rset.getString("group_name"));	
 		    	} else {
 					result.append("result", "fail");
@@ -508,7 +566,11 @@ public class RestController extends HttpServlet {
 		    rset = stm.executeQuery();
 		    while (rset.next() == true) {
 	    		JSONObject userObj = new JSONObject();
-	    		userObj.append("user", (String) rset.getString("friend_id"));
+	    		String user = (String) rset.getString("friend_id");
+	    		if (user.equals(owner)) {
+	    			userObj.append("owner", "true");
+	    		}
+	    		userObj.append("user", user);
 	    		userObj.append("notice", (String) rset.getString("notice"));
 	    		result.append("members", userObj);
 		    }
