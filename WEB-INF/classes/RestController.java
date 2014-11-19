@@ -5,6 +5,9 @@
  */
 import services.UtilHelper;
 
+import org.json.JSONObject;
+import org.json.JSONArray;
+
 import java.util.*;
 import java.io.*;
 
@@ -59,6 +62,8 @@ public class RestController extends HttpServlet {
 
 			} else if (function.equals("groupBelong")) {
 
+			} else if (function.equals("getGroup")) {
+				result = getGroup(request, map);
 			} else if (function.equals("singleImage")) {
 				result = getSingleImage(request);
 			} else {
@@ -213,12 +218,19 @@ public class RestController extends HttpServlet {
 		    rset1.next();
 		    int group_id = rset1.getInt(1);
 
-			// Insert row into table with an empty blob.
+			// Insert row into table
 		    PreparedStatement stm = conn.prepareStatement("INSERT INTO groups (GROUP_ID, USER_NAME, GROUP_NAME, DATE_CREATED) VALUES(?, ?, ?, ?)");
 		    stm.setInt(1, group_id);
 	    	stm.setString(2, userName);
 	    	stm.setString(3, groupName);
 	    	stm.setDate(4, date);
+	    	stm.executeUpdate();
+
+	    	stm = conn.prepareStatement("INSERT INTO group_lists (GROUP_ID, FRIEND_ID, DATE_ADDED, NOTICE) VALUES(?, ?, ?, ?)");
+		    stm.setInt(1, group_id);
+	    	stm.setString(2, userName);
+	    	stm.setDate(3, date);
+	    	stm.setString(4, "Current Owner");
 	    	stm.executeUpdate();
 
             conn.close();
@@ -236,6 +248,20 @@ public class RestController extends HttpServlet {
 	}
 
 	/*
+	 * Adds a user to a group.
+	 */
+	private static String addUserToGroup () {
+		// Verify username
+			// PreparedStatement stm = conn.prepareStatement("SELECT user_name FROM users WHERE user_name = ?");
+		 //    stm.setString(1, userName);
+		 //    ResultSet rset2 = stm.executeQuery();
+		 //    if (rset2.next() == false) {
+		 //    	throw new Exception("Invalid user name.");
+		 //    }
+		return "";
+	}
+
+	/*
      * returns an html option list contain group ids and names.
      */
 	private static String getGroupOptions(HttpServletRequest request) {
@@ -246,16 +272,8 @@ public class RestController extends HttpServlet {
     		// Connect to the oracle database
 			Connection conn = UtilHelper.getConnection();
 
-	    	// Verify username
-			PreparedStatement stm = conn.prepareStatement("SELECT user_name FROM users WHERE user_name = ?");
-		    stm.setString(1, userName);
-		    ResultSet rset2 = stm.executeQuery();
-		    if (rset2.next() == false) {
-		    	throw new Exception("Invalid user name.");
-		    }
-
 		    // Get groups that user is a part of
-			stm = conn.prepareStatement("SELECT groups.group_id, group_name "
+			PreparedStatement stm = conn.prepareStatement("SELECT groups.group_id, group_name, user_name "
 				+ "FROM (groups INNER JOIN group_lists ON groups.group_id = group_lists.group_id) "
 				+ "WHERE friend_id = ?");
 		    stm.setString(1, userName);
@@ -263,7 +281,7 @@ public class RestController extends HttpServlet {
 		    // Build the result
 		    ResultSet rset = stm.executeQuery();
 		    while (rset.next() == true) {
-		    	result += "<option value='" + (String) rset.getString("group_id") + "'>" + (String) rset.getString("group_name") + "</option>";
+		    	result += "<option value='" + (String) rset.getString("group_id") + "'>" + (String) rset.getString("group_name") + " (Owner: " + (String) rset.getString("user_name") + "</option>";
 		    }
 
 		    conn.close();
@@ -273,6 +291,78 @@ public class RestController extends HttpServlet {
 		}
 
 		return result;
+	}
+
+	/*
+     * returns a json object containing group data.
+     */
+	private static String getGroup(HttpServletRequest request, Map<String, String[]> map) {
+		JSONObject result = new JSONObject();
+
+    	String userName = getUserName(request);
+    	if (userName == "") {
+    		result.append("result", "fail");
+    		result.append("reason", "User not logged in.");
+    		return result.toString();
+    	}
+		
+    	try {
+			// Get params
+			int groupId = Integer.parseInt(getParamValue("groupId", map)[0]);
+
+    		// Connect to the oracle database
+			Connection conn = UtilHelper.getConnection();
+			PreparedStatement stm;
+			ResultSet rset;
+
+			// Confirm user has permission to manage group
+			stm = conn.prepareStatement("SELECT user_name, group_name "
+				+ "FROM groups "
+				+ "WHERE group_id = ?");
+		    stm.setInt(1, groupId);
+
+			rset = stm.executeQuery();
+		    while (rset.next() == true) {
+		    	String owner = (String) rset.getString("user_name");
+		    	if (owner.equals(userName)) {
+		    		result.append("groupName", (String) rset.getString("group_name"));	
+		    	} else {
+					result.append("result", "fail");
+		    		result.append("reason", "User not group owner.");
+		    		return result.toString();
+		    	}
+		    }
+
+
+		    // Get group members
+			stm = conn.prepareStatement("SELECT friend_id, notice "
+				+ "FROM group_lists "
+				+ "WHERE group_id = ?");
+		    stm.setInt(1, groupId);
+
+		    // Build array of members
+		    rset = stm.executeQuery();
+		    while (rset.next() == true) {
+		    	String user = (String) rset.getString("friend_id");
+		    	if (!user.equals(userName)) {
+		    		JSONObject userObj = new JSONObject();
+		    		userObj.append("user", user);
+		    		userObj.append("notice", (String) rset.getString("notice"));
+		    		result.append("members", userObj);
+		    	}
+		    }
+
+		    conn.close();
+
+		    result.append("result", "success");
+
+	    } catch( Exception ex ) {
+		    result.append("result", "fail");
+    		result.append("reason", "Exception Occurred: " + ex);
+    		return result.toString();
+		}
+
+		return result.toString();
 	}
 
 	/*

@@ -11,24 +11,50 @@ $(document).ready(function() {
 	var cur = window.location.href;
 	var requestedGroup = cur.substring(cur.indexOf('?')+1);
 
-	if (requestedGroup == '') {
-		// New group
-		setupNew();
-	} else {
-		setupEdit();
-	}
+	populate(requestedGroup);
 
-	$('#change-name').on('click', function(event) {
-		var cur = window.location.href;
-		baseAdd = cur.substring(0, cur.indexOf('CMPUT391F/')+10);
-		window.location.href = baseAdd + "manageGroup.html?";
+	$('#transfer').on('click', function(event) {
+		var $this = $(this);
+		if ($this.hasClass('expanded')) {
+			$this.removeClass('expanded');
+			collapse($('.collapsible.transfer'));
+		} else {
+			$this.addClass('expanded');
+			expand($('.collapsible.transfer'), $('button').height() * 3);	
+		}
 	});
 
-	// // Handles submit for upload form
-	// $("#upload-form").on("submit", function(event) {
-	// 	handleSubmit();
-	//     return false;
-	// });
+	$('#confirm-transfer').on('click', function(event) {
+		handleTransfer();
+	});
+
+	$('#disband').on('click', function(event) {
+		var $this = $(this);
+		if ($this.hasClass('expanded')) {
+			$this.removeClass('expanded');
+			collapse($('.collapsible.disband'));
+		} else {
+			$this.addClass('expanded');
+			expand($('.collapsible.disband'), $('button').height() * 3);
+		}
+	});
+
+	$('#cancel-disband').on('click', function(event) {
+		$('#disband').removeClass('expanded');
+		collapse($('.collapsible.disband'));
+	});
+
+	$('#confirm-disband').on('click', function(event) {
+		handleDisband();
+	});
+
+	$('#confirm-add').on('click', function(event) {
+		handleAdd();
+	});
+
+	$(".member").on("click", function(event) {
+		handleRemove();
+	});
 	
 });
 
@@ -50,34 +76,50 @@ function expand($collapsible, height) {
 	}, 200);
 }
 
-// Populates the group dropdown
-function populateGroups() {
+function populate(groupId) {
 	$.ajax({
 	    url: "/CMPUT391F/RestService",
-	    data: 'function=groups',
+	    data: 'function=getGroup&groupId='+groupId,
 	    type: 'GET',
 
 	    success: function(response){
-	        console.log("Groups: "+response);
-	        if (response == "") {
-	        	// No groups returned
-	        	$('.permission-validation').append('* No groups found');
+	        var results = JSON.parse(response)
+	        if (results.result[0] == "fail") {
+	        	$('.section').empty().append('<h1><center>Group Management Denied</center></h1>');
+	        	$('.section').append('<p class="hcenter">' + results.reason[0] + '</p>');
 	        } else {
-	        	$('select[name="group-id"]').empty();
-	        	$('select[name="group-id"]').append(response);
-	        	var $radGroup = $('input[type="radio"][value="group"]');
-	        	$radGroup[0].disabled = false;
+	        	populateFields(results);
 	        }
 	    },
 	    //Options to tell jQuery not to process data or worry about content-type.
         cache: false,
         contentType: false,
         processData: false
-	});
+	});	
 }
 
-function setupNew() {
-	$('#group-name').append("Create New Group");
+function populateFields(group) {
+	console.log(group);
+	$('#group-name').append(group.groupName[0]);
+
+	for (var i in group.members) {
+		$('#members').append('<div class="hdivider"></div>'
+		+ '<div><b>' + group.members[i].user + '</b>'
+		+ '<button class="member medium-button hright" type="button" data-member-id="' + group.members[i].user + '">Remove</button>'
+		+ '<p class="notice">' + group.members[i].notice + '</p></div>');
+	}
+}
+
+function handleTransfer() {
+}
+
+function handleDisband() {
+}
+
+function handleAdd() {
+}
+
+function handleRemove() {
 }
 
 function handleSubmit() {

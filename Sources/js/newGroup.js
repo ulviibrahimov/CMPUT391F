@@ -62,7 +62,7 @@ function handleSave() {
 	    		// Group created successfully, redirect to manage page
 	    		var cur = window.location.href;
 				var baseAdd = cur.substring(0, cur.indexOf('CMPUT391F/')+10);
-				window.location.href = baseAdd + "manageGroups.html?" + response;
+				window.location.href = baseAdd + "manageGroup.html?" + response;
 	    	} else {
 	    		// An error was encountered
 	    		$('.name.validation').append(response);

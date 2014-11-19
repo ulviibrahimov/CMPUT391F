@@ -60,7 +60,8 @@ $(document).ready(function() {
 		"publicPicBrowse",
 		"groupPicBrowse",
 		"newGroup.html",
-		"manageGroup.html"
+		"manageGroup.html",
+		"groups.html"
 		);
 		
 		if (redirectPages.indexOf(pageNoQuery) >= 0) {
