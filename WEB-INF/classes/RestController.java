@@ -281,7 +281,7 @@ public class RestController extends HttpServlet {
 		    // Build the result
 		    ResultSet rset = stm.executeQuery();
 		    while (rset.next() == true) {
-		    	result += "<option value='" + (String) rset.getString("group_id") + "'>" + (String) rset.getString("group_name") + " (Owner: " + (String) rset.getString("user_name") + "</option>";
+		    	result += "<option value='" + (String) rset.getString("group_id") + "'>" + (String) rset.getString("group_name") + " (Owner: " + (String) rset.getString("user_name") + ")</option>";
 		    }
 
 		    conn.close();
