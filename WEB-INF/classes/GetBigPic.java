@@ -22,7 +22,7 @@ public class GetBigPic extends HttpServlet
 	//String name=parts[1];
 	String type=parts[1];
 	query = "select subject, place, timing, description, owner_name from images where photo_id="
-	        + picid.substring(3,5);
+	        + id.substring(3);
 
 	//ServletOutputStream out = response.getOutputStream();
 	PrintWriter out = response.getWriter();

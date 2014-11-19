@@ -30,7 +30,7 @@ public class PictureBrowse extends HttpServlet implements SingleThreadModel {
 		"<script type=\"text/javascript\" src=\"/CMPUT391F/Sources/js/buildHeader.js\" defer></script>"+
 		"<link rel=\"stylesheet\" type=\"text/css\" href=\"/CMPUT391F/Sources/css/main.css\">"+
 		"<title>LUX Image Hosting</title></head><body>");
-	out.println("<br><br><div class=\"section hcenter\" style=\"display:none\"><center><h3> Images</h3>");
+	out.println("<br><br><div class=\"section hcenter\" style=\"display:none\"><center><h1> Images</h1>");
 	HttpSession session = request.getSession();	
     	name = (String) session.getAttribute("user");
 	if (name == null) {
