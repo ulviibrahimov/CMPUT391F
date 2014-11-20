@@ -69,6 +69,15 @@ CREATE TABLE images (
 );
 
 
+CREATE TABLE viewed (
+   photo_id    int,
+   owner_name  varchar(24),
+   PRIMARY KEY(photo_id,owner_name),
+   FOREIGN KEY(owner_name) REFERENCES users,
+   FOREIGN KEY(photo_id) REFERENCES images
+);
+
+
 -- Our custom SQL setup commands
 
 DROP SEQUENCE pic_id_seq;

@@ -75,7 +75,9 @@ public class GetBigPic extends HttpServlet
 			out.println("<P><a href=\"/CMPUT391F/edit.html?"+picid+"\"> Edit </a>");
 		}
 
-		if (type.contains("3"))
+		if (type.contains("4"))
+			out.println("<P><a href=\"/CMPUT391F/Sources/jsp/searchReturn.jsp?"+parts[2]+"\"> Return </a>");
+		else if (type.contains("3"))
 			out.println("<P><a href=\"publicPicBrowse\"> Return </a>");
 		else if (type.contains("2"))
 			out.println("<P><a href=\"groupPicBrowse\">  Return </a>");
@@ -98,11 +100,4 @@ public class GetBigPic extends HttpServlet
 	}
     }
 
-/*	public void doPost(HttpServletRequest request,
-		HttpServletResponse response)
-		throws ServletException, IOException {
-		if (request.getParameter("editSubject")!=null){
-			System.out.println("<h3> Owner: ALALALA!!!! </h3>");
-		}
-	}*/
 }

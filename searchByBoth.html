@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+  <head>
+	<meta charset="UTF-8">
+	<script type="text/javascript" src="/CMPUT391F/Sources/js/jquery-1.9.1.min.js" defer></script>
+	<script type="text/javascript" src="/CMPUT391F/Sources/js/jquery.cookie.min.js" defer></script>
+	<script type="text/javascript" src="/CMPUT391F/Sources/js/buildHeader.js" defer></script>
+	<link rel="stylesheet" type="text/css" href="/CMPUT391F/Sources/css/main.css">
+	<title>LUX Image Hosting</title>
+  </head>
+<body>
+	<br>
+	<br>
+	<div class="section hcenter">
+        <h1><center>Search</center></h1>
+	<FORM NAME="searchpicture" ACTION="/CMPUT391F/Sources/jsp/searchTranslate.jsp?3" METHOD="post" >
+	Enter keywords: <br>
+	<INPUT TYPE="text" Name="key" size="50"></input><br>	
+	time period: <TD><br><input
+		name="dateStart" type="text" size="50" placeholder="DD/MM/YYYY"></input></TD> and <TD><input
+		name="dateEnd" type="text" size="50" placeholder="DD/MM/YYYY"></input></TD>
+		
+	<p>Select sorting method:</p>
+	<input type="radio" name="SEARCHTYPE" value="recentFirst">Recent First
+	<br> <input type="radio" name="SEARCHTYPE" value="recentLast">Recent Last
+	<br> <input type="radio" name="SEARCHTYPE" value="relevant">Relevant<br>
+	<input type="submit" name="SEARCHDATA" value="Search">
+
+	<br><center><a href="/CMPUT391F/search.html">Return</a>
+</form>
+
+
+
+
+</BODY>
+</HTML>
