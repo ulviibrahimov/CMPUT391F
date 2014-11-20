@@ -199,11 +199,11 @@ div.hdivider {
 	width: calc(100% + 40px);
 }
 
-p.notice, p.remove, p.transfer {
+p.notice, p.remove, p.transfer, p.disband {
 	margin-top: 5px;
 	margin-bottom: 5px;
 	width: 340px;
-	word-wrap:break-word;
+	word-wrap: break-word;
 }
 
 .hright {

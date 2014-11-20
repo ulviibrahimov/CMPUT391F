@@ -112,6 +112,8 @@ public class RestController extends HttpServlet {
 				result = addUserToGroup(userName, map);
 			} else if (function.equals("kickUser")) {
 				result = kickUser(userName, map);
+			} else if (function.equals("disbandGroup")) {
+				result = disbandGroup(userName, map);
 			} else {
 				result = "Requested function is not mapped.";
 			}
@@ -338,6 +340,57 @@ public class RestController extends HttpServlet {
 	    	stm.executeUpdate();
 
             conn.close();
+	}
+
+	/*
+	 * Attempts to delete a group.
+	 */
+	private static String disbandGroup(String userName, Map<String,List<FileItem>> map) {
+    	if (userName == "") {
+    		return "User not logged in.";
+    	}
+
+		String result = "";
+    	try {
+			// Get all input fields
+			int groupId = Integer.parseInt(getTextValue("group", map));
+
+			// Connect to the oracle database
+			Connection conn = UtilHelper.getConnection();
+			PreparedStatement stm;
+			ResultSet rset;
+
+			if (!userName.equals("admin")) {
+				stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");
+			    stm.setInt(1, groupId);
+		    	rset = stm.executeQuery();
+
+			    rset.next();
+			    String owner = rset.getString("user_name");
+
+			    // Enusre that it is the owner attempting to disband.
+			    if (!owner.equals(userName)) {
+			    	throw new Exception("User is not group owner.");
+			    }
+			}
+
+	    	stm = conn.prepareStatement("DELETE FROM group_lists WHERE group_id = ?");
+		    stm.setInt(1, groupId);
+		    stm.executeUpdate();
+
+	    	stm = conn.prepareStatement("DELETE FROM groups WHERE group_id = ?");
+			stm.setInt(1, groupId);
+			stm.executeUpdate();
+
+            conn.close();
+
+            result = "success";
+
+		} catch (Exception ex) {
+		    return result + "Exception occurred: " + ex;
+		}
+
+		return result;
 	}
 
 	/*

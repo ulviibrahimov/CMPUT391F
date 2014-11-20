@@ -30,7 +30,7 @@ $(document).ready(function() {
 	});
 
 	$('#confirm-disband').on('click', function(event) {
-		handleDisband();
+		handleDisband(requestedGroup);
 	});
 
 	$('#confirm-add').on('click', function(event) {
@@ -164,7 +164,32 @@ function populateFields(group) {
 function handleTransfer() {
 }
 
-function handleDisband() {
+function handleDisband(group) {
+	// Get all our data in a FormData object
+	var data = new FormData();
+	data.append('group', group);
+	// Add function so the RESTController knows what to do with the data
+	data.append("function", "disbandGroup");
+
+    $.ajax({
+	    url: "/CMPUT391F/RestService",
+	    data: data,
+	    type: 'POST',
+	    success: function(response){
+	        if (response == 'success') {
+	        	var cur = window.location.href;
+				var page = cur.substring(0, cur.indexOf('CMPUT391F/')+10);
+				window.location.href = page + "groups.html";
+	        } else {
+	        	$('p.disband').empty().append(response);
+	        	expand($('div.collapsible.disband'));
+	        }
+	    },
+	    //Options to tell jQuery not to process data or worry about content-type.
+        cache: false,
+        contentType: false,
+        processData: false
+	});
 }
 
 function handleAdd(user, group, notice) {
