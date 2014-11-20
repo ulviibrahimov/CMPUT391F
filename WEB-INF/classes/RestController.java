@@ -110,6 +110,8 @@ public class RestController extends HttpServlet {
 				result = leaveGroup(userName, map);
 			} else if (function.equals("addUserToGroup")) {
 				result = addUserToGroup(userName, map);
+			} else if (function.equals("kickUser")) {
+				result = kickUser(userName, map);
 			} else {
 				result = "Requested function is not mapped.";
 			}
@@ -269,6 +271,31 @@ public class RestController extends HttpServlet {
 			removeUserFromGroup(userName, groupId, null);
 
             result = groupId + "";
+
+		} catch (Exception ex) {
+		    return result + "Exception occurred: " + ex;
+		}
+
+		return result;
+	}
+
+	/*
+	 * Attempts to remove a user from a group.
+	 */
+	private static String kickUser(String userName, Map<String,List<FileItem>> map) {
+    	if (userName == "") {
+    		return "User not logged in.";
+    	}
+
+		String result = "";
+    	try {
+			// Get all input fields
+			String member = getTextValue("user", map);
+			int groupId = Integer.parseInt(getTextValue("group", map));
+
+			removeUserFromGroup(member, groupId, userName);
+
+            result = "success";
 
 		} catch (Exception ex) {
 		    return result + "Exception occurred: " + ex;

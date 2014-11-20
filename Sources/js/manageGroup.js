@@ -20,7 +20,7 @@ $(document).ready(function() {
 			collapse($('.collapsible.disband'));
 		} else {
 			$this.addClass('expanded');
-			expand($('.collapsible.disband'), $('button').height() * 3);
+			expand($('.collapsible.disband'));
 		}
 	});
 
@@ -46,7 +46,7 @@ $(document).ready(function() {
 			collapse($this.parent().find('.collapsible.transfer'));
 		} else {
 			$this.addClass('expanded');
-			expand($this.parent().find('.collapsible.transfer'), $('button').height() * 3);	
+			expand($this.parent().find('.collapsible.transfer'));	
 		}
 	});
 
@@ -67,7 +67,7 @@ $(document).ready(function() {
 			collapse($this.parent().find('.collapsible.remove'));
 		} else {
 			$this.addClass('expanded');
-			expand($this.parent().find('.collapsible.remove'), $('button').height() * 3);	
+			expand($this.parent().find('.collapsible.remove'));	
 		}
 	});
 
@@ -95,8 +95,13 @@ function collapse($collapsible) {
 	$collapsible.height('0px');
 }
 
-function expand($collapsible, height) {
-	$collapsible.height(height);
+function expand($collapsible) {
+	var totalHeight = 0;
+    $collapsible.find('> *').each(function(){
+        totalHeight += $(this).height();
+    });
+
+	$collapsible.height(totalHeight);
 	setTimeout(function() {
 		$collapsible.find('> *').show();
 	}, 200);
@@ -144,10 +149,12 @@ function populateFields(group) {
 					+ '<p class="notice">' + group.members[i].notice + '</p>'
 					+ '<div class="collapsible hspan transfer"><br><span>Transfer Leadership to ' + group.members[i].user + '?</span>'
 					+ '<button class="confirm-transfer small-button" type="button">Yes</button>'
-					+ '<button class="cancel-transfer small-button" type="button">No</button></div>'
+					+ '<button class="cancel-transfer small-button" type="button">No</button>'
+					+ '<p class="validation transfer"></p></div>'
 					+ '<div class="collapsible hspan remove"><br><span>Remove ' + group.members[i].user + '?</span>'
 					+ '<button class="confirm-remove small-button" type="button">Yes</button>'
-					+ '<button class="cancel-remove small-button" type="button">No</button></div>'
+					+ '<button class="cancel-remove small-button" type="button">No</button>'
+					+ '<p class="validation remove"></p></div>'
 					+ '</div>');
 			}
 		}
@@ -177,7 +184,7 @@ function handleAdd(user, group, notice) {
 	    type: 'POST',
 	    success: function(response){
 	        if (response == 'success') {
-	        	expand($('div.collapsible.add'), $('button').height());
+	        	expand($('div.collapsible.add'));
 	        	$('div.add-result').removeClass('validation');
 	        	$('div.add-result').empty().append('User, ' + user + ', added successfully!');
 
@@ -188,15 +195,17 @@ function handleAdd(user, group, notice) {
 					+ '<p class="notice">' + notice + '</p>'
 					+ '<div class="collapsible hspan transfer"><br><span>Transfer Leadership to ' + user + '?</span>'
 					+ '<button class="confirm-transfer small-button" type="button">Yes</button>'
-					+ '<button class="cancel-transfer small-button" type="button">No</button></div>'
+					+ '<button class="cancel-transfer small-button" type="button">No</button>'
+					+ '<p class="validation transfer"></p></div>'
 					+ '<div class="collapsible hspan remove"><br><span>Remove ' + user + '?</span>'
 					+ '<button class="confirm-remove small-button" type="button">Yes</button>'
-					+ '<button class="cancel-remove small-button" type="button">No</button></div>'
+					+ '<button class="cancel-remove small-button" type="button">No</button>'
+					+ '<p class="validation remove"></p></div>'
 					+ '</div>');	
 	        } else {
 	        	$('div.add-result').addClass('validation');
 	        	$('div.add-result').empty().append(response);
-	        	expand($('div.collapsible.add'), $('div.add-result').height());
+	        	expand($('div.collapsible.add'));
 	        }
 	    },
 	    //Options to tell jQuery not to process data or worry about content-type.
@@ -213,23 +222,26 @@ function handleRemove(user, group) {
 	data.append("group", group);
 	
 	// Add function so the RESTController knows what to do with the data
-	data.append("function", "removeUserFromGroup");
+	data.append("function", "kickUser");
 
     $.ajax({
 	    url: "/CMPUT391F/RestService",
 	    data: data,
 	    type: 'POST',
-	    xhr: function() {  // Custom XMLHttpRequest
-            var myXhr = $.ajaxSettings.xhr();
-            if(myXhr.upload){ // Check if upload property exists
-                // myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // For handling the progress of the upload
-            }
-            return myXhr;
-        },
-
 	    success: function(response){
 	        console.log(response);
-	        $("#upload-results").append(response);
+	        if (response == 'success') {
+	        	$('div[data-member-id="'+user+'"]').empty().append('<div data-member-id="' + user + '"><b>' + user + '</b><a class="hright">Successfully removed!</a></div>');
+	        	setTimeout(function() {
+	        		var $div = $('div[data-member-id="'+user+'"]');
+	        		$div.prev().remove();
+	        		$div.remove();
+	        	}, 2000);
+	        } else {
+	        	var $remove = $('div[data-member-id="'+user+'"]').find('div.remove');
+	        	$remove.find('p.remove').empty().append('Failed to remove ' + user + '.  ' + response);
+	        	expand($remove);
+	        }
 	    },
 	    //Options to tell jQuery not to process data or worry about content-type.
         cache: false,
