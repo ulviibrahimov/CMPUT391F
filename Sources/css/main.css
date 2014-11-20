@@ -98,6 +98,7 @@ div.nav-option {
 	margin-top: 15px;
 
 	padding: 20px;
+	padding-top: 0px;
 
 	border-style: solid;
 	border-width: 3px;
@@ -135,8 +136,8 @@ tr > td:first-child {
 }
 
 /* spacing between table rows */
-tr > td > * {
-	margin-bottom: 10px;
+tr > td {
+	padding-bottom: 10px;
 }
 
 /* widths for most inputs */
@@ -171,6 +172,40 @@ table textarea, .text-display {
 .hspan {
 	width: 100%;
 }
-button {
-	margin-left:15px;
+.top {
+	vertical-align: top;
+}
+button.small-button {
+	width: 50px;
+	margin-left: 15px;
+}
+button.medium-button {
+	width: 95px;
+	margin-left: 10px;
+}
+
+div.hdivider {
+	position: relative;
+
+	left: -20px;
+
+	border-top-style: dotted;
+	border-width: 1px;
+	border-color: #A1A1A1;
+
+	margin-top: 13px;
+	margin-bottom: 13px;
+
+	width: calc(100% + 40px);
+}
+
+p.notice, p.remove, p.transfer {
+	margin-top: 5px;
+	margin-bottom: 5px;
+	width: 340px;
+	word-wrap:break-word;
+}
+
+.hright {
+	float: right;
 }

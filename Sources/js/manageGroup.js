@@ -11,24 +11,76 @@ $(document).ready(function() {
 	var cur = window.location.href;
 	var requestedGroup = cur.substring(cur.indexOf('?')+1);
 
-	if (requestedGroup == '') {
-		// New group
-		setupNew();
-	} else {
-		setupEdit();
-	}
+	populate(requestedGroup);
 
-	$('#change-name').on('click', function(event) {
-		var cur = window.location.href;
-		baseAdd = cur.substring(0, cur.indexOf('CMPUT391F/')+10);
-		window.location.href = baseAdd + "manageGroup.html?";
+	$('#disband').on('click', function(event) {
+		var $this = $(this);
+		if ($this.hasClass('expanded')) {
+			$this.removeClass('expanded');
+			collapse($('.collapsible.disband'));
+		} else {
+			$this.addClass('expanded');
+			expand($('.collapsible.disband'));
+		}
 	});
 
-	// // Handles submit for upload form
-	// $("#upload-form").on("submit", function(event) {
-	// 	handleSubmit();
-	//     return false;
-	// });
+	$('#cancel-disband').on('click', function(event) {
+		$('#disband').removeClass('expanded');
+		collapse($('.collapsible.disband'));
+	});
+
+	$('#confirm-disband').on('click', function(event) {
+		handleDisband();
+	});
+
+	$('#confirm-add').on('click', function(event) {
+		var newMember = $('input[name="new-member"]').val();
+		var notice = $('textarea[name="notice"]').val();
+		handleAdd(newMember, requestedGroup, notice);
+	});
+
+	$('body').on('click', 'button.transfer', function(event) {
+		var $this = $(this);
+		if ($this.hasClass('expanded')) {
+			$this.removeClass('expanded');
+			collapse($this.parent().find('.collapsible.transfer'));
+		} else {
+			$this.addClass('expanded');
+			expand($this.parent().find('.collapsible.transfer'));	
+		}
+	});
+
+	$('body').on('click', '.cancel-transfer', function(event) {
+		var $this = $(this);
+		$this.parent().parent().find('button.transfer').removeClass('expanded');
+		collapse($this.parent());
+	});
+
+	$('body').on('click', '.confirm-transfer', function(event) {
+		handleTransfer();
+	});
+
+	$('body').on('click', 'button.remove', function(event) {
+		var $this = $(this);
+		if ($this.hasClass('expanded')) {
+			$this.removeClass('expanded');
+			collapse($this.parent().find('.collapsible.remove'));
+		} else {
+			$this.addClass('expanded');
+			expand($this.parent().find('.collapsible.remove'));	
+		}
+	});
+
+	$('body').on('click', '.cancel-remove', function(event) {
+		var $this = $(this);
+		$this.parent().parent().find('button.remove').removeClass('expanded');
+		collapse($this.parent());
+	});
+
+	$('body').on('click', '.confirm-remove', function(event) {
+		var user = $(this).parent().parent().data('member-id');
+		handleRemove(user, requestedGroup);
+	});
 	
 });
 
@@ -43,30 +95,117 @@ function collapse($collapsible) {
 	$collapsible.height('0px');
 }
 
-function expand($collapsible, height) {
-	$collapsible.height(height);
+function expand($collapsible) {
+	var totalHeight = 0;
+    $collapsible.find('> *').each(function(){
+        totalHeight += $(this).height();
+    });
+
+	$collapsible.height(totalHeight);
 	setTimeout(function() {
 		$collapsible.find('> *').show();
 	}, 200);
 }
 
-// Populates the group dropdown
-function populateGroups() {
+function populate(groupId) {
 	$.ajax({
 	    url: "/CMPUT391F/RestService",
-	    data: 'function=groups',
+	    data: 'function=getGroup&groupId='+groupId,
 	    type: 'GET',
 
 	    success: function(response){
-	        console.log("Groups: "+response);
-	        if (response == "") {
-	        	// No groups returned
-	        	$('.permission-validation').append('* No groups found');
+	        var results = JSON.parse(response)
+	        if (results.result[0] == "fail") {
+	        	$('.section').empty().append('<h1><center>Group Management Denied</center></h1>');
+	        	$('.section').append('<p class="hcenter">' + results.reason[0] + '</p>');
 	        } else {
-	        	$('select[name="group-id"]').empty();
-	        	$('select[name="group-id"]').append(response);
-	        	var $radGroup = $('input[type="radio"][value="group"]');
-	        	$radGroup[0].disabled = false;
+	        	populateFields(results);
+	        }
+	    },
+	    //Options to tell jQuery not to process data or worry about content-type.
+        cache: false,
+        contentType: false,
+        processData: false
+	});	
+}
+
+function populateFields(group) {
+	console.log(group);
+	$('#group-name').append(group.groupName[0]);
+
+	if (!group.members) {
+		$('.transfer').hide();
+	} else {
+		for (var i in group.members) {
+			if (group.members[i].owner) {
+				$('#members').prepend('<div class="hdivider"></div>'
+					+ '<div><b>' + group.members[i].user + '</b>'
+					+ '<p class="notice">' + group.members[i].notice + '</p></div>');
+			} else {
+				$('#members').append('<div class="hdivider"></div>'
+					+ '<div data-member-id="' + group.members[i].user + '"><b>' + group.members[i].user + '</b>'
+					+ '<button class="remove medium-button hright" type="button">Remove</button>'
+					+ '<button class="hright transfer" type="button">Transfer Leadership</button>'
+					+ '<p class="notice">' + group.members[i].notice + '</p>'
+					+ '<div class="collapsible hspan transfer"><br><span>Transfer Leadership to ' + group.members[i].user + '?</span>'
+					+ '<button class="confirm-transfer small-button" type="button">Yes</button>'
+					+ '<button class="cancel-transfer small-button" type="button">No</button>'
+					+ '<p class="validation transfer"></p></div>'
+					+ '<div class="collapsible hspan remove"><br><span>Remove ' + group.members[i].user + '?</span>'
+					+ '<button class="confirm-remove small-button" type="button">Yes</button>'
+					+ '<button class="cancel-remove small-button" type="button">No</button>'
+					+ '<p class="validation remove"></p></div>'
+					+ '</div>');
+			}
+		}
+	}
+}
+
+function handleTransfer() {
+}
+
+function handleDisband() {
+}
+
+function handleAdd(user, group, notice) {
+	// Get all our data in a FormData object
+	var data = new FormData();
+	data.append('user', user);
+	data.append('group', group);
+	data.append('notice', notice);
+	data.append('date', getCurrentDate());
+	
+	// Add function so the RESTController knows what to do with the data
+	data.append("function", "addUserToGroup");
+
+    $.ajax({
+	    url: "/CMPUT391F/RestService",
+	    data: data,
+	    type: 'POST',
+	    success: function(response){
+	        if (response == 'success') {
+	        	expand($('div.collapsible.add'));
+	        	$('div.add-result').removeClass('validation');
+	        	$('div.add-result').empty().append('User, ' + user + ', added successfully!');
+
+	        	$('#members').append('<div class="hdivider"></div>'
+					+ '<div data-member-id="' + user + '"><b>' + user + '</b>'
+					+ '<button class="remove medium-button hright" type="button">Remove</button>'
+					+ '<button class="hright transfer" type="button">Transfer Leadership</button>'
+					+ '<p class="notice">' + notice + '</p>'
+					+ '<div class="collapsible hspan transfer"><br><span>Transfer Leadership to ' + user + '?</span>'
+					+ '<button class="confirm-transfer small-button" type="button">Yes</button>'
+					+ '<button class="cancel-transfer small-button" type="button">No</button>'
+					+ '<p class="validation transfer"></p></div>'
+					+ '<div class="collapsible hspan remove"><br><span>Remove ' + user + '?</span>'
+					+ '<button class="confirm-remove small-button" type="button">Yes</button>'
+					+ '<button class="cancel-remove small-button" type="button">No</button>'
+					+ '<p class="validation remove"></p></div>'
+					+ '</div>');	
+	        } else {
+	        	$('div.add-result').addClass('validation');
+	        	$('div.add-result').empty().append(response);
+	        	expand($('div.collapsible.add'));
 	        }
 	    },
 	    //Options to tell jQuery not to process data or worry about content-type.
@@ -76,112 +215,53 @@ function populateGroups() {
 	});
 }
 
-function setupNew() {
-	$('#group-name').append("Create New Group");
-}
-
-function handleSubmit() {
-		
-	// Validate!
-	var passed = true;
-	$('.validation').empty();	
-
-	// Make sure a file is selected, and it's extension is correct.
-	var fileName = $('input[name="selected-file"]').val();
-	if (fileName.length <= 4) {
-		// No file selected
-		$('.selected-file.validation').append('* Please select a valid file.');
-		passed = false;
-	} else if (fileName.substring(fileName.length-4).toLowerCase() != ".jpg" && fileName.substring(fileName.length-4).toLowerCase() != ".gif") {
-		// Invalid extension
-		$('.selected-file.validation').append('* Only .jpg and .gif are accepted.');
-		passed = false;
-	}
-
-	// Check for valid permission
-	var permission_id = 0;
-	$('input[name="permitted"]').each(function(index, entry) {
-		if ($(entry).is(':checked')) {
-			permission_id = entry.value;
-		}
-	});
-	if (permission_id == 'group') {
-		permission_id = $('select[name="group-id"]').val();
-	} else if (permission_id == 0) {
-		$('.permission.validation').append('* Please select a permission level.');
-		passed = false;
-	}
-
+function handleRemove(user, group) {
 	// Get all our data in a FormData object
 	var data = new FormData();
-	$('input').each(function(index, element) {
-		var type = this.type;
-		if (type == "group" || type == "radio") {
-			// Don't add anything, just continue
-		} else if (type == "file") {
-			data.append(this.name, this.files[0]);
-		} else if (this.name == "date") {
-			if (this.value == "") {
-				// Empty / null date
-				data.append(this.name, this.value);
-			} else {
-				// There is input on date, check for validity
-				var d = new Date(this.value);
-				if (d == "Invalid Date") {
-					$('.date.validation').append('* Invalid date.');
-					passed = false;
-				} else {
-					// Transform date to correct format
-					var month = (d.getMonth()+1);
-					if ((month+"").length < 2) {
-						month = "0" + month;
-					}
-					var date = d.getDate();
-					if ((date+"").length < 2) {
-						date = "0" + date;
-					}
-					var val = d.getFullYear() + "-" + month + "-" + date;
-					data.append(this.name, val);
-				}
-			}
-		} else {
-			data.append(this.name, this.value);
-		}
-	});
-
-	// Did we pass validation?
-	if (!passed) {
-		return false;
-	}
-
-	// Start upload
-	$("#upload-results").empty().append('Uploading...');
-
-	// Add the group id and description
-	data.append("group-id", permission_id);
-	data.append('description', $('textarea').val());
+	data.append('user', user);
+	data.append("group", group);
+	
 	// Add function so the RESTController knows what to do with the data
-	data.append("function", "uploadOne");
+	data.append("function", "kickUser");
 
     $.ajax({
 	    url: "/CMPUT391F/RestService",
 	    data: data,
 	    type: 'POST',
-	    xhr: function() {  // Custom XMLHttpRequest
-            var myXhr = $.ajaxSettings.xhr();
-            if(myXhr.upload){ // Check if upload property exists
-                // myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // For handling the progress of the upload
-            }
-            return myXhr;
-        },
-
 	    success: function(response){
 	        console.log(response);
-	        $("#upload-results").append(response);
+	        if (response == 'success') {
+	        	$('div[data-member-id="'+user+'"]').empty().append('<div data-member-id="' + user + '"><b>' + user + '</b><a class="hright">Successfully removed!</a></div>');
+	        	setTimeout(function() {
+	        		var $div = $('div[data-member-id="'+user+'"]');
+	        		$div.prev().remove();
+	        		$div.remove();
+	        	}, 2000);
+	        } else {
+	        	var $remove = $('div[data-member-id="'+user+'"]').find('div.remove');
+	        	$remove.find('p.remove').empty().append('Failed to remove ' + user + '.  ' + response);
+	        	expand($remove);
+	        }
 	    },
 	    //Options to tell jQuery not to process data or worry about content-type.
         cache: false,
         contentType: false,
         processData: false
 	});
+}
+
+function getCurrentDate() {	
+	var d = new Date();
+
+	// Transform date to correct format
+	var month = (d.getMonth()+1);
+	if ((month+"").length < 2) {
+		month = "0" + month;
+	}
+	var date = d.getDate();
+	if ((date+"").length < 2) {
+		date = "0" + date;
+	}
+	var val = d.getFullYear() + "-" + month + "-" + date;
+	return val;
 }

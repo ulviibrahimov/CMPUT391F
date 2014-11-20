@@ -36,6 +36,7 @@ $(document).ready(function() {
 	        	$(".login-bubble").append('Welcome: ' + response + '<a class="vertical-divider"></a>' + '<a href="/CMPUT391F/Sources/jsp/logout.jsp">Log Out</a>');
 	        	$('div.section').show();
 	        }
+	        $('.login-bubble').data('user', response);
 	    },
 	    //Options to tell jQuery not to process data or worry about content-type.
         cache: false,
@@ -60,7 +61,8 @@ $(document).ready(function() {
 		"publicPicBrowse",
 		"groupPicBrowse",
 		"newGroup.html",
-		"manageGroup.html"
+		"manageGroup.html",
+		"groups.html"
 		);
 		
 		if (redirectPages.indexOf(pageNoQuery) >= 0) {

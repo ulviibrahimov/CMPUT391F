@@ -12,69 +12,52 @@
 	<title>Upload Images</title>
 </head>
 <body>
-	<div class="section hcenter" style="display:none">
-		<h1><center id="group-name"></center></h1>
+	<table class="hspan"><tr>
+		<td class="top">
+			<div class="section hcenter" style="display:none">
+				<h1><center id="group-name"></center></h1>
 
-		<br>
-		<table class="hspan">
-			<tr>
-				<td><input type="text" name="subject" maxlength="24" placeholder="Group Name"></td>
-				<td><button id="change" type="button">Save</button></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td><button id="transfer" type="button">Transfer Leadership</button></td>
-			</tr>
-			<tr>
-				<td></td>
-				<td><button id="disband" type="button">Disband</button></td>
-			</tr>
-		</table>
-		
-	    <h1><center>Members</center></h1>
-	    <button id="add" type="button">New Member</button>
-		
-	        <table class="edit-only">
-		        <tbody>
-		        	<tr>
-				        <td>Group Name:</td>
-				        <td><input type="text" name="subject" maxlength="24"></td>
-			        </tr>
-			        <tr>
-				        <td>Permission:</td>
-				        <td>
-				        	<div class="radio-horizontal"><input type="radio" name="permitted" value="2" checked> Private</div>
-							<div class="radio-horizontal"><input type="radio" name="permitted" value="1"> Public</div>
-							<div class="radio-horizontal" style='margin-right:3px;'><input type="radio" name="permitted" value="group" disabled> Group</div>
-							<div class="permission-validation" style="vertical-align: top"></div>
-						</td>
-			        </tr>
-					<tr class="collapsible group-selector">
-				        <td >Select Group:</td>
-				        <td >
-				        	<select name="group-id">
-							</select> 
-				        </td>
-			        </tr>
-			        <tr>
-				        <td>Subject:</td>
-				        <td><input type="text" name="subject" maxlength="128"></td>
-			        </tr>
-			        <tr>
-				        <td>Date Taken:</td>
-				        <td><input id="date-taken" type="text" name="date" placeholder="mm/dd/yyyy"> <div class="date validation"></div></td>
-			        </tr>
-			        <tr>
-				        <td>Location Taken:</td>
-				        <td><input type="text" name="location" maxlength="128"></td>
-			        </tr>
-			        <tr>
-				        <td>Description:</td>
-				        <td><textarea name="description" maxlength="2048" rows="15"></textarea></td>
-			        </tr>
-		        </tbody>
-		    </table>
-	</div>
+				<div class="hdivider"></div>
+
+				<div>
+					<input type="text" name="group-name" maxlength="24" placeholder="New Group Name"></input>
+					<button id="change" class="medium-button" type="button">Change</button>
+				</div>
+				<div class="collapsible hspan change">
+					<div class="change-result"></div>
+				</div>
+			
+				<div class="hdivider"></div>
+			
+				<button id="disband" class="hcenter" type="button">Disband</button>
+				<div class="collapsible hspan disband">
+					<br>
+					<span>Are you sure?</span>
+					<button id="confirm-disband" class="small-button" type="button">Yes</button>
+					<button id="cancel-disband" class="small-button" type="button">No</button>
+				</div>
+
+				<div class="hdivider"></div>
+
+				<input type="text" name="new-member" maxlength="24" placeholder="New Member"></input>
+				<button id="confirm-add" class="medium-button" type="button">Add Member!</button>
+				<textarea class="hspan" name="notice" maxlength="1024" placeholder="New Member Notice" style="margin-top: 10px"></textarea>
+				<div class="collapsible hspan add">
+					<div class="add-result"></div>
+				</div>
+
+			</div>
+		</td>
+		<td class="top">
+			<div class="section hcenter" style="display:none">
+
+			    <h1><center>Members</center></h1>
+				
+				<div id="members"></div>
+
+			</div>
+		</td>
+	</table>
 
 </body>
 </html>

@@ -15,49 +15,29 @@
 <body>
 	<table class="hspan"><tr>
 
-		<td><div class="section hcenter" style="display:none">
-			<h1><center>My Groups</center></h1>
-			<button id="create" type="button" class="hcenter">Create New</button>
-			<br>
-	        <table class="hcenter">
-		        <tbody>
-		        	<tr>
-				        <td>Group 1</td>
-				        <td>
-				        	<button type="button">Manage</button>
-				        </td>
-			        </tr>
-			        <tr>
-				        <td>Group 2</td>
-				        <td>
-				        	<button type="button">Manage</button>
-				        </td>
-			        </tr>
-		        </tbody>
-		    </table>
-			<br>
-		</div></td>
-		
-		<td><div class="section hcenter" style="display:none">
-				<h1><center>Groups I belong to</center></h1>
-				<table class="hcenter">
-			        <tbody>
-			        	<tr>
-					        <td>Group 1</td>
-					        <td>
-					        	<button type="button">Leave</button>
-					        </td>
-				        </tr>
-				        <tr>
-					        <td>Group 2</td>
-					        <td>
-					        	<button type="button">Leave</button>
-					        </td>
-				        </tr>
-			        </tbody>
-			    </table>
-				<br>	
-			</div></td>
+		<td class="top">
+			<div class="section hcenter" style="display:none">
+				<h1><center>My Groups</center></h1>
+				<button id="create" type="button" class="hcenter">Create New</button>
+				<br>
+		        <table class="hcenter" id="owned-groups"></table>
+			</div>
+		</td>
+
+		<td class="top">
+			<div class="section hcenter" style="display:none">
+				<h1><center>Groups I Belong to</center></h1>
+				<a class="hcenter" style="margin-top: -15px; margin-bottom: 15px">(But do not own.)</a>
+				<table class="hcenter" id="belong-groups"></table>
+			</div>
+		</td>
+
+		<td id="admin-column" class="top" style="display: none">
+			<div class="section hcenter">
+				<h1><center>All Groups</center></h1>
+				<table class="hcenter" id="admin-groups"></table>
+			</div>
+		</td>
 	
 	</tr></table>
 

@@ -5,6 +5,9 @@
  */
 import services.UtilHelper;
 
+import org.json.JSONObject;
+import org.json.JSONArray;
+
 import java.util.*;
 import java.io.*;
 
@@ -56,9 +59,13 @@ public class RestController extends HttpServlet {
 			} else if (function.equals("groupOptions")) {
 				result = getGroupOptions(request);
 			} else if (function.equals("groupOwned")) {
-
-			} else if (function.equals("groupBelong")) {
-
+				result = getGroupsOwned(request);
+			} else if (function.equals("groupBelongNotOwn")) {
+				result = getGroupsBelong(request, false);
+			} else if (function.equals("groupAdmin")) {
+				result = getGroupsAdmin(request);
+			} else if (function.equals("getGroup")) {
+				result = getGroup(request, map);
 			} else if (function.equals("singleImage")) {
 				result = getSingleImage(request);
 			} else {
@@ -99,6 +106,12 @@ public class RestController extends HttpServlet {
 				result = "<br>Upload status:<br>" + uploadFile(userName, map);
 			} else if (function.equals("createGroup")) {
 				result = createGroup(userName, map);
+			} else if (function.equals("leaveGroup")) {
+				result = leaveGroup(userName, map);
+			} else if (function.equals("addUserToGroup")) {
+				result = addUserToGroup(userName, map);
+			} else if (function.equals("kickUser")) {
+				result = kickUser(userName, map);
 			} else {
 				result = "Requested function is not mapped.";
 			}
@@ -213,12 +226,19 @@ public class RestController extends HttpServlet {
 		    rset1.next();
 		    int group_id = rset1.getInt(1);
 
-			// Insert row into table with an empty blob.
+			// Insert row into table
 		    PreparedStatement stm = conn.prepareStatement("INSERT INTO groups (GROUP_ID, USER_NAME, GROUP_NAME, DATE_CREATED) VALUES(?, ?, ?, ?)");
 		    stm.setInt(1, group_id);
 	    	stm.setString(2, userName);
 	    	stm.setString(3, groupName);
 	    	stm.setDate(4, date);
+	    	stm.executeUpdate();
+
+	    	stm = conn.prepareStatement("INSERT INTO group_lists (GROUP_ID, FRIEND_ID, DATE_ADDED, NOTICE) VALUES(?, ?, ?, ?)");
+		    stm.setInt(1, group_id);
+	    	stm.setString(2, userName);
+	    	stm.setDate(3, date);
+	    	stm.setString(4, "Current Owner");
 	    	stm.executeUpdate();
 
             conn.close();
@@ -236,6 +256,149 @@ public class RestController extends HttpServlet {
 	}
 
 	/*
+	 * Attempts to remove a user from a group.
+	 */
+	private static String leaveGroup(String userName, Map<String,List<FileItem>> map) {
+    	if (userName == "") {
+    		return "User not logged in.";
+    	}
+
+		String result = "";
+    	try {
+			// Get all input fields
+			int groupId = Integer.parseInt(getTextValue("groupId", map));
+
+			removeUserFromGroup(userName, groupId, null);
+
+            result = groupId + "";
+
+		} catch (Exception ex) {
+		    return result + "Exception occurred: " + ex;
+		}
+
+		return result;
+	}
+
+	/*
+	 * Attempts to remove a user from a group.
+	 */
+	private static String kickUser(String userName, Map<String,List<FileItem>> map) {
+    	if (userName == "") {
+    		return "User not logged in.";
+    	}
+
+		String result = "";
+    	try {
+			// Get all input fields
+			String member = getTextValue("user", map);
+			int groupId = Integer.parseInt(getTextValue("group", map));
+
+			removeUserFromGroup(member, groupId, userName);
+
+            result = "success";
+
+		} catch (Exception ex) {
+		    return result + "Exception occurred: " + ex;
+		}
+
+		return result;
+	}
+
+	/*
+	 * Attempts to revome specified user from group_list.  Optionally checks if the group owner matches expectedOwner.  
+	 * Pass null to expectedOwner if you wish to bypass this check.
+	 */
+	private static void removeUserFromGroup(String userName, int groupId, String expectedOwner) throws Exception{
+
+			// Connect to the oracle database
+			Connection conn = UtilHelper.getConnection();
+			PreparedStatement stm;
+			ResultSet rset;
+
+			stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");
+		    stm.setInt(1, groupId);
+	    	rset = stm.executeQuery();
+
+		    rset.next();
+		    String owner = rset.getString("user_name");
+
+			// Ensure user to be removed is not group leader
+		    if (owner.equals(userName)) {
+		    	throw new Exception("User is group owner.  Please transfer leadership first or disband group.");
+		    }
+
+		    // Ensure owner is as espected
+		    if (expectedOwner != null && !expectedOwner.equals("admin") && !expectedOwner.equals(owner)) {
+		    	throw new Exception("User does not have persmission to remove " + userName + ".");
+		    }
+
+	    	stm = conn.prepareStatement("DELETE FROM group_lists WHERE group_id = ? AND friend_id = ?");
+		    stm.setInt(1, groupId);
+		    stm.setString(2, userName);
+	    	stm.executeUpdate();
+
+            conn.close();
+	}
+
+	/*
+	 * Adds a user to a group.
+	 */
+	private static String addUserToGroup(String requester, Map<String,List<FileItem>> map) {
+		String result = "";
+    	
+    	try {
+    		int groupId = Integer.parseInt(getTextValue("group", map));
+    		String user = getTextValue("user", map);
+    		String notice = getTextValue("notice", map);
+    		String dateTemp = getTextValue("date", map);
+			java.sql.Date date = null;
+			if (!dateTemp.equals("")) {
+				date = java.sql.Date.valueOf(dateTemp);
+			}
+
+    		// Connect to the oracle database
+			Connection conn = UtilHelper.getConnection();
+			PreparedStatement stm;
+			ResultSet rset;
+
+			if (!requester.equals("admin")) {
+				// Verify username
+				stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");
+			    stm.setInt(1, groupId);
+			    rset = stm.executeQuery();
+			    if (rset.next() == false) {
+			    	throw new Exception("Invalid user name.");
+			    }
+			}
+			
+			// Verify user exists
+			stm = conn.prepareStatement("SELECT user_name FROM users WHERE user_name = ?");
+		    stm.setString(1, user);
+		    rset = stm.executeQuery();
+		    if (rset.next() == false) {
+		    	throw new Exception("User, <b>" + user + "</b>, does not exist.");
+		    }
+
+		    // Add user
+			stm = conn.prepareStatement("INSERT INTO group_lists (group_id, friend_id, date_added, notice) "
+				+ "VALUES (?, ?, ?, ?) ");
+		    stm.setInt(1, groupId);
+		    stm.setString(2, user);
+		    stm.setDate(3, date);
+		    stm.setString(4, notice);
+		    stm.executeUpdate();
+
+		    conn.close();
+
+		    result = "success";
+	    } catch( Exception ex ) {
+		    return result + "Exception occurred: " + ex;
+		}
+
+		return result;
+	}
+
+	/*
      * returns an html option list contain group ids and names.
      */
 	private static String getGroupOptions(HttpServletRequest request) {
@@ -246,16 +409,8 @@ public class RestController extends HttpServlet {
     		// Connect to the oracle database
 			Connection conn = UtilHelper.getConnection();
 
-	    	// Verify username
-			PreparedStatement stm = conn.prepareStatement("SELECT user_name FROM users WHERE user_name = ?");
-		    stm.setString(1, userName);
-		    ResultSet rset2 = stm.executeQuery();
-		    if (rset2.next() == false) {
-		    	throw new Exception("Invalid user name.");
-		    }
-
 		    // Get groups that user is a part of
-			stm = conn.prepareStatement("SELECT groups.group_id, group_name "
+			PreparedStatement stm = conn.prepareStatement("SELECT groups.group_id, group_name, user_name "
 				+ "FROM (groups INNER JOIN group_lists ON groups.group_id = group_lists.group_id) "
 				+ "WHERE friend_id = ?");
 		    stm.setString(1, userName);
@@ -263,7 +418,7 @@ public class RestController extends HttpServlet {
 		    // Build the result
 		    ResultSet rset = stm.executeQuery();
 		    while (rset.next() == true) {
-		    	result += "<option value='" + (String) rset.getString("group_id") + "'>" + (String) rset.getString("group_name") + "</option>";
+		    	result += "<option value='" + (String) rset.getString("group_id") + "'>" + (String) rset.getString("group_name") + " (Owner: " + (String) rset.getString("user_name") + ")</option>";
 		    }
 
 		    conn.close();
@@ -273,6 +428,237 @@ public class RestController extends HttpServlet {
 		}
 
 		return result;
+	}
+/*
+     * returns a json object containing groups owned by current user.
+     */
+	private static String getGroupsOwned(HttpServletRequest request) {
+		JSONObject result = new JSONObject();
+
+    	String userName = getUserName(request);
+    	if (userName == "") {
+    		result.append("result", "fail");
+    		result.append("reason", "User not logged in.");
+    		return result.toString();
+    	}
+		
+    	try {
+    		Map<String, String> groups = getUserOwnedGroups(userName);
+		    for (String k : groups.keySet()) {
+		    	result.append(k, groups.get(k));
+		    }
+		    result.append("result", "success");
+
+	    } catch( Exception ex ) {
+		    result.append("result", "fail");
+    		result.append("reason", "Exception Occurred: " + ex);
+    		return result.toString();
+		}
+
+		return result.toString();
+	}
+
+	/*
+     * returns a json object containing groups that current user belongs to but does not own.
+     */
+	private static String getGroupsBelong(HttpServletRequest request, boolean includeOwned) {
+		JSONObject result = new JSONObject();
+
+    	String userName = getUserName(request);
+    	if (userName == "") {
+    		result.append("result", "fail");
+    		result.append("reason", "User not logged in.");
+    		return result.toString();
+    	}
+		
+    	try {
+			Map<String, String> groups = getUserGroups(userName, includeOwned);
+			for (String k : groups.keySet()) {
+		    	result.append(k, groups.get(k));
+		    }
+		    result.append("result", "success");
+
+	    } catch( Exception ex ) {
+		    result.append("result", "fail");
+    		result.append("reason", "Exception Occurred: " + ex);
+    		return result.toString();
+		}
+
+		return result.toString();
+	}
+
+	/*
+     * returns a map of groups that the user belongs to.
+     */
+	private static Map<String, String> getUserGroups(String userName, boolean includeOwned) throws Exception {
+		Map<String, String> groups = new HashMap<String, String>();
+
+		// Connect to the oracle database
+		Connection conn = UtilHelper.getConnection();
+
+	    // Get groups that user is a part of
+		String baseStatement = "SELECT groups.group_id, group_name, user_name "
+			+ "FROM (groups INNER JOIN group_lists ON groups.group_id = group_lists.group_id) "
+			+ "WHERE friend_id = ?";
+		if (!includeOwned) {
+			baseStatement += " AND user_name <> ?";
+		}
+
+		PreparedStatement stm = conn.prepareStatement(baseStatement);
+	    stm.setString(1, userName);
+	    if (!includeOwned) {
+			stm.setString(2, userName);
+		}
+
+	    // Build the result
+	    ResultSet rset = stm.executeQuery();
+	    while (rset.next() == true) {
+	    	groups.put((String) rset.getString("group_id"), ((String) rset.getString("group_name")) + " (Owner: " + ((String) rset.getString("user_name")) + ")");
+	    } 
+
+	    conn.close();
+
+		return groups;
+	}
+
+	/*
+     * returns a map of groups that the user owns.
+     */
+	private static Map<String, String> getUserOwnedGroups(String userName) throws Exception {
+		Map<String, String> groups = new HashMap<String, String>();
+
+		// Connect to the oracle database
+		Connection conn = UtilHelper.getConnection();
+
+	    // Get groups that user is a part of
+		PreparedStatement stm = conn.prepareStatement("SELECT group_id, group_name "
+			+ "FROM groups "
+			+ "WHERE user_name = ?");
+	    stm.setString(1, userName);
+
+	    // Build the result
+	    ResultSet rset = stm.executeQuery();
+	    while (rset.next() == true) {
+	    	groups.put((String) rset.getString("group_id"), (String) rset.getString("group_name"));
+	    }
+
+	    conn.close();
+
+		return groups;
+	}
+
+	/*
+     * returns a map of groups that the user owns.
+     */
+	private static String getGroupsAdmin(HttpServletRequest request) {
+		JSONObject result = new JSONObject();
+
+		String userName = getUserName(request);
+    	if (!userName.equals("admin")) {
+    		result.append("result", "fail");
+    		result.append("reason", "User not admin.");
+    		return result.toString();
+    	}
+
+		try {
+			// Connect to the oracle database
+			Connection conn = UtilHelper.getConnection();
+
+		    // Get all groups
+			PreparedStatement stm = conn.prepareStatement("SELECT group_id, group_name "
+				+ "FROM groups "
+				+ "WHERE group_id <> 1 AND group_id <> 2");
+
+		    // Build the result
+		    JSONObject groups = new JSONObject();
+		    ResultSet rset = stm.executeQuery();
+		    while (rset.next() == true) {
+		    	groups.append((String) rset.getString("group_id"), (String) rset.getString("group_name"));
+		    }
+		    result.append("groups", groups);
+		    result.append("result", "success");
+
+		    conn.close();
+		} catch (Exception ex) {
+			result.append("result", "fail");
+    		result.append("reason", "Exception Occurred: " + ex);
+    		return result.toString();
+		}
+
+		return result.toString();
+	}
+
+	/*
+     * returns a json object containing group data.
+     */
+	private static String getGroup(HttpServletRequest request, Map<String, String[]> map) {
+		JSONObject result = new JSONObject();
+
+    	String userName = getUserName(request);
+    	if (userName == "") {
+    		result.append("result", "fail");
+    		result.append("reason", "User not logged in.");
+    		return result.toString();
+    	}
+		
+    	try {
+			// Get params
+			int groupId = Integer.parseInt(getParamValue("groupId", map)[0]);
+
+    		// Connect to the oracle database
+			Connection conn = UtilHelper.getConnection();
+			PreparedStatement stm;
+			ResultSet rset;
+
+			// Confirm user has permission to manage group
+			stm = conn.prepareStatement("SELECT user_name, group_name "
+				+ "FROM groups "
+				+ "WHERE group_id = ?");
+		    stm.setInt(1, groupId);
+
+			rset = stm.executeQuery();
+			String owner = "";
+		    while (rset.next() == true) {
+		    	owner = (String) rset.getString("user_name");
+		    	if (userName.equals(owner) || userName.equals("admin")) {
+		    		result.append("groupName", (String) rset.getString("group_name"));	
+		    	} else {
+					result.append("result", "fail");
+		    		result.append("reason", "User not group owner.");
+		    		return result.toString();
+		    	}
+		    }
+
+		    // Get group members
+			stm = conn.prepareStatement("SELECT friend_id, notice "
+				+ "FROM group_lists "
+				+ "WHERE group_id = ?");
+		    stm.setInt(1, groupId);
+
+		    // Build array of members
+		    rset = stm.executeQuery();
+		    while (rset.next() == true) {
+	    		JSONObject userObj = new JSONObject();
+	    		String user = (String) rset.getString("friend_id");
+	    		if (user.equals(owner)) {
+	    			userObj.append("owner", "true");
+	    		}
+	    		userObj.append("user", user);
+	    		userObj.append("notice", (String) rset.getString("notice"));
+	    		result.append("members", userObj);
+		    }
+
+		    conn.close();
+
+		    result.append("result", "success");
+
+	    } catch( Exception ex ) {
+		    result.append("result", "fail");
+    		result.append("reason", "Exception Occurred: " + ex);
+    		return result.toString();
+		}
+
+		return result.toString();
 	}
 
 	/*
