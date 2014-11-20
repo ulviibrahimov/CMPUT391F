@@ -108,6 +108,8 @@ public class RestController extends HttpServlet {
 				result = createGroup(userName, map);
 			} else if (function.equals("leaveGroup")) {
 				result = leaveGroup(userName, map);
+			} else if (function.equals("addUserToGroup")) {
+				result = addUserToGroup(userName, map);
 			} else {
 				result = "Requested function is not mapped.";
 			}
@@ -314,15 +316,59 @@ public class RestController extends HttpServlet {
 	/*
 	 * Adds a user to a group.
 	 */
-	private static String addUserToGroup () {
-		// Verify username
-			// PreparedStatement stm = conn.prepareStatement("SELECT user_name FROM users WHERE user_name = ?");
-		 //    stm.setString(1, userName);
-		 //    ResultSet rset2 = stm.executeQuery();
-		 //    if (rset2.next() == false) {
-		 //    	throw new Exception("Invalid user name.");
-		 //    }
-		return "";
+	private static String addUserToGroup(String requester, Map<String,List<FileItem>> map) {
+		String result = "";
+    	
+    	try {
+    		int groupId = Integer.parseInt(getTextValue("group", map));
+    		String user = getTextValue("user", map);
+    		String notice = getTextValue("notice", map);
+    		String dateTemp = getTextValue("date", map);
+			java.sql.Date date = null;
+			if (!dateTemp.equals("")) {
+				date = java.sql.Date.valueOf(dateTemp);
+			}
+
+    		// Connect to the oracle database
+			Connection conn = UtilHelper.getConnection();
+			PreparedStatement stm;
+			ResultSet rset;
+
+			if (!requester.equals("admin")) {
+				// Verify username
+				stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");
+			    stm.setInt(1, groupId);
+			    rset = stm.executeQuery();
+			    if (rset.next() == false) {
+			    	throw new Exception("Invalid user name.");
+			    }
+			}
+			
+			// Verify user exists
+			stm = conn.prepareStatement("SELECT user_name FROM users WHERE user_name = ?");
+		    stm.setString(1, user);
+		    rset = stm.executeQuery();
+		    if (rset.next() == false) {
+		    	throw new Exception("User, <b>" + user + "</b>, does not exist.");
+		    }
+
+		    // Add user
+			stm = conn.prepareStatement("INSERT INTO group_lists (group_id, friend_id, date_added, notice) "
+				+ "VALUES (?, ?, ?, ?) ");
+		    stm.setInt(1, groupId);
+		    stm.setString(2, user);
+		    stm.setDate(3, date);
+		    stm.setString(4, notice);
+		    stm.executeUpdate();
+
+		    conn.close();
+
+		    result = "success";
+	    } catch( Exception ex ) {
+		    return result + "Exception occurred: " + ex;
+		}
+
+		return result;
 	}
 
 	/*

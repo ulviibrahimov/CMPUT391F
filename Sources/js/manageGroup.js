@@ -34,7 +34,9 @@ $(document).ready(function() {
 	});
 
 	$('#confirm-add').on('click', function(event) {
-		handleAdd();
+		var newMember = $('input[name="new-member"]').val();
+		var notice = $('textarea[name="notice"]').val();
+		handleAdd(newMember, requestedGroup, notice);
 	});
 
 	$('body').on('click', 'button.transfer', function(event) {
@@ -139,13 +141,14 @@ function populateFields(group) {
 					+ '<div data-member-id="' + group.members[i].user + '"><b>' + group.members[i].user + '</b>'
 					+ '<button class="remove medium-button hright" type="button">Remove</button>'
 					+ '<button class="hright transfer" type="button">Transfer Leadership</button>'
-					+ '<div class="collapsible hspan remove"><br><span>Remove ' + group.members[i].user + '?</span>'
-					+ '<button class="confirm-remove small-button" type="button">Yes</button>'
-					+ '<button class="cancel-remove small-button" type="button">No</button></div>'
+					+ '<p class="notice">' + group.members[i].notice + '</p>'
 					+ '<div class="collapsible hspan transfer"><br><span>Transfer Leadership to ' + group.members[i].user + '?</span>'
 					+ '<button class="confirm-transfer small-button" type="button">Yes</button>'
 					+ '<button class="cancel-transfer small-button" type="button">No</button></div>'
-					+ '<p class="notice">' + group.members[i].notice + '</p></div>');
+					+ '<div class="collapsible hspan remove"><br><span>Remove ' + group.members[i].user + '?</span>'
+					+ '<button class="confirm-remove small-button" type="button">Yes</button>'
+					+ '<button class="cancel-remove small-button" type="button">No</button></div>'
+					+ '</div>');
 			}
 		}
 	}
@@ -157,7 +160,50 @@ function handleTransfer() {
 function handleDisband() {
 }
 
-function handleAdd() {
+function handleAdd(user, group, notice) {
+	// Get all our data in a FormData object
+	var data = new FormData();
+	data.append('user', user);
+	data.append('group', group);
+	data.append('notice', notice);
+	data.append('date', getCurrentDate());
+	
+	// Add function so the RESTController knows what to do with the data
+	data.append("function", "addUserToGroup");
+
+    $.ajax({
+	    url: "/CMPUT391F/RestService",
+	    data: data,
+	    type: 'POST',
+	    success: function(response){
+	        if (response == 'success') {
+	        	expand($('div.collapsible.add'), $('button').height());
+	        	$('div.add-result').removeClass('validation');
+	        	$('div.add-result').empty().append('User, ' + user + ', added successfully!');
+
+	        	$('#members').append('<div class="hdivider"></div>'
+					+ '<div data-member-id="' + user + '"><b>' + user + '</b>'
+					+ '<button class="remove medium-button hright" type="button">Remove</button>'
+					+ '<button class="hright transfer" type="button">Transfer Leadership</button>'
+					+ '<p class="notice">' + notice + '</p>'
+					+ '<div class="collapsible hspan transfer"><br><span>Transfer Leadership to ' + user + '?</span>'
+					+ '<button class="confirm-transfer small-button" type="button">Yes</button>'
+					+ '<button class="cancel-transfer small-button" type="button">No</button></div>'
+					+ '<div class="collapsible hspan remove"><br><span>Remove ' + user + '?</span>'
+					+ '<button class="confirm-remove small-button" type="button">Yes</button>'
+					+ '<button class="cancel-remove small-button" type="button">No</button></div>'
+					+ '</div>');	
+	        } else {
+	        	$('div.add-result').addClass('validation');
+	        	$('div.add-result').empty().append(response);
+	        	expand($('div.collapsible.add'), $('div.add-result').height());
+	        }
+	    },
+	    //Options to tell jQuery not to process data or worry about content-type.
+        cache: false,
+        contentType: false,
+        processData: false
+	});
 }
 
 function handleRemove(user, group) {
@@ -190,4 +236,20 @@ function handleRemove(user, group) {
         contentType: false,
         processData: false
 	});
+}
+
+function getCurrentDate() {	
+	var d = new Date();
+
+	// Transform date to correct format
+	var month = (d.getMonth()+1);
+	if ((month+"").length < 2) {
+		month = "0" + month;
+	}
+	var date = d.getDate();
+	if ((date+"").length < 2) {
+		date = "0" + date;
+	}
+	var val = d.getFullYear() + "-" + month + "-" + date;
+	return val;
 }
