@@ -13,7 +13,7 @@ public class groupPicBrowse extends PictureBrowse{
 		type=2;
 	}
     public String setQuery(){
-	String query = "select photo_id from images where permitted=3";
+	String query = "select i.photo_id from images i, group_lists g where g.friend_id = '" + name +"' and g.group_id = i.permitted";
 	return query;
     }
 }

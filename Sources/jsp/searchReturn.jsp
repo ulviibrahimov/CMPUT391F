@@ -1,10 +1,5 @@
 <%@ page import="java.sql.*, java.util.*" %>
-<%@ page import="java.io.*,javax.servlet.*" %>
-<%@ page import="java.servlet.http.*,java.sql.*,oracle.jdbc.driver.*,java.text.*,java.net.*" %>
-<%@ page import="java.net.URLDecoder" %>
 <%@ page import="services.UtilHelper" %>
-<%@ page import="org.apache.commons.fileupload.*, org.apache.commons.fileupload.disk.*, org.apache.commons.fileupload.servlet.*" %>
-<%@ page import="db.Database.*" %>
 
 
 <%
@@ -45,7 +40,6 @@
 	<script type="text/javascript" src="/CMPUT391F/Sources/js/jquery-1.9.1.min.js" defer></script>
 	<script type="text/javascript" src="/CMPUT391F/Sources/js/jquery.cookie.min.js" defer></script>
 	<script type="text/javascript" src="/CMPUT391F/Sources/js/buildHeader.js" defer></script>
-	<script type="text/javascript" src="/CMPUT391F/Sources/js/myImages.js" defer></script>
 	<link rel="stylesheet" type="text/css" href="/CMPUT391F/Sources/css/main.css">
 	<title>LUX Image Hosting</title>
   </head>
@@ -59,7 +53,7 @@
 		
 	String query = "select images.photo_id,images.subject,images.place,images.description";
 
-	if (keywords != "" && dateStart != "" && dateEnd != "" && type.equals("3")) {
+	if (!keywords.equals("") && !dateStart.equals("") && !dateEnd.equals("") && type.equals("3")) {
 		query = query + ", ";
 		String[] wordList = keywords.split(" "); //split the keyword value by space into an array for multiple keywords
 		int matchNum = 0;
@@ -90,7 +84,7 @@
 	}
 	
 	
-	else if (dateStart!="" && dateEnd!="" && type.equals("2")) {
+	else if (!dateStart.equals("") && !dateEnd.equals("") && type.equals("2")) {
 		out.println("Results of time period between " + dateStart+" and " + dateEnd);
 		
 		query = query + " FROM images where ";
@@ -100,7 +94,7 @@
 
 	}
 	
-	else if (keywords!="" && type.equals("1")) {
+	else if (!keywords.equals("") && type.equals("1")) {
 		out.println("Resutls of matching keywords: " + keywords);
 		query = query + ", ";
 		String[] wordList = keywords.split(" ");
@@ -127,10 +121,10 @@
 			countNum = countNum+3;
 		}
 		query = query + " ORDER BY "+queryOrder;
-		//out.println(queryOrder);
+		out.println(keywords);
 	}
 	else{
-		out.println("Pleace enter the required parts"+type+keywords+dateStart);
+		out.println("Pleace enter the required parts");
 		display=false;
 	}
 	//out.println(type);

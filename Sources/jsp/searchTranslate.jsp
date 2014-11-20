@@ -1,10 +1,5 @@
 <%@ page import="java.sql.*, java.util.*" %>
-<%@ page import="java.io.*,javax.servlet.*" %>
-<%@ page import="java.servlet.http.*,java.sql.*,oracle.jdbc.driver.*,java.text.*,java.net.*" %>
-<%@ page import="java.net.URLDecoder" %>
 <%@ page import="services.UtilHelper" %>
-<%@ page import="org.apache.commons.fileupload.*, org.apache.commons.fileupload.disk.*, org.apache.commons.fileupload.servlet.*" %>
-<%@ page import="db.Database.*" %>
 
 
 <%
