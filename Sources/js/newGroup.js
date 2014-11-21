@@ -29,17 +29,12 @@ function expand($collapsible, height) {
 }
 
 function handleSave() {
-	// var groupName = $('input[name="group-name"]').val();
-	
 	$('.validation').empty();
 
 	// Get all our data in a FormData object
 	var data = new FormData();
-	$('input').each(function(index, element) {
-		data.append(this.name, this.value);
-	});
-
-	// Add current date
+	data.append('group-name', $('input[name="group-name"]').val());
+	data.append('notice', $('textarea[name="notice"]').val());
 	data.append('date', getCurrentDate());
 
 	// Add function so the RESTController knows what to do with the data

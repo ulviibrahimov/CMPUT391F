@@ -57,7 +57,8 @@ $(document).ready(function() {
 	});
 
 	$('body').on('click', '.confirm-transfer', function(event) {
-		handleTransfer();
+		var user = $(this).parent().parent().data('member-id');
+		handleTransfer(user, requestedGroup);
 	});
 
 	$('body').on('click', 'button.remove', function(event) {
@@ -161,7 +162,35 @@ function populateFields(group) {
 	}
 }
 
-function handleTransfer() {
+function handleTransfer(user, group) {
+	// Get all our data in a FormData object
+	var data = new FormData();
+	data.append('user', user);
+	data.append('group', group);
+	
+	// Add function so the RESTController knows what to do with the data
+	data.append("function", "transferGroupOwnership");
+
+    $.ajax({
+	    url: "/CMPUT391F/RestService",
+	    data: data,
+	    type: 'POST',
+	    success: function(response){
+	        if (response == 'success') {
+	        	var cur = window.location.href;
+				var page = cur.substring(0, cur.indexOf('CMPUT391F/')+10);
+				window.location.href = page + "groups.html";
+	        } else {
+	        	var $transfer = $('div[data-member-id="'+user+'"]').find('div.transfer');
+	        	$transfer.find('p.transfer').empty().append('Failed to tansfer leadership to ' + user + '.  ' + response);
+	        	expand($transfer);
+	        }
+	    },
+	    //Options to tell jQuery not to process data or worry about content-type.
+        cache: false,
+        contentType: false,
+        processData: false
+	});
 }
 
 function handleDisband(group) {
@@ -212,6 +241,7 @@ function handleAdd(user, group, notice) {
 	        	expand($('div.collapsible.add'));
 	        	$('div.add-result').removeClass('validation');
 	        	$('div.add-result').empty().append('User, ' + user + ', added successfully!');
+	        	expand($('div.collapsible.add'));
 
 	        	$('#members').append('<div class="hdivider"></div>'
 					+ '<div data-member-id="' + user + '"><b>' + user + '</b>'

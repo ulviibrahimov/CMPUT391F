@@ -114,6 +114,8 @@ public class RestController extends HttpServlet {
 				result = kickUser(userName, map);
 			} else if (function.equals("disbandGroup")) {
 				result = disbandGroup(userName, map);
+			} else if (function.equals("transferGroupOwnership")) {
+				result = transferGroupOwnership(userName, map);
 			} else {
 				result = "Requested function is not mapped.";
 			}
@@ -213,6 +215,7 @@ public class RestController extends HttpServlet {
     	try {
 			// Get all input fields
 			String groupName = getTextValue("group-name", map);
+			String notice = getTextValue("notice", map);
 			String dateTemp = getTextValue("date", map);
 			java.sql.Date date = null;
 			if (!dateTemp.equals("")) {
@@ -240,7 +243,7 @@ public class RestController extends HttpServlet {
 		    stm.setInt(1, group_id);
 	    	stm.setString(2, userName);
 	    	stm.setDate(3, date);
-	    	stm.setString(4, "Current Owner");
+	    	stm.setString(4, notice);
 	    	stm.executeUpdate();
 
             conn.close();
@@ -270,6 +273,10 @@ public class RestController extends HttpServlet {
 			// Get all input fields
 			int groupId = Integer.parseInt(getTextValue("groupId", map));
 
+			if (groupId <= 2) {
+				return "User does not have permission to modify the public/private group.";
+			}
+			
 			removeUserFromGroup(userName, groupId, null);
 
             result = groupId + "";
@@ -294,6 +301,10 @@ public class RestController extends HttpServlet {
 			// Get all input fields
 			String member = getTextValue("user", map);
 			int groupId = Integer.parseInt(getTextValue("group", map));
+
+			if (groupId <= 2) {
+				return "User does not have permission to modify the public/private group.";
+			}
 
 			removeUserFromGroup(member, groupId, userName);
 
@@ -359,6 +370,9 @@ public class RestController extends HttpServlet {
 			// Get all input fields
 			int groupId = Integer.parseInt(getTextValue("group", map));
 
+			if (groupId <= 2) {
+				return "User does not have permission to modify the public/private group.";
+			}
 			// Connect to the oracle database
 			Connection conn = UtilHelper.getConnection();
 			PreparedStatement stm;
@@ -424,6 +438,59 @@ public class RestController extends HttpServlet {
     	stm.executeUpdate();
 
         conn.close();
+	}
+
+	/*
+	 * Attempts to transfer ownership of a group.
+	 */
+	private static String transferGroupOwnership(String userName, Map<String,List<FileItem>> map) {
+    	if (userName == "") {
+    		return "User not logged in.";
+    	}
+
+		String result = "";
+    	try {
+			// Get all input fields
+			String newOwner = getTextValue("user", map);
+			int groupId = Integer.parseInt(getTextValue("group", map));
+
+			if (groupId <= 2) {
+				return "User does not have permission to modify the public/private group.";
+			}
+
+			// Connect to the oracle database
+			Connection conn = UtilHelper.getConnection();
+			PreparedStatement stm;
+			ResultSet rset;
+
+			if (!userName.equals("admin")) {
+				stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");
+			    stm.setInt(1, groupId);
+		    	rset = stm.executeQuery();
+
+			    rset.next();
+			    String owner = rset.getString("user_name");
+
+			    // Ensure that it is the current owner attempting to transfer.
+			    if (!owner.equals(userName)) {
+			    	return "User is not group owner.";
+			    }
+			}
+
+	    	stm = conn.prepareStatement("UPDATE groups SET user_name = ? WHERE group_id = ?");
+			stm.setString(1, newOwner);
+			stm.setInt(2, groupId);
+			stm.executeUpdate();
+
+            conn.close();
+
+            result = "success";
+
+		} catch (Exception ex) {
+		    return result + "Exception occurred: " + ex;
+		}
+
+		return result;
 	}
 
 	/*
