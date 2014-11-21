@@ -72,6 +72,7 @@ CREATE TABLE images (
 INSERT INTO users values('admin', 'secret', SYSDATE);
 INSERT INTO persons values('admin', null, null, null, null, null);
 
+DROP TABLE viewed;
 CREATE TABLE viewed (
    photo_id    int,
    name  varchar(24),
@@ -79,8 +80,6 @@ CREATE TABLE viewed (
    FOREIGN KEY(photo_id) REFERENCES images,
    FOREIGN KEY(name) REFERENCES users
 );
-
-
 
 DROP SEQUENCE pic_id_seq;
 CREATE SEQUENCE pic_id_seq;

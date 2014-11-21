@@ -7,7 +7,6 @@
 	<script type="text/javascript" src="/CMPUT391F/Sources/js/jquery-1.9.1.min.js" defer></script>
 	<script type="text/javascript" src="/CMPUT391F/Sources/js/jquery.cookie.min.js" defer></script>
 	<script type="text/javascript" src="/CMPUT391F/Sources/js/buildHeader.js" defer></script>
-	<script type="text/javascript" src="/CMPUT391F/Sources/js/myImages.js" defer></script>
 	<link rel="stylesheet" type="text/css" href="/CMPUT391F/Sources/css/main.css">
 	<title>LUX Image Hosting</title>
   </head>
@@ -20,9 +19,11 @@
 
 		
 	<a href="/CMPUT391F/myPicBrowse">My Images</a>
-
+	<br>
 	<a href="/CMPUT391F/publicPicBrowse">Public Images</a>
+	<br>
 	<a href="/CMPUT391F/groupPicBrowse">Group Images</a>
+	<br>
 	<a href="/CMPUT391F/popularPicBrowse">Popular Images</a>
 
 <%
@@ -30,7 +31,7 @@
 	if (name==null) name="";
         if(name.equals("admin"))
         {
-	        out.println("<a href=\"/CMPUT391F/PictureBrowse\">All images</a>");
+	        out.println("<br><a href=\"/CMPUT391F/PictureBrowse\">All images</a>");
 	}
 %>
 
