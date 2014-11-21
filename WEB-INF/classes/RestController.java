@@ -773,7 +773,7 @@ public class RestController extends HttpServlet {
 			Connection conn = UtilHelper.getConnection();
 
 		    // Get all groups
-			PreparedStatement stm = conn.prepareStatement("SELECT group_id, group_name "
+			PreparedStatement stm = conn.prepareStatement("SELECT group_id, group_name, user_name "
 				+ "FROM groups "
 				+ "WHERE group_id <> 1 AND group_id <> 2");
 
@@ -781,7 +781,7 @@ public class RestController extends HttpServlet {
 		    JSONObject groups = new JSONObject();
 		    ResultSet rset = stm.executeQuery();
 		    while (rset.next() == true) {
-		    	groups.append((String) rset.getString("group_id"), (String) rset.getString("group_name"));
+		    	groups.append((String) rset.getString("group_id"), ((String) rset.getString("group_name")) + " (Owner: " + ((String) rset.getString("user_name")) + ")");
 		    }
 		    result.append("groups", groups);
 		    result.append("result", "success");
