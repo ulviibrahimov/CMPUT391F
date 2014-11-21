@@ -48,6 +48,8 @@ public class GetBigPic extends HttpServlet
 	    response.setContentType("text/html");
             String title, place, time, descrip, owner;
 
+
+
 	    if ( rset.next() ) {
 	        title = rset.getString("subject");
 	        place = rset.getString("place");
@@ -75,17 +77,27 @@ public class GetBigPic extends HttpServlet
 			out.println("<P><a href=\"/CMPUT391F/edit.html?"+picid+"\"> Edit </a>");
 		}
 
-		if (type.contains("4"))
+		if (type.contains("5"))
+			out.println("<P><a href=\"popularPicBrowse\"> Return </a>");
+		else if (type.contains("4"))
 			out.println("<P><a href=\"/CMPUT391F/Sources/jsp/searchReturn.jsp?"+parts[2]+"\"> Return </a>");
 		else if (type.contains("3"))
 			out.println("<P><a href=\"publicPicBrowse\"> Return </a>");
 		else if (type.contains("2"))
 			out.println("<P><a href=\"groupPicBrowse\">  Return </a>");
-		else if 
+		else if (type.contains("1"))
 			out.println("<P><a href=\"myPicBrowse\">  Return </a>");
 		else
 			out.println("<P><a href=\"PictureBrowse\">  Return </a>");
 		out.println("</body></html>");
+
+
+		String searchView="select * from viewed where photo_id = "+id.substring(3)+" and name = '"+name+"'";
+		ResultSet rset1 = stmt.executeQuery(searchView);
+		if ( !rset1.next() ) {
+			String viewed="INSERT INTO viewed values("+id.substring(3)+ ", '"+name+"')";		
+			stmt.executeQuery(viewed);
+		}
             }
 	    else
 	      out.println("<html> Pictures are not avialable</html>");

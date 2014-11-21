@@ -29,7 +29,7 @@ Rem gkaminag 11/19/01 - bug 2052473.
 Rem gkaminag 05/14/99 - bugs
 Rem gkaminag 04/09/99 - Creation
 define idxname = "myindex2"
-define interval = "10"
+define interval = "1"
 set serveroutput on
 declare
 job number;
