@@ -312,34 +312,38 @@ public class RestController extends HttpServlet {
 	 */
 	private static void removeUserFromGroup(String userName, int groupId, String expectedOwner) throws Exception{
 
-			// Connect to the oracle database
-			Connection conn = UtilHelper.getConnection();
-			PreparedStatement stm;
-			ResultSet rset;
+		// Connect to the oracle database
+		Connection conn = UtilHelper.getConnection();
+		PreparedStatement stm;
+		ResultSet rset;
 
-			stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");
-		    stm.setInt(1, groupId);
-	    	rset = stm.executeQuery();
+		stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");
+	    stm.setInt(1, groupId);
+    	rset = stm.executeQuery();
 
-		    rset.next();
-		    String owner = rset.getString("user_name");
+	    rset.next();
+	    String owner = rset.getString("user_name");
 
-			// Ensure user to be removed is not group leader
-		    if (owner.equals(userName)) {
-		    	throw new Exception("User is group owner.  Please transfer leadership first or disband group.");
-		    }
+		// Ensure user to be removed is not group leader
+	    if (owner.equals(userName)) {
+	    	throw new Exception("User is group owner.  Please transfer leadership first or disband group.");
+	    }
 
-		    // Ensure owner is as espected
-		    if (expectedOwner != null && !expectedOwner.equals("admin") && !expectedOwner.equals(owner)) {
-		    	throw new Exception("User does not have persmission to remove " + userName + ".");
-		    }
+	    // Ensure owner is as espected
+	    if (expectedOwner != null && !expectedOwner.equals("admin") && !expectedOwner.equals(owner)) {
+	    	throw new Exception("User does not have persmission to remove " + userName + ".");
+	    }
 
-	    	stm = conn.prepareStatement("DELETE FROM group_lists WHERE group_id = ? AND friend_id = ?");
-		    stm.setInt(1, groupId);
-		    stm.setString(2, userName);
-	    	stm.executeUpdate();
+	    // First remove their pictures from the group
+	    pictureToPrivate(groupId, userName);
 
-            conn.close();
+	    // Then remove the user.
+    	stm = conn.prepareStatement("DELETE FROM group_lists WHERE group_id = ? AND friend_id = ?");
+	    stm.setInt(1, groupId);
+	    stm.setString(2, userName);
+    	stm.executeUpdate();
+
+        conn.close();
 	}
 
 	/*
@@ -370,9 +374,12 @@ public class RestController extends HttpServlet {
 
 			    // Enusre that it is the owner attempting to disband.
 			    if (!owner.equals(userName)) {
-			    	throw new Exception("User is not group owner.");
+			    	return "User is not group owner.";
 			    }
 			}
+
+			// First change permissions on pictures associated with the group.
+			pictureToPrivate(groupId, null);
 
 	    	stm = conn.prepareStatement("DELETE FROM group_lists WHERE group_id = ?");
 		    stm.setInt(1, groupId);
@@ -391,6 +398,32 @@ public class RestController extends HttpServlet {
 		}
 
 		return result;
+	}
+
+	/*
+	 * Attempts to change matched pictures' permission id to private.
+	 * Pass null to userName if you wish to change all pictures in a group.
+	 */
+	private static void pictureToPrivate(int groupId, String userName) throws Exception {
+
+		// Connect to the oracle database
+		Connection conn = UtilHelper.getConnection();
+		PreparedStatement stm;
+		ResultSet rset;
+
+		String baseStatement = "UPDATE images SET permitted = ? WHERE permitted = ?";
+		if (userName != null) {
+			baseStatement += " AND owner_name = ?";
+		}
+		stm = conn.prepareStatement(baseStatement);
+	    stm.setInt(1, 2);
+	    stm.setInt(2, groupId);
+	    if (userName != null) {
+			stm.setString(3, userName);
+		}
+    	stm.executeUpdate();
+
+        conn.close();
 	}
 
 	/*
