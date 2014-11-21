@@ -67,7 +67,6 @@ CREATE TABLE images (
    FOREIGN KEY(permitted) REFERENCES groups
 );
 
-
 -- Our custom SQL setup commands
 
 INSERT INTO users values('admin', 'secret', SYSDATE);

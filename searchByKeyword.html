@@ -10,17 +10,24 @@
 	<title>LUX Image Hosting</title>
   </head>
 <body>
-
 	<br>
 	<br>
 	<div class="section hcenter">
         <h1><center>Search</center></h1>
+	<FORM NAME="searchpicture" ACTION="/CMPUT391F/Sources/jsp/searchTranslate.jsp?1" METHOD="post" >
+	Enter keywords: <br>
+	<INPUT TYPE="text" Name="key" size="50"></input><br>	
+	<p>Select sorting method:</p>
+	<input type="radio" name="SEARCHTYPE" value="recentFirst">Recent First
+	<br> <input type="radio" name="SEARCHTYPE" value="recentLast">Recent Last
+	<br> <input type="radio" name="SEARCHTYPE" value="relevant">Relevant<br>
+	<input type="submit" name="SEARCHDATA" value="Search">
 
-		
-	<a href="/CMPUT391F/searchByKeyword.html">Search by Keyword</a><br>
+	<br><center><a href="/CMPUT391F/search.html">Return</a>
+</form>
 
-	<a href="/CMPUT391F/searchByDate.html">Search by Date</a><br>
-	<a href="/CMPUT391F/searchByBoth.html">Search by Keyword and Date</a><br>
+
+
 
 </BODY>
 </HTML>
