@@ -47,12 +47,16 @@
 	
 <%
 
+
 	String userID = (String) session.getAttribute("user");
 	Boolean display=true;
 	String name = (String) session.getAttribute("user");
 	String query = "select images.photo_id,images.subject,images.place,images.description";
-
+	
 	String canBrowse=" FROM images where images.photo_id in (select distinct i.photo_id from images i, group_lists g where (g.friend_id = '"+name+"' and g.group_id = i.permitted) or i.owner_name='"+name+"' or i.permitted=1) and ";
+	if (name.equals("admin")){
+		canBrowse=" FROM images where ";
+	}
 
 	if (!keywords.equals("") && !dateStart.equals("") && !dateEnd.equals("") && type.equals("3")) {
 		query = query + ", ";
