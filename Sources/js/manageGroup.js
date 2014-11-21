@@ -13,6 +13,11 @@ $(document).ready(function() {
 
 	populate(requestedGroup);
 
+	$('#change').on('click', function() {
+		var newName = $('input[name="group-name"]').val();
+		handleChange(newName, requestedGroup);
+	});
+
 	$('#disband').on('click', function(event) {
 		var $this = $(this);
 		if ($this.hasClass('expanded')) {
@@ -162,6 +167,39 @@ function populateFields(group) {
 	}
 }
 
+
+function handleChange(newName, group) {
+	// Get all our data in a FormData object
+	var data = new FormData();
+	data.append('name', newName);
+	data.append('group', group);
+	// Add function so the RESTController knows what to do with the data
+	data.append("function", "changeGroupName");
+
+    $.ajax({
+	    url: "/CMPUT391F/RestService",
+	    data: data,
+	    type: 'POST',
+	    success: function(response){
+	        var $out = $('p.change');
+	        if (response == 'success') {
+	        	$('#group-name').empty().append(newName);
+	        	$out.removeClass('validation');
+	        	$out.empty().append('Group name successfully changed.')
+				expand($('div.collapsible.change'));
+	        } else {
+	        	$out.addClass('validation');
+	        	$out.empty().append(response);
+	        	expand($('div.collapsible.change'));
+	        }
+	    },
+	    //Options to tell jQuery not to process data or worry about content-type.
+        cache: false,
+        contentType: false,
+        processData: false
+	});
+}
+
 function handleTransfer(user, group) {
 	// Get all our data in a FormData object
 	var data = new FormData();
@@ -239,8 +277,8 @@ function handleAdd(user, group, notice) {
 	    success: function(response){
 	        if (response == 'success') {
 	        	expand($('div.collapsible.add'));
-	        	$('div.add-result').removeClass('validation');
-	        	$('div.add-result').empty().append('User, ' + user + ', added successfully!');
+	        	$('p.add').removeClass('validation');
+	        	$('p.add').empty().append('User, ' + user + ', added successfully!');
 	        	expand($('div.collapsible.add'));
 
 	        	$('#members').append('<div class="hdivider"></div>'
@@ -258,8 +296,8 @@ function handleAdd(user, group, notice) {
 					+ '<p class="validation remove"></p></div>'
 					+ '</div>');	
 	        } else {
-	        	$('div.add-result').addClass('validation');
-	        	$('div.add-result').empty().append(response);
+	        	$('p.add').addClass('validation');
+	        	$('p.add').empty().append(response);
 	        	expand($('div.collapsible.add'));
 	        }
 	    },

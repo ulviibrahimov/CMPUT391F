@@ -116,6 +116,8 @@ public class RestController extends HttpServlet {
 				result = disbandGroup(userName, map);
 			} else if (function.equals("transferGroupOwnership")) {
 				result = transferGroupOwnership(userName, map);
+			} else if (function.equals("changeGroupName")) {
+				result = changeGroupName(userName, map);
 			} else {
 				result = "Requested function is not mapped.";
 			}
@@ -276,7 +278,7 @@ public class RestController extends HttpServlet {
 			if (groupId <= 2) {
 				return "User does not have permission to modify the public/private group.";
 			}
-			
+
 			removeUserFromGroup(userName, groupId, null);
 
             result = groupId + "";
@@ -479,6 +481,59 @@ public class RestController extends HttpServlet {
 
 	    	stm = conn.prepareStatement("UPDATE groups SET user_name = ? WHERE group_id = ?");
 			stm.setString(1, newOwner);
+			stm.setInt(2, groupId);
+			stm.executeUpdate();
+
+            conn.close();
+
+            result = "success";
+
+		} catch (Exception ex) {
+		    return result + "Exception occurred: " + ex;
+		}
+
+		return result;
+	}
+
+	/*
+	 * Attempts to change the name of a group.
+	 */
+	private static String changeGroupName(String userName, Map<String,List<FileItem>> map) {
+    	if (userName == "") {
+    		return "User not logged in.";
+    	}
+
+		String result = "";
+    	try {
+			// Get all input fields
+			String newName = getTextValue("name", map);
+			int groupId = Integer.parseInt(getTextValue("group", map));
+
+			if (groupId <= 2) {
+				return "User does not have permission to modify the public/private group.";
+			}
+
+			// Connect to the oracle database
+			Connection conn = UtilHelper.getConnection();
+			PreparedStatement stm;
+			ResultSet rset;
+
+			if (!userName.equals("admin")) {
+				stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");
+			    stm.setInt(1, groupId);
+		    	rset = stm.executeQuery();
+
+			    rset.next();
+			    String owner = rset.getString("user_name");
+
+			    // Ensure that it is the current owner attempting to transfer.
+			    if (!owner.equals(userName)) {
+			    	return "User is not group owner.";
+			    }
+			}
+
+	    	stm = conn.prepareStatement("UPDATE groups SET group_name = ? WHERE group_id = ?");
+			stm.setString(1, newName);
 			stm.setInt(2, groupId);
 			stm.executeUpdate();
 
