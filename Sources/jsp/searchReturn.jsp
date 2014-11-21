@@ -50,8 +50,10 @@
 
 	String userID = (String) session.getAttribute("user");
 	Boolean display=true;
-		
+	String name = (String) session.getAttribute("user");
 	String query = "select images.photo_id,images.subject,images.place,images.description";
+
+	String canBrowse=" FROM images where images.photo_id in (select distinct i.photo_id from images i, group_lists g where (g.friend_id = '"+name+"' and g.group_id = i.permitted) or i.owner_name='"+name+"' or i.permitted=1) and ";
 
 	if (!keywords.equals("") && !dateStart.equals("") && !dateEnd.equals("") && type.equals("3")) {
 		query = query + ", ";
@@ -66,7 +68,7 @@
 			matchNum = matchNum + 3;
 		}
 		query = query + "as rank ";
-		query = query + " FROM images where ";
+		query = query + canBrowse;
 		out.println("Results of matching keywords: " + keywords+ " between dates " + dateStart + " and " + dateEnd);
 		//query statement to search for a certain time period
 		query = query + "images.timing between to_date('" + dateStart+ "', 'DD/MM/YYYY') AND to_date('" + dateEnd+ "', 'DD/MM/YYYY') AND ";
@@ -87,10 +89,13 @@
 	else if (!dateStart.equals("") && !dateEnd.equals("") && type.equals("2")) {
 		out.println("Results of time period between " + dateStart+" and " + dateEnd);
 		
-		query = query + " FROM images where ";
+		query = query + canBrowse;
 		
 		query = query + " images.timing between to_date('"+dateStart+ "','DD/MM/YYYY') AND to_date('" +
 				dateEnd+"','DD/MM/YYYY') ORDER BY " + queryOrder;
+		//out.println("<br>");
+		//out.println(query);
+		//out.println("<br>");
 
 	}
 	
@@ -109,7 +114,7 @@
 		
 		query = query + " as rank ";
 		
-		query = query + " From images where ";
+		query = query + canBrowse;
 		
 		int countNum = 0;
 		for (int i = 0; i< wordList.length;i++) {
@@ -121,7 +126,7 @@
 			countNum = countNum+3;
 		}
 		query = query + " ORDER BY "+queryOrder;
-		out.println(keywords);
+		//out.println(name);
 	}
 	else{
 		out.println("Pleace enter the required parts");
