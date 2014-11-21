@@ -57,13 +57,17 @@ public class PictureBrowse extends HttpServlet implements SingleThreadModel {
 		int times=0;
 	    while (rset.next() ) {
 		p_id = (rset.getObject(1)).toString();
-
+		if (type==5 && times >4) {
+			break;
+		}
 	       // specify the servlet for the image
                out.println("<a href=\"GetBigPic?big"+p_id+"!"+type+"\">");
 	       // specify the servlet for the themernail
 	       out.println("<img src=\"GetOnePic?dis"+p_id +
 	                   "\"></a>");
 		times+=1;
+
+
 	    }
 		if (times==0){
 			out.println("<h3> No pictures found.</h3>");

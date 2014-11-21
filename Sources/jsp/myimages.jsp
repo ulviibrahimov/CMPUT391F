@@ -23,9 +23,11 @@
 
 	<a href="/CMPUT391F/publicPicBrowse">Public Images</a>
 	<a href="/CMPUT391F/groupPicBrowse">Group Images</a>
+	<a href="/CMPUT391F/popularPicBrowse">Popular Images</a>
 
-<% 
+<%
 	String name = (String) session.getAttribute("user");
+	if (name==null) name="";
         if(name.equals("admin"))
         {
 	        out.println("<a href=\"/CMPUT391F/PictureBrowse\">All images</a>");

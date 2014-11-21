@@ -73,4 +73,13 @@
         <url-pattern>/groupPicBrowse</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>popularPicBrowse</servlet-name>
+        <servlet-class>popularPicBrowse</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>popularPicBrowse</servlet-name>
+        <url-pattern>/popularPicBrowse</url-pattern>
+    </servlet-mapping>
+
 </web-app>
