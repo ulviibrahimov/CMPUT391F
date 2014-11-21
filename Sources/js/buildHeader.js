@@ -62,7 +62,8 @@ $(document).ready(function() {
 		"groupPicBrowse",
 		"newGroup.html",
 		"manageGroup.html",
-		"groups.html"
+		"groups.html",
+		"edit.html"
 		);
 		
 		if (redirectPages.indexOf(pageNoQuery) >= 0) {

@@ -67,7 +67,7 @@ public class RestController extends HttpServlet {
 			} else if (function.equals("getGroup")) {
 				result = getGroup(request, map);
 			} else if (function.equals("singleImage")) {
-				result = getSingleImage(request);
+				result = getSingleImage(request, map);
 			} else {
 				result = "Requested function is not mapped.";
 			}
@@ -104,6 +104,8 @@ public class RestController extends HttpServlet {
 			String result;
 		    if (function.equals("uploadOne")) {
 				result = "<br>Upload status:<br>" + uploadFile(userName, map);
+		    } else if (function.equals("editPic")) {
+				result = editPic(userName, map);
 			} else if (function.equals("createGroup")) {
 				result = createGroup(userName, map);
 			} else if (function.equals("leaveGroup")) {
@@ -206,6 +208,70 @@ public class RestController extends HttpServlet {
 		}
 
 		return result + "Upload successful.";
+	}
+
+	/*
+	 * Attempts to edit a picture's description
+	 */
+	private static String editPic(String userName, Map<String,List<FileItem>> map) {
+    	if (userName == "") {
+    		return "Save failed.  User not logged in.";
+    	}
+
+		String result = "";
+    	try {
+			// Get all input fields
+			int picId = Integer.parseInt(getTextValue("photo-id", map));
+			int groupId = Integer.parseInt(getTextValue("group-id", map));
+			String subject = getTextValue("subject", map);
+			String dateTemp = getTextValue("date",map);
+			java.sql.Date date = null;
+			if (!dateTemp.equals("")) {
+				date = java.sql.Date.valueOf(dateTemp);
+			}
+			String location = getTextValue("location", map);
+			String description = getTextValue("description", map);
+
+			// Connect to the oracle database
+			Connection conn = UtilHelper.getConnection();
+			PreparedStatement stm;
+			ResultSet rset;
+
+			// Get picture owner.
+			stm = conn.prepareStatement("SELECT owner_name "
+				+ "FROM images "
+				+ "WHERE photo_id = ?");
+		    stm.setInt(1, picId);
+		    rset = stm.executeQuery();
+
+		    // Confirm user has permission to edit pic
+			String owner = "";
+		    while (rset.next() == true) {
+		    	owner = (String) rset.getString("owner_name");
+		    }
+		    if (!userName.equals(owner)) {
+				return "Save failed.  User not picture owner.";
+	    	}
+
+			// Update image.
+		    stm = conn.prepareStatement("UPDATE images "
+		    	+ "SET PERMITTED=?, SUBJECT=?, PLACE=?, TIMING=?, DESCRIPTION=? "
+		    	+ "WHERE photo_id = ?");
+		    stm.setInt(1, groupId);
+	    	stm.setString(2, subject);
+	    	stm.setString(3, location);
+	    	stm.setDate(4, date);
+	    	stm.setString(5, description);
+	    	stm.setInt(6, picId);
+	    	stm.executeUpdate();
+
+            conn.close();
+
+		} catch( Exception ex ) {
+		    return result + "Save failed.  Exception occurred: " + ex;
+		}
+
+		return result + "Save successful.";
 	}
 
     private static String createGroup(String userName, Map<String,List<FileItem>> map) {
@@ -872,8 +938,64 @@ public class RestController extends HttpServlet {
 	/*
      * returns privledge level for the signed in user and data about the image.
      */
-	private static String getSingleImage(HttpServletRequest request) {
-		return "Whee";
+	private static String getSingleImage(HttpServletRequest request, Map<String, String[]> map) {
+		JSONObject result = new JSONObject();
+
+    	String userName = getUserName(request);
+    	if (userName == "") {
+    		result.append("result", "fail");
+    		result.append("reason", "User not logged in.");
+    		return result.toString();
+    	}
+		
+    	try {
+			// Get params
+			int picId = Integer.parseInt(getParamValue("id", map)[0]);
+
+    		// Connect to the oracle database
+			Connection conn = UtilHelper.getConnection();
+			PreparedStatement stm;
+			ResultSet rset;
+
+			// Get picture data.
+			stm = conn.prepareStatement("SELECT photo_id, owner_name, permitted, subject, place, timing, description, photo "
+				+ "FROM images "
+				+ "WHERE photo_id = ?");
+		    stm.setInt(1, picId);
+
+			rset = stm.executeQuery();
+			String owner = "";
+		    while (rset.next() == true) {
+		    	owner = (String) rset.getString("owner_name");
+		    	// Confirm user has permission to edit pic
+		    	if (userName.equals(owner)) {
+		    		JSONObject pic = new JSONObject();
+		    		pic.append("photo_id", (String) rset.getString("photo_id"));
+		    		pic.append("permitted", (String) rset.getString("permitted"));
+		    		pic.append("subject", (String) rset.getString("subject"));
+		    		pic.append("place", (String) rset.getString("place"));
+		    		pic.append("timing", (String) rset.getString("timing"));
+		    		pic.append("description", (String) rset.getString("description"));
+
+		    		result.append("pic", pic);
+		    	} else {
+					result.append("result", "fail");
+		    		result.append("reason", "User not picture owner.");
+		    		return result.toString();
+		    	}
+		    }
+
+		    conn.close();
+
+		    result.append("result", "success");
+
+	    } catch( Exception ex ) {
+		    result.append("result", "fail");
+    		result.append("reason", "Exception Occurred: " + ex);
+    		return result.toString();
+		}
+
+		return result.toString();
 	}
 
     /*

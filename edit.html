@@ -6,7 +6,7 @@
 	<script type="text/javascript" src="/CMPUT391F/Sources/js/jquery.cookie.min.js" defer></script>
 	<script type="text/javascript" src="/CMPUT391F/Sources/js/jquery-ui.min.js" defer></script>
 	<script type="text/javascript" src="/CMPUT391F/Sources/js/buildHeader.js" defer></script>
-	<script type="text/javascript" src="/CMPUT391F/Sources/js/upload.js" defer></script>
+	<script type="text/javascript" src="/CMPUT391F/Sources/js/edit.js" defer></script>
 	<link rel="stylesheet" type="text/css" href="/CMPUT391F/Sources/css/main.css">
 	<link rel="stylesheet" type="text/css" href="/CMPUT391F/Sources/css/jquery-ui.min.css">
 	<link rel="stylesheet" type="text/css" href="/CMPUT391F/Sources/css/jquery-ui.theme.css">
@@ -16,7 +16,9 @@
 	<div class="section hcenter" style="display:none">
 		<h1><center>Edit Description</center></h1>
 
-		<form id="upload-form" name="upload-image" enctype="multipart/form-data" >
+		<img id="picToDisplay">
+
+		<form id="edit-form" name="upload-image" enctype="multipart/form-data" >
 
 	        <table>
 		        <tbody>
@@ -55,10 +57,10 @@
 		        </tbody>
 		    </table>
 
-	        <input class="hcenter" type="submit" name="submit-button" value="Upload">
+	        <input class="hcenter" type="submit" name="submit-button" value="Save">
 		</form>
 		<br>
-		<div id="upload-results" class="hcenter"></div>	
+		<div id="edit-results" class="hcenter"></div>	
 	</div>
 
 </body>
