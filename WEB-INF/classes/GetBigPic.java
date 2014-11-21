@@ -81,8 +81,10 @@ public class GetBigPic extends HttpServlet
 			out.println("<P><a href=\"publicPicBrowse\"> Return </a>");
 		else if (type.contains("2"))
 			out.println("<P><a href=\"groupPicBrowse\">  Return </a>");
-		else
+		else if 
 			out.println("<P><a href=\"myPicBrowse\">  Return </a>");
+		else
+			out.println("<P><a href=\"PictureBrowse\">  Return </a>");
 		out.println("</body></html>");
             }
 	    else

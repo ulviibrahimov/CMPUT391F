@@ -13,7 +13,6 @@
 	String dateStart = parts[2];
 	String dateEnd = parts[3];
 	String searchtype=parts[4];
-	//String queryString=type+"!"+keywords+"!"+dateStart+"!"+dateEnd+"!"+searchtype;
 
 
 	//depending on which order radio button is selected, create a relevant query string for it
@@ -125,8 +124,10 @@
 				query=query+"OR ";
 			countNum = countNum+3;
 		}
-		query = query + " ORDER BY "+queryOrder;
-		//out.println(name);
+		query = query + "ORDER BY " + queryOrder; //order by the order query string made above
+		//out.println("<br>");
+		//out.println(query);
+		//out.println("<br>");
 	}
 	else{
 		out.println("Pleace enter the required parts");

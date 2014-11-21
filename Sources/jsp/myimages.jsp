@@ -1,4 +1,5 @@
 <%@ page import="java.sql.*, java.util.*" %>
+<%@ page import="services.UtilHelper" %>
 <!DOCTYPE HTML>
 <html lang="en">
   <head>
@@ -22,5 +23,14 @@
 
 	<a href="/CMPUT391F/publicPicBrowse">Public Images</a>
 	<a href="/CMPUT391F/groupPicBrowse">Group Images</a>
+
+<% 
+	String name = (String) session.getAttribute("user");
+        if(name.equals("admin"))
+        {
+	        out.println("<a href=\"/CMPUT391F/PictureBrowse\">All images</a>");
+	}
+%>
+
     </body>
 </html>
