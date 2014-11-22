@@ -18,7 +18,7 @@
 	<div class="section hcenter">
         <h1><center>Data Analysis</center></h1>
 
-        <form name="dataAnalysis" action="/CMPUT391F/Sources/jsp/dataAnalysis.jsp" method="post">
+        <form name="dataAnalysis" action="/CMPUT391F/Sources/jsp/dataAnalysis.jsp?0" method="post">
 		
         <p>Please, fill out the form below to search the database for analysis</p>
         <table>
@@ -38,7 +38,7 @@
 		String name = "";
 		while (rset.next() ) {
 			name=(rset.getObject(1)).toString();
-			out.println("<OPTION VALUE='"+name+"' SELECTED> User:"+name+" </OPTION>");
+			out.println("<OPTION VALUE='"+name+"' SELECTED> "+name+" </OPTION>");
 		}
 	}
         catch(Exception ex){
@@ -53,7 +53,7 @@
         </tr>
         <tr>
         <td>Sort By Owner</td>
-        <td><input type="checkbox" name="SortBySubject" value ="true"></td>
+        <td><input type="checkbox" name="SortByOwner" value ="true"></td>
         </tr>
         <tbody><tr>
 	<td>Time period: from</td> 

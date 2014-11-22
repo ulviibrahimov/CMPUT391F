@@ -1,3 +1,6 @@
+<%@ page import="java.sql.*" %>
+<%@ page import="services.UtilHelper" %>
+
 <!DOCTYPE HTML>
 <html lang="en">
   <head>
@@ -15,10 +18,44 @@
 	<div class="section hcenter">
         <h1><center>Data Analysis</center></h1>
 
-        <form name="dataAnalysis" action="/CMPUT391F/Sources/jsp/dataAnalysis.jsp?1" method="post">
+        <form name="dataAnalysis" action="/CMPUT391F/Sources/jsp/dataAnalysis.jsp?2" method="post">
 		
         <p>Please, fill out the form below to search the database for analysis</p>
         <table>
+        <tbody><tr>
+        <td>Select an owner:</td>
+        <td><select name="Owner">
+<%      
+	Connection conn = null;  
+	try{
+        	conn = UtilHelper.getConnection();
+	        Statement stmt = null;
+		ResultSet rset = null;
+	        String sql = "select distinct owner_name from images";
+
+	        stmt = conn.createStatement();
+		rset = stmt.executeQuery(sql);
+		String name = "";
+		while (rset.next() ) {
+			name=(rset.getObject(1)).toString();
+			out.println("<OPTION VALUE='"+name+"' SELECTED> "+name+" </OPTION>");
+		}
+	}
+        catch(Exception ex){
+		out.println("<hr>" + ex.getMessage() + "<hr>");
+        }
+%>
+	<OPTION VALUE="" SELECTED>PLEASE SELECT AN OWNER</OPTION>
+	</SELECT></TD>
+	</TR>
+
+	</td>
+        </tr>
+
+        <tr>
+        <td>Sort By Owner</td>
+        <td><input type="checkbox" name="SortByOwner" value ="true"></td>
+        </tr>
         <tbody><tr>
         <td>Subject:</td>
         <td><input type="text" name="Subject" maxlength="24"></td>
