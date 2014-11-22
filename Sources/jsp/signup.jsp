@@ -49,7 +49,7 @@
 	        	uCount = (urset.getInt(1));
 	        
 	        if (uCount>0){ 
-	        	String uredirectURL = "/CMPUT391F/signup.html";
+	        	String uredirectURL = "/CMPUT391F/signup.html?error=duplicate_username";
         		response.sendRedirect(uredirectURL);
 
 	        }
@@ -71,7 +71,7 @@
         	while(erset != null && erset.next())
 	        	eCount = (erset.getInt(1));
 	        if (eCount>0 && uCount==0){ 
-	        	String eredirectURL = "/CMPUT391F/signup.html";
+	        	String eredirectURL = "/CMPUT391F/signup.html?error=duplicate_email";
         		response.sendRedirect(eredirectURL);
 
 	        }
