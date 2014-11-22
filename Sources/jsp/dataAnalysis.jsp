@@ -66,7 +66,7 @@
 		rset = stmt.executeQuery(query);
 		//out.println(query);
 		if (rset.next() )
-			out.println((rset.getObject(1)).toString());
+			out.println((rset.getObject(2)).toString()+": "+(rset.getObject(1)).toString());
 		else
 			out.println("something wrong");
 	}
@@ -75,7 +75,7 @@
 		//out.println(query);
 		rset = stmt.executeQuery(query);
 		while (rset.next() )
-			out.println((rset.getObject(2)).toString()+": "+(rset.getObject(1)).toString());
+			out.println("Subject "+(rset.getObject(2)).toString()+": "+(rset.getObject(1)).toString());
 			//out.println("<br>");
 			//out.println("<br>");
 
@@ -85,13 +85,146 @@
 		//out.println(query);
 		rset = stmt.executeQuery(query);
 		while (rset.next() )
-			out.println((rset.getObject(2)).toString()+": "+(rset.getObject(1)).toString());
+			out.println("Owner "+(rset.getObject(2)).toString()+": "+(rset.getObject(1)).toString());
 			//out.println("<br>");
 			//out.println("<br>");
 
 	}
+	else if (subjectSort!=null && ownerSort!=null && rangeSort.equals("")){
+		query = "SELECT count(i.photo_id), i.owner_name, i.subject from images i "+endStatement + " group by i.owner_name, i.subject ";
+		//out.println(query);
+		rset = stmt.executeQuery(query);
+		while (rset.next() )
+			out.println("Owner "+(rset.getObject(2)).toString()+" Subject "+(rset.getObject(3)).toString()+": "+(rset.getObject(1)).toString());
+			//out.println("<br>");
+			//out.println("<br>");
 
+	}
+	else if (subjectSort==null && ownerSort==null && !rangeSort.equals("")){
+		//out.println(rangeSort);
+		if (rangeSort.equals("year")){
+			query = "SELECT count(i.photo_id), extract(year from i.timing) from images i "+endStatement + " group by extract(year from i.timing) ";
+			//out.println(query);
+			rset = stmt.executeQuery(query);
+			while (rset.next() )
+				out.println((rset.getObject(2)).toString()+": "+(rset.getObject(1)).toString());
+				//out.println("<br>");
+				//out.println("<br>");
+		}
+		else if (rangeSort.equals("month")){
+			query = "SELECT count(i.photo_id), extract(year from i.timing), extract(month from i.timing) from images i "+endStatement + " group by extract(year from i.timing), extract(month from i.timing) ";
+			//out.println(query);
+			rset = stmt.executeQuery(query);
+			while (rset.next() )
+				out.println((rset.getObject(2)).toString()+"-"+(rset.getObject(3)).toString()+": "+(rset.getObject(1)).toString());
+				//out.println("<br>");
+				//out.println("<br>");
+		}
+		else {
+			query = "SELECT count(i.photo_id), extract(year from i.timing), extract(month from i.timing), to_char(i.timing,'w') from images i "+endStatement + " group by extract(year from i.timing), extract(month from i.timing), to_char(i.timing,'w') ";
+			//out.println(query);
+			rset = stmt.executeQuery(query);
+			while (rset.next() )
+				out.println((rset.getObject(2)).toString()+"-"+(rset.getObject(3)).toString()+"(week "+(rset.getObject(4)).toString()+"): "+(rset.getObject(1)).toString());
+				//out.println("<br>");
+				//out.println("<br>");
+		}
 
+	}
+	else if (subjectSort!=null && ownerSort==null && !rangeSort.equals("")){
+		//out.println(rangeSort);
+		if (rangeSort.equals("year")){
+			query = "SELECT count(i.photo_id), extract(year from i.timing),i.subject from images i "+endStatement + " group by extract(year from i.timing),i.subject ";
+			//out.println(query);
+			rset = stmt.executeQuery(query);
+			while (rset.next() )
+				out.println("Subject "+(rset.getObject(3)).toString()+" "+(rset.getObject(2)).toString()+": "+(rset.getObject(1)).toString());
+				//out.println("<br>");
+				//out.println("<br>");
+		}
+		else if (rangeSort.equals("month")){
+			query = "SELECT count(i.photo_id), extract(year from i.timing), extract(month from i.timing),i.subject from images i "+endStatement + " group by extract(year from i.timing), extract(month from i.timing),i.subject ";
+			//out.println(query);
+			rset = stmt.executeQuery(query);
+			while (rset.next() )
+				out.println("Subject "+(rset.getObject(4)).toString()+" "+(rset.getObject(2)).toString()+"-"+(rset.getObject(3)).toString()+": "+(rset.getObject(1)).toString());
+				//out.println("<br>");
+				//out.println("<br>");
+		}
+		else {
+			query = "SELECT count(i.photo_id), extract(year from i.timing), extract(month from i.timing), to_char(i.timing,'w'),i.subject from images i "+endStatement + " group by extract(year from i.timing), extract(month from i.timing), to_char(i.timing,'w'),i.subject ";
+			//out.println(query);
+			rset = stmt.executeQuery(query);
+			while (rset.next() )
+				out.println("Subject "+(rset.getObject(5)).toString()+" "+(rset.getObject(2)).toString()+"-"+(rset.getObject(3)).toString()+"(week "+(rset.getObject(4)).toString()+"): "+(rset.getObject(1)).toString());
+				//out.println("<br>");
+				//out.println("<br>");
+		}
+
+	}
+	else if (subjectSort==null && ownerSort!=null && !rangeSort.equals("")){
+		//out.println(rangeSort);
+		if (rangeSort.equals("year")){
+			query = "SELECT count(i.photo_id), extract(year from i.timing), i.owner_name from images i "+endStatement + " group by extract(year from i.timing), i.owner_name ";
+			//out.println(query);
+			rset = stmt.executeQuery(query);
+			while (rset.next() )
+				out.println("Owner "+(rset.getObject(3)).toString()+" "+(rset.getObject(2)).toString()+": "+(rset.getObject(1)).toString());
+				//out.println("<br>");
+				//out.println("<br>");
+		}
+		else if (rangeSort.equals("month")){
+			query = "SELECT count(i.photo_id), extract(year from i.timing), extract(month from i.timing), i.owner_name from images i "+endStatement + " group by extract(year from i.timing), extract(month from i.timing), i.owner_name ";
+			//out.println(query);
+			rset = stmt.executeQuery(query);
+			while (rset.next() )
+				out.println("Owner "+(rset.getObject(4)).toString()+" "+(rset.getObject(2)).toString()+"-"+(rset.getObject(3)).toString()+": "+(rset.getObject(1)).toString());
+				//out.println("<br>");
+				//out.println("<br>");
+		}
+		else {
+			query = "SELECT count(i.photo_id), extract(year from i.timing), extract(month from i.timing), to_char(i.timing,'w'), i.owner_name, from images i "+endStatement + " group by extract(year from i.timing), extract(month from i.timing), to_char(i.timing,'w'), i.owner_name ";
+			//out.println(query);
+			rset = stmt.executeQuery(query);
+			while (rset.next() )
+				out.println("Owner "+(rset.getObject(5)).toString()+" "+(rset.getObject(2)).toString()+"-"+(rset.getObject(3)).toString()+"(week "+(rset.getObject(4)).toString()+"): "+(rset.getObject(1)).toString());
+				//out.println("<br>");
+				//out.println("<br>");
+		}
+
+	}
+
+	else{
+		//out.println(rangeSort);
+		if (rangeSort.equals("year")){
+			query = "SELECT count(i.photo_id), extract(year from i.timing), i.owner_name, i.subject from images i "+endStatement + " group by extract(year from i.timing), i.owner_name, i.subject ";
+			//out.println(query);
+			rset = stmt.executeQuery(query);
+			while (rset.next() )
+				out.println("Subject "+(rset.getObject(4)).toString()+" "+"Owner "+(rset.getObject(3)).toString()+" "+(rset.getObject(2)).toString()+": "+(rset.getObject(1)).toString());
+				//out.println("<br>");
+				//out.println("<br>");
+		}
+		else if (rangeSort.equals("month")){
+			query = "SELECT count(i.photo_id), extract(year from i.timing), extract(month from i.timing), i.owner_name, i.subject from images i "+endStatement + " group by extract(year from i.timing), extract(month from i.timing), i.owner_name, i.subject ";
+			//out.println(query);
+			rset = stmt.executeQuery(query);
+			while (rset.next() )
+				out.println("Subject "+(rset.getObject(5)).toString()+" "+"Owner "+(rset.getObject(4)).toString()+" "+(rset.getObject(2)).toString()+"-"+(rset.getObject(3)).toString()+": "+(rset.getObject(1)).toString());
+				//out.println("<br>");
+				//out.println("<br>");
+		}
+		else {
+			query = "SELECT count(i.photo_id), extract(year from i.timing), extract(month from i.timing), to_char(i.timing,'w'), i.owner_name, i.subject from images i "+endStatement + " group by extract(year from i.timing), extract(month from i.timing), to_char(i.timing,'w'), i.owner_name, i.subject ";
+			//out.println(query);
+			rset = stmt.executeQuery(query);
+			while (rset.next() )
+				out.println("Subject "+(rset.getObject(6)).toString()+" "+"Owner "+(rset.getObject(5)).toString()+" "+(rset.getObject(2)).toString()+"-"+(rset.getObject(3)).toString()+"(week "+(rset.getObject(4)).toString()+"): "+(rset.getObject(1)).toString());
+				//out.println("<br>");
+				//out.println("<br>");
+		}
+
+	}
 %>
 	</div>
 </body>
