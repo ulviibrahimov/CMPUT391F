@@ -44,17 +44,15 @@ public class UtilHelper {
         StringTokenizer st = new StringTokenizer(config, System.getProperty("line.separator"));
         String token;
         while (st.hasMoreTokens()) {
-            token = st.nextToken();
+            token = st.nextToken().trim();
             if (token.equals("START")) {
                 // Found our config
                 break;
             }
         }
-
         String[] out = new String[3];
-
         for (int i = 0; i < out.length; i++) {
-            out[i] = st.nextToken();
+            out[i] = st.nextToken().trim();
         }
 
         return out;
@@ -64,12 +62,15 @@ public class UtilHelper {
      *   To connect to the database specified in "CMPUT391F/connectionConfig.txt"
      */
     public static Connection getConnection() throws Exception {
+
         String configParam[] = getConfiguration();
 
+		
         String dbstring = configParam[0];
         String username = configParam[1];
         String password = configParam[2];
         String drivername = "oracle.jdbc.driver.OracleDriver";
+		//throw new IOException("");
         Class drvClass = Class.forName(drivername); 
         DriverManager.registerDriver((Driver) drvClass.newInstance());
         return (DriverManager.getConnection(dbstring,username,password));
