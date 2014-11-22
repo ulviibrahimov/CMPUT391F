@@ -51,31 +51,31 @@ function validateForm() {
         <table>
         <tbody><tr>
         <td>Username:</td>
-        <td><input type="text" name="USERNAME" maxlength="24" ></td>
+        <td><input type="text" name="USERNAME" maxlength="24" required pattern="[a-zA-Z0-9]+"></td>
         </tr>
         <tr>
         <td>Password:</td>
-        <td><input type="password" name="PASSWD" maxlength="24"></td>
+        <td><input type="password" name="PASSWD" maxlength="24" required pattern="[a-zA-Z0-9]+"></td>
         </tr>
         <tbody><tr>
         <td>First name:</td>
-        <td><input type="text" name="FIRSTNAME" maxlength="24"></td>
+        <td><input type="text" name="FIRSTNAME" maxlength="24" required pattern="[a-zA-Z0-9]+"></td>
         </tr>
         <tbody><tr>
         <td>Last name:</td>
-        <td><input type="text" name="LASTNAME" maxlength="24"></td>
+        <td><input type="text" name="LASTNAME" maxlength="24" required pattern="[a-zA-Z0-9]+"></td>
         </tr>
         <tbody><tr>
         <td>Address:</td>
-        <td><input type="text" name="address" maxlength="128"></td>
+        <td><input type="text" name="address" maxlength="128" required pattern="[a-zA-Z0-9]+"></td>
         </tr>
         <tbody><tr>
         <td>Email:</td>
-        <td><input type="text" name="email" maxlength="128"></td>
+        <td><input type="text" name="email" maxlength="128" required pattern="[a-zA-Z0-9]+"></td>
         </tr>
         <tbody><tr>
         <td>Phone:</td>
-        <td><input type="text" name="phone" maxlength="10"></td>
+        <td><input type="text" name="phone" maxlength="10" required pattern="[a-zA-Z0-9]+"></td>
         </tr>
 
         </tbody></table>

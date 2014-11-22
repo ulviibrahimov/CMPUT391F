@@ -2,7 +2,9 @@
 
 
 <title>Login Result</title>
-<style type="text/css"></style></head>
+<style type="text/css"></style>
+
+</head>
 
 <body>
 
@@ -32,7 +34,7 @@
 		        rset = stmt.executeQuery(sql);
 
 
-		        String truepwd = "";
+		        String truepwd = ";";
 		
 	        	while(rset != null && rset.next())
 		        	truepwd = (rset.getString(1)).trim();
@@ -71,7 +73,8 @@
 			        }
 		    	} else{
 		        	out.println("<p><b>Either your userName or Your password is inValid!</b></p>");
-					String redirectURL = "/CMPUT391F/login.html";
+		        	session.setAttribute("error","Either your userName or Your password is inValid!");
+					String redirectURL = "/CMPUT391F/login.html?error=invalid_login";
 	        		response.sendRedirect(redirectURL);
 	        	}
                 conn.close();
