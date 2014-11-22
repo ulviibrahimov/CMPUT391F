@@ -6,22 +6,37 @@
 	<script type="text/javascript" src="/CMPUT391F/Sources/js/jquery.cookie.min.js" defer></script>
 	<script type="text/javascript" src="/CMPUT391F/Sources/js/jquery-ui.min.js" defer></script>
 	<script type="text/javascript" src="/CMPUT391F/Sources/js/buildHeader.js" defer></script>
-	<script type="text/javascript" src="/CMPUT391F/Sources/js/edit.js" defer></script>
+	<script type="text/javascript" src="/CMPUT391F/Sources/uploadify/jquery.uploadify.js" defer></script>
+	<script type="text/javascript" src="/CMPUT391F/Sources/js/uploadFolder.js" defer></script>
 	<link rel="stylesheet" type="text/css" href="/CMPUT391F/Sources/css/main.css">
 	<link rel="stylesheet" type="text/css" href="/CMPUT391F/Sources/css/jquery-ui.min.css">
 	<link rel="stylesheet" type="text/css" href="/CMPUT391F/Sources/css/jquery-ui.theme.css">
+	<link rel="stylesheet" type="text/css" href="/CMPUT391F/Sources/uploadify/uploadify.css">
 	<title>LUX Image Hosting</title>
 </head>
 <body>
 	<div class="section hcenter" style="display:none">
-		<h1><center>Edit Description</center></h1>
+		<h1><center>Upload Images</center></h1>
 
-		<img id="picToDisplay">
+		<form id="upload-form" name="upload-image" enctype="multipart/form-data" >
 
-		<form id="edit-form" name="upload-image" enctype="multipart/form-data" >
-
+	        <p class="hcenter">Select images to upload!</p>
 	        <table>
 		        <tbody>
+		        	<tr>
+				        <td>Select Image:</td>
+				        <td>
+				        	<applet code="wjhk.jupload2.JUploadApplet" name="JUpload" archive="wjhk.jupload.jar" mayscript="" height="300" width="640">
+							    <param name="ARCHIVE" value="wjhk.jupload.jar">
+							    <param name="CODE" value="wjhk.jupload2.JUploadApplet">
+							    <param name="type" value="application/x-java-applet;version=1.4">
+							    <param name="scriptable" value="false">    
+							    <param name="postURL" value="http://luscar.cs.ualberta.ca:8080/yuan/parseRequest.jsp?URLParam=URL+Parameter+Value">
+							    <param name="nbFilesPerRequest" value="2">    
+							Java 1.4 or higher plugin required.
+							</applet>
+				        </td>
+			        </tr>
 			        <tr>
 				        <td>Permission:</td>
 				        <td>
@@ -35,7 +50,7 @@
 				        <td >Select Group:</td>
 				        <td >
 				        	<select name="group-id">
-							 </select> 
+							</select> 
 				        </td>
 			        </tr>
 			        <tr>
@@ -57,10 +72,10 @@
 		        </tbody>
 		    </table>
 
-	        <input class="hcenter" type="submit" name="submit-button" value="Save">
+	        <input class="hcenter" type="submit" name="submit-button" value="Upload">
 		</form>
 		<br>
-		<div id="edit-results" class="hcenter"></div>	
+		<div id="upload-results" class="hcenter"></div>	
 	</div>
 
 </body>
