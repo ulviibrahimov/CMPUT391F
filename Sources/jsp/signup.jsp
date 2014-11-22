@@ -76,34 +76,38 @@
 
 	        }
 			
+			//out.println("u"+uCount+"e"+eCount);
+			
+			if(eCount==0 && uCount==0){
 		
-	        //insert values into users and persons table
-        	Statement stmt = null;
-	        ResultSet rset = null;
-	        java.util.Date date = new java.util.Date();
-      		long t = date.getTime();
-        	String sqlusers = "insert into users values ('"+userName+"','"+passwd+"',"+"SYSDATE"+")";
-        	String sqlpersons = "insert into persons values ('"+userName+"','"+firstName+"','"+lastName+"','"+address+"','"+email+"','"+phone+"')";
-        	//out.println(sqlusers);
-        	try{
-	        	stmt = conn.createStatement();
-		        stmt.executeUpdate(sqlusers);
-		        stmt.executeUpdate(sqlpersons);
-		        out.println("<p><b>Signup Successful!</b></p>");
-		        response.sendRedirect("/CMPUT391F/login.html");
-        	}
+			    //insert values into users and persons table
+		    	Statement stmt = null;
+			    ResultSet rset = null;
+			    java.util.Date date = new java.util.Date();
+		  		long t = date.getTime();
+		    	String sqlusers = "insert into users values ('"+userName+"','"+passwd+"',"+"SYSDATE"+")";
+		    	String sqlpersons = "insert into persons values ('"+userName+"','"+firstName+"','"+lastName+"','"+address+"','"+email+"','"+phone+"')";
+		    	out.println(sqlusers);
+		    	try{
+			    	stmt = conn.createStatement();
+				    stmt.executeUpdate(sqlusers);
+				    stmt.executeUpdate(sqlpersons);
+				    out.println("<p><b>Signup Successful!</b></p>");
+				    response.sendRedirect("/CMPUT391F/login.html");
+		    	}
 	
-	        catch(Exception ex){
-	        	out.println("<hr>" + ex.getMessage() + "<hr>");
-        	}
+			    catch(Exception ex){
+			    	out.println("<hr>" + ex.getMessage() + "<hr>");
+		    	}
 	
-	        
+			    
 
-            try{
-                    conn.close();
-            }
-            catch(Exception ex){
-                    out.println("<hr>" + ex.getMessage() + "<hr>");
+		        try{
+		                conn.close();
+		        }
+		        catch(Exception ex){
+		                out.println("<hr>" + ex.getMessage() + "<hr>");
+		        }
             }
         }
  
