@@ -117,11 +117,10 @@ function populateGroups(callback) {
 						}
 					});
 				});
-
-				if (callback) {
-					callback();
-				}
 	        }
+	        if (callback) {
+				callback();
+			}
 	    },
 	    //Options to tell jQuery not to process data or worry about content-type.
         cache: false,
