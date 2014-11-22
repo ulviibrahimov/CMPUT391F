@@ -34,12 +34,12 @@
 		        rset = stmt.executeQuery(sql);
 
 
-		        String truepwd = ";";
+		        String truepwd = "";
 		
 	        	while(rset != null && rset.next())
 		        	truepwd = (rset.getString(1)).trim();
 	        	//display the result
-		        if(passwd.equals(truepwd)) {
+		        if(passwd.equals(truepwd) && !truepwd.equals("")) {
 		        	// On authenticate succes
 
 		        	if (session.getAttribute("user") != null) {
