@@ -38,8 +38,34 @@ function validateForm() {
         return false;
     }
 }
+
+function getUrlVars()
+{
+	var vars = [], hash;
+	var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+	for(var i = 0; i < hashes.length; i++)
+	{
+		hash = hashes[i].split('=');
+		vars.push(hash[0]);
+		vars[hash[0]] = hash[1];
+	}
+	return vars;
+}
+
+function displayError()
+{
+	var msg=getUrlVars()['error'];
+	if (msg==="duplicate_username"){
+		alert("Username already exists!");
+	}
+	else if (msg==="duplicate_email"){
+		alert("Email already exists!");
+	}
+
+}
+
 </script>
-<body>
+<body onload = "displayError()">
     <br>
     <br>
     <div class="section hcenter">
@@ -51,31 +77,31 @@ function validateForm() {
         <table>
         <tbody><tr>
         <td>Username:</td>
-        <td><input type="text" name="USERNAME" maxlength="24" ></td>
+        <td><input type="text" name="USERNAME" maxlength="24" required pattern="[a-zA-Z0-9]+"></td>
         </tr>
         <tr>
         <td>Password:</td>
-        <td><input type="password" name="PASSWD" maxlength="24"></td>
+        <td><input type="password" name="PASSWD" maxlength="24" required pattern="[a-zA-Z0-9]+"></td>
         </tr>
         <tbody><tr>
         <td>First name:</td>
-        <td><input type="text" name="FIRSTNAME" maxlength="24"></td>
+        <td><input type="text" name="FIRSTNAME" maxlength="24" required pattern="[a-zA-Z0-9]+"></td>
         </tr>
         <tbody><tr>
         <td>Last name:</td>
-        <td><input type="text" name="LASTNAME" maxlength="24"></td>
+        <td><input type="text" name="LASTNAME" maxlength="24" required pattern="[a-zA-Z0-9]+"></td>
         </tr>
         <tbody><tr>
         <td>Address:</td>
-        <td><input type="text" name="address" maxlength="128"></td>
+        <td><input type="text" name="address" maxlength="128" required pattern="[a-zA-Z0-9]+"></td>
         </tr>
         <tbody><tr>
         <td>Email:</td>
-        <td><input type="text" name="email" maxlength="128"></td>
+        <td><input type="text" name="email" maxlength="128" required pattern="[a-zA-Z0-9]+"></td>
         </tr>
         <tbody><tr>
         <td>Phone:</td>
-        <td><input type="text" name="phone" maxlength="10"></td>
+        <td><input type="text" name="phone" maxlength="10" required pattern="[a-zA-Z0-9]+"></td>
         </tr>
 
         </tbody></table>
