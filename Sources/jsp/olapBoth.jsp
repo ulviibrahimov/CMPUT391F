@@ -18,7 +18,7 @@
 	<div class="section hcenter">
         <h1><center>Data Analysis</center></h1>
 
-        <form name="dataAnalysis" action="/CMPUT391F/Sources/jsp/dataAnalysis.jsp?2" method="post">
+        <form name="dataAnalysis" action="/CMPUT391F/Sources/jsp/dataAnalysis.jsp" method="post">
 		
         <p>Please, fill out the form below to search the database for analysis</p>
         <table>
