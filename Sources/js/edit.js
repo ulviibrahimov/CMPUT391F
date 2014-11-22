@@ -132,6 +132,10 @@ function populateGroups(callback) {
 function populateForm(pic) {
 	// Show picture
 	$('#picToDisplay')[0].src="GetOnePic?big"+pic.photo_id[0];
+	$('#picToDisplay').on('load', function() {
+        $('.section').width($('#picToDisplay').width());
+    });
+
 
 	// Permission
 	var perm = pic.permitted[0];
