@@ -60,10 +60,17 @@ $(document).ready(function() {
 		"myPicBrowse",
 		"publicPicBrowse",
 		"groupPicBrowse",
+		"popularPicBrowse",
+		"PictureBrowse",
 		"newGroup.html",
 		"manageGroup.html",
 		"groups.html",
-		"edit.html"
+		"edit.html",
+		"Sources/jsp/searchReturn.jsp",
+		"searchByKeyword.html",
+		"searchByDate.html",
+		"searchByBoth.html",
+		"search.html"
 		);
 		
 		if (redirectPages.indexOf(pageNoQuery) >= 0) {

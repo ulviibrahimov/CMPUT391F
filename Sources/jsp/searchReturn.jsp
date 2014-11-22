@@ -1,9 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html lang="en">
+  <head>
+	<meta charset="UTF-8">
+	<script type="text/javascript" src="/CMPUT391F/Sources/js/jquery-1.9.1.min.js" defer></script>
+	<script type="text/javascript" src="/CMPUT391F/Sources/js/jquery.cookie.min.js" defer></script>
+	<script type="text/javascript" src="/CMPUT391F/Sources/js/buildHeader.js" defer></script>
+	<link rel="stylesheet" type="text/css" href="/CMPUT391F/Sources/css/main.css">
+	<title>LUX Image Hosting</title>
+  </head>
+<body>
+<br><br><div class="section hcenter" style="display:none"><center><h1> Search Result</h1>
+
 <%@ page import="java.sql.*, java.util.*" %>
 <%@ page import="services.UtilHelper" %>
 
 
 <%
-	
+	// Is user logged in?
+	String name = (String) session.getAttribute("user");
+	if (name == null) {
+		return;
+	}
 
 	//retrieves the text field paramters from searchStart.html
 	String queryString  = request.getQueryString();
@@ -26,31 +44,10 @@
 			queryOrder = "rank desc";
 		}
 		//if there is no order option selected, display an error
-	} 
-%>
-
-
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-
-<html lang="en">
-  <head>
-	<meta charset="UTF-8">
-	<script type="text/javascript" src="/CMPUT391F/Sources/js/jquery-1.9.1.min.js" defer></script>
-	<script type="text/javascript" src="/CMPUT391F/Sources/js/jquery.cookie.min.js" defer></script>
-	<script type="text/javascript" src="/CMPUT391F/Sources/js/buildHeader.js" defer></script>
-	<link rel="stylesheet" type="text/css" href="/CMPUT391F/Sources/css/main.css">
-	<title>LUX Image Hosting</title>
-  </head>
-<body>
-<br><br><div class="section hcenter"><center><h1> Search Result</h1>
-	
-<%
-
+	}
 
 	String userID = (String) session.getAttribute("user");
 	Boolean display=true;
-	String name = (String) session.getAttribute("user");
 	String query = "select images.photo_id,images.subject,images.place,images.description";
 	
 	String canBrowse=" FROM images where images.photo_id in (select distinct i.photo_id from images i, group_lists g where (g.friend_id = '"+name+"' and g.group_id = i.permitted) or i.owner_name='"+name+"' or i.permitted=1) and ";
