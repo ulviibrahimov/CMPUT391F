@@ -93,7 +93,7 @@
 				    stmt.executeUpdate(sqlusers);
 				    stmt.executeUpdate(sqlpersons);
 				    out.println("<p><b>Signup Successful!</b></p>");
-				    response.sendRedirect("/CMPUT391F/login.html");
+				    response.sendRedirect("/CMPUT391F/login.html?error=success");
 		    	}
 	
 			    catch(Exception ex){
