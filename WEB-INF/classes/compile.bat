@@ -1,5 +1,6 @@
 javac services/UtilHelper.java
 javac RestController.java
+javac UploadFolder.java
 javac GetBigPic.java
 javac GetOnePic.java
 javac groupPicBrowse.java

@@ -103,7 +103,7 @@ public class RestController extends HttpServlet {
 		    // Route the request to the appropriate function.
 			String result;
 		    if (function.equals("uploadOne")) {
-				result = "<br>Upload status:<br>" + uploadFile(userName, map);
+				result = uploadFile(userName, map);
 		    } else if (function.equals("editPic")) {
 				result = editPic(userName, map);
 			} else if (function.equals("createGroup")) {
@@ -139,22 +139,55 @@ public class RestController extends HttpServlet {
 		String result = "";
     	try {
 			// Get all input fields
-			int groupId = Integer.parseInt(getTextValue("group-id", map));
-			String subject = getTextValue("subject", map);
-			String dateTemp = getTextValue("date",map);
-			java.sql.Date date = null;
-			if (!dateTemp.equals("")) {
-				date = java.sql.Date.valueOf(dateTemp);
+			int groupId = Integer.parseInt(getTextValue("groupid", map));
+			String subject = "";
+			try {
+				subject = getTextValue("subject", map);
+			} catch (Exception e) {
+				if (e.toString().contains("No 'subject' key passed into post request data.")) {
+					subject = null;
+				} else {
+					throw e;
+				}
 			}
-			String location = getTextValue("location", map);
-			String description = getTextValue("description", map);
+			String location = "";
+			try {
+				location = getTextValue("location", map);
+			} catch (Exception e) {
+				if (e.toString().contains("No 'location' key passed into post request data.")) {
+					location = null;
+				} else {
+					throw e;
+				}
+			}
+			String description = "";
+			try {
+				description = getTextValue("description", map);
+			} catch (Exception e) {
+				if (e.toString().contains("No 'description' key passed into post request data.")) {
+					description = null;
+				} else {
+					throw e;
+				}
+			}
+			java.sql.Date date = null;
+			try {
+				String dateTemp = getTextValue("date",map);
+				date = java.sql.Date.valueOf(dateTemp);
+			} catch (Exception e) {
+				if (e.toString().contains("No 'date' key passed into post request data.")) {
+
+				} else {
+					throw e;
+				}
+			}
 
 			// Get images			
-			String fileType = getFileType("selected-file", map);
+			String fileType = getFileType("Filedata", map);
 			if (!fileType.equals("jpg") && !fileType.equals("gif")) {
 	    		throw new Exception("Invalid file.  Only image files (.jpg and .gif) are accepted.");
 	    	}
-	    	InputStream inStream = getFileValue("selected-file", map);
+	    	InputStream inStream = getFileValue("Filedata", map);
 			BufferedImage photo = ImageIO.read(inStream);
 		    BufferedImage thumbnail = shrink(photo, 10);
 			inStream.close();
@@ -207,7 +240,7 @@ public class RestController extends HttpServlet {
 		    return result + "Exception occurred: " + ex;
 		}
 
-		return result + "Upload successful.";
+		return "Upload successful.";
 	}
 
 	/*

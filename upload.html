@@ -6,10 +6,12 @@
 	<script type="text/javascript" src="/CMPUT391F/Sources/js/jquery.cookie.min.js" defer></script>
 	<script type="text/javascript" src="/CMPUT391F/Sources/js/jquery-ui.min.js" defer></script>
 	<script type="text/javascript" src="/CMPUT391F/Sources/js/buildHeader.js" defer></script>
+	<script type="text/javascript" src="/CMPUT391F/Sources/uploadify/jquery.uploadify.min.js" defer></script>
 	<script type="text/javascript" src="/CMPUT391F/Sources/js/upload.js" defer></script>
 	<link rel="stylesheet" type="text/css" href="/CMPUT391F/Sources/css/main.css">
 	<link rel="stylesheet" type="text/css" href="/CMPUT391F/Sources/css/jquery-ui.min.css">
 	<link rel="stylesheet" type="text/css" href="/CMPUT391F/Sources/css/jquery-ui.theme.css">
+	<link rel="stylesheet" type="text/css" href="/CMPUT391F/Sources/uploadify/uploadify.css">
 	<title>LUX Image Hosting</title>
 </head>
 <body>
@@ -18,14 +20,13 @@
 
 		<form id="upload-form" name="upload-image" enctype="multipart/form-data" >
 
-	        <p class="hcenter">Select an image to upload or a <a href="/CMPUT391F/uploadfolder.html">Folder</a>!</p>
 	        <table>
 		        <tbody>
 		        	<tr>
 				        <td>Select Image:</td>
 				        <td>
-				        	<input name="selected-file" type="file" accept=".jpg, .gif">
-				        	<div class="selected-file validation"></div>
+				        	<input id="upload-here" name="Filedata" type="file" accept=".jpg, .gif">
+				        	<div class="Filedata validation"></div>
 				        </td>
 			        </tr>
 			        <tr>
@@ -40,7 +41,7 @@
 					<tr class="collapsible group-selector">
 				        <td >Select Group:</td>
 				        <td >
-				        	<select name="group-id">
+				        	<select name="groupid">
 							</select> 
 				        </td>
 			        </tr>

@@ -20,6 +20,16 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>UploadFolderServlet</servlet-name>
+        <servlet-class>UploadFolder</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>UploadFolderServlet</servlet-name>
+        <url-pattern>/UploadFolder</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>PictureBrowse</servlet-name>
         <servlet-class>PictureBrowse</servlet-class>
     </servlet>
