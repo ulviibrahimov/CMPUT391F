@@ -15,7 +15,7 @@
 
 	<br>
 	<br>
-	<div class="section hcenter" style="display:none">
+	<div class="section hcenter">
 
 <%
 	if (request.getParameter("analysisSubmit") == null){
@@ -41,41 +41,56 @@
 	String dateEnd = request.getParameter("dateEnd");
 	String rangeSort = request.getParameter("Range");
 
-	//out.println(dataStart);
+	
 	//printStatement=printStatement+"owner = " + owner +"  subject= " +subject +"  time period= "+ dataStart +"-"+dataEnd;
 	String endStatement="";
 	String printStatement="Search for: ";
 	if (!owner.equals("") && !subject.equals("") && !dateStart.equals("") && !dateEnd.equals("")){
 		endStatement=" where i.owner_name = '"+owner+"' and i.subject = '"+ subject+"' and i.timing between to_date('" + dateStart+ "', 'DD/MM/YYYY') AND to_date('" + dateEnd+ "', 'DD/MM/YYYY') ";
-		printStatement=printStatement+"owner = " + owner +"  subject = " +subject +"  time period = ";
+		out.println(printStatement+"owner = " + owner +"  subject = " +subject +"  time period = ");
+		out.println(dateStart);
+		out.println("-");
+		out.println(dateEnd);
 	}
 	else if (!owner.equals("") && !subject.equals("") && dateStart.equals("") && dateEnd.equals("")){
 		endStatement=" where i.owner_name = '"+owner+"' and i.subject = '"+ subject+"' ";
-		printStatement=printStatement+"owner = " + owner +"  subject = " +subject +"  time period = ";
+		out.println(printStatement+"owner = " + owner +"  subject = " +subject +"  time period = ");
+		out.println(dateStart);
+		out.println("-");
+		out.println(dateEnd);
 	}
 	else if (!owner.equals("") && subject.equals("") && !dateStart.equals("") && !dateEnd.equals("")){
 		endStatement=" where i.owner_name = '"+owner+"' and i.timing between to_date('" + dateStart+ "', 'DD/MM/YYYY') AND to_date('" + dateEnd+ "', 'DD/MM/YYYY') ";
-		printStatement=printStatement+"owner = " + owner +"  time period = ";
+		out.println(printStatement+"owner = " + owner +"  time period = ");
+		out.println(dateStart);
+		out.println("-");
+		out.println(dateEnd);
 	}
 	else if (owner.equals("") && !subject.equals("") && !dateStart.equals("") && !dateEnd.equals("")){
 		endStatement=" where i.subject = '"+ subject+"' and i.timing between to_date('" + dateStart+ "', 'DD/MM/YYYY') AND to_date('" + dateEnd+ "', 'DD/MM/YYYY') ";
-		printStatement=printStatement+"subject = " +subject +"  time period = ";
+		out.println(printStatement+"subject = " +subject +"  time period = ");
+		out.println(dateStart);
+		out.println("-");
+		out.println(dateEnd);
 	}
 	else if (!owner.equals("") && subject.equals("") && dateStart.equals("") && dateEnd.equals("")){
 		endStatement=" where i.owner_name = '"+owner+"' ";
-		printStatement=printStatement+"owner = " + owner;
+		out.println(printStatement+"owner = " + owner);
 	}
 	else if (owner.equals("") && !subject.equals("") && dateStart.equals("") && dateEnd.equals("")){
 		endStatement=" where  i.subject = '"+ subject+"' ";
-		printStatement=printStatement+"subject = " +subject;
+		out.println(printStatement+"subject = " +subject);
 	}
 	else if (owner.equals("") && subject.equals("") && !dateStart.equals("") && !dateEnd.equals("")){
 		endStatement=" where i.timing between to_date('" + dateStart+ "', 'DD/MM/YYYY') AND to_date('" + dateEnd+ "', 'DD/MM/YYYY') ";
-		printStatement=printStatement+"time period = ";
+		out.println(printStatement+"time period = ");
+		out.println(dateStart);
+		out.println("-");
+		out.println(dateEnd);
 	}
 	else
 		endStatement="";
-	out.println(printStatement);
+	//out.println(printStatement);
 	out.println("<br>");
 	
 
