@@ -38,7 +38,7 @@
 		String name = "";
 		while (rset.next() ) {
 			name=(rset.getObject(1)).toString();
-			out.println("<OPTION VALUE='"+name+"' SELECTED> User:"+name+" </OPTION>");
+			out.println("<OPTION VALUE='"+name+"' SELECTED> "+name+" </OPTION>");
 		}
 	}
         catch(Exception ex){
@@ -51,8 +51,17 @@
 
 	</td>
         </tr>
+
         <tr>
         <td>Sort By Owner</td>
+        <td><input type="checkbox" name="SortByOwner" value ="true"></td>
+        </tr>
+        <tbody><tr>
+        <td>Subject:</td>
+        <td><input type="text" name="Subject" maxlength="24"></td>
+        </tr>
+        <tr>
+        <td>Sort By Subject</td>
         <td><input type="checkbox" name="SortBySubject" value ="true"></td>
         </tr>
         <tbody><tr>

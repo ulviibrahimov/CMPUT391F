@@ -8,8 +8,35 @@
 	<link rel="stylesheet" type="text/css" href="/CMPUT391F/Sources/css/main.css">
 	<title>Login</title>
 	<style type="text/css"></style>
+	<script> 
+	// Read a page's GET URL variables and return them as an associative array.
+		function getUrlVars()
+		{
+			var vars = [], hash;
+			var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+			for(var i = 0; i < hashes.length; i++)
+			{
+				hash = hashes[i].split('=');
+				vars.push(hash[0]);
+				vars[hash[0]] = hash[1];
+			}
+			return vars;
+		}
+	
+		function displayError()
+		{
+			var msg=getUrlVars()['error'];
+			if (msg==="invalid_login"){
+				alert("Either your userName or Your password is inValid!");
+			}
+			if (msg==="success"){
+				alert("Registration successful!");
+			}
+		
+		}
+	</script>
 </head>
-<body>
+<body onload = "displayError()" >
 <!--This is the login page-->
 <br>
 <br>
@@ -22,7 +49,7 @@
 			<table>
 			<tbody><tr>
 			<td>Username:</td>
-			<td><input type="text" name="USERNAME"></td>
+			<td><input type="text" name="USERNAME" required pattern="[a-zA-Z0-9]+"></td>
 			</tr>
 			<tr>
 			<td>Password:</td>
@@ -30,7 +57,7 @@
 			</tr>
 			</tbody></table>
 
-			<input type="submit" name="loginSubmit" value="LOGIN">
+			<input type="submit" name="loginSubmit" value="LOGIN" required pattern="[a-zA-Z0-9]+">
 			<a href="/CMPUT391F/signup.html">Register</a>
 		</form>
 	</div>
