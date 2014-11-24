@@ -12,26 +12,29 @@ $(document).ready(function() {
 	// Sets date picker on all browsers
 	$('#date-taken').datepicker();
 
-	// Set uploadify on browse button
-	$('#upload-here').uploadify({
-		'auto'     : false,
-        'swf'      : '/CMPUT391F/Sources/uploadify/uploadify.swf',
-        'uploader' : '/CMPUT391F/RestService',
-        'fileTypeExts' : '*.gif; *.jpg',
-        'onUploadStart' : function(file) {
-			if (file.type.toLowerCase() != ".jpg" && file.type.toLowerCase() != ".gif") {
-				// Invalid extension
-				$('.Filedata.validation').append('* Only .jpg and .gif are accepted.');
-				$('#upload-here').uploadify('stop');
-			}
-		},
-        'onUploadSuccess' : function(file, data, response) {
-        	$("#upload-results").append('<br>' + file.name + ': ' + data);
-    	},
-    	'onUploadError' : function(file, errorCode, errorMsg, errorString) {
-            $("#upload-results").append('<br>' + file.name + ': could not be uploaded. ' + errorString);
-        }
-    });
+	// Only set up uploadify on non-firefox
+	if (navigator.userAgent.toLowerCase().indexOf('firefox') == -1) {
+		// Set uploadify on browse button
+		$('#upload-here').uploadify({
+			'auto'     : false,
+	        'swf'      : '/CMPUT391F/Sources/uploadify/uploadify.swf',
+	        'uploader' : '/CMPUT391F/RestService',
+	        'fileTypeExts' : '*.gif; *.jpg',
+	        'onUploadStart' : function(file) {
+				if (file.type.toLowerCase() != ".jpg" && file.type.toLowerCase() != ".gif") {
+					// Invalid extension
+					$('.Filedata.validation').append('* Only .jpg and .gif are accepted.');
+					$('#upload-here').uploadify('stop');
+				}
+			},
+	        'onUploadSuccess' : function(file, data, response) {
+	        	$("#upload-results").append('<br>' + file.name + ': ' + data);
+	    	},
+	    	'onUploadError' : function(file, errorCode, errorMsg, errorString) {
+	            $("#upload-results").append('<br>' + file.name + ': could not be uploaded. ' + errorString);
+	        }
+	    });
+	}
 
 	// Populates the group dropdown
 	populateGroups();
