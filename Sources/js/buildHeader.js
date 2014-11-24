@@ -35,6 +35,7 @@ $(document).ready(function() {
 	        	redirect();
 		        $(".login-bubble").append('<a href="/CMPUT391F/login.html">Login</a>' + '<a class="vertical-divider"></a>' + '<a href="/CMPUT391F/signup.html">Register</a>');
 	        } else {
+			
 	        	$(".login-bubble").append('Welcome: ' + response + '<a class="vertical-divider"></a>' + '<a href="/CMPUT391F/Sources/jsp/logout.jsp">Log Out</a>');
 	        	$('div.section:not(.admin-only)').show();
 	        	if (response.trim() == 'admin') {

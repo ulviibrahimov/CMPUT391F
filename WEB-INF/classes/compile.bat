@@ -7,3 +7,4 @@ javac groupPicBrowse.java
 javac myPicBrowse.java
 javac PictureBrowse.java
 javac publicPicBrowse.java
+javac popularPicBrowse.java
