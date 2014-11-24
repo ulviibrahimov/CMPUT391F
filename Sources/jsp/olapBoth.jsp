@@ -24,14 +24,14 @@
         <table>
         <tbody><tr>
         <td>Select an owner:</td>
-        <td><select name="Owner">
+        <td><select name="User">
 <%      
 	Connection conn = null;  
 	try{
         	conn = UtilHelper.getConnection();
 	        Statement stmt = null;
 		ResultSet rset = null;
-	        String sql = "select distinct owner_name from images";
+	        String sql = "select distinct user_name from users";
 
 	        stmt = conn.createStatement();
 		rset = stmt.executeQuery(sql);
