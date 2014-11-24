@@ -15,7 +15,7 @@
 
 	<br>
 	<br>
-	<div class="section hcenter">
+	<div class="section hcenter admin-only" style="display:none">
         <h1><center>Data Analysis</center></h1>
 
         <form name="dataAnalysis" action="/CMPUT391F/Sources/jsp/dataAnalysis.jsp" method="post">

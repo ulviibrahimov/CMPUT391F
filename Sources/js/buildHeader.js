@@ -17,6 +17,7 @@ $(document).ready(function() {
 				+'<div class="nav-option left"><a href="/CMPUT391F/groups.html">Groups</a></div>'
 				+'<div class="nav-option left"><a href="/CMPUT391F/upload.html">Upload</a></div>'
 				+'<div class="nav-option left"><a href="/CMPUT391F/search.html">Search</a></div>'
+				+'<div class="nav-option left admin-only" style="display:none"><a href="/CMPUT391F/Sources/jsp/olapBoth.jsp">Data Analysis</a></div>'
 		+'</div></div></div>'
 	);
 
@@ -34,7 +35,10 @@ $(document).ready(function() {
 		        $(".login-bubble").append('<a href="/CMPUT391F/login.html">Login</a>' + '<a class="vertical-divider"></a>' + '<a href="/CMPUT391F/signup.html">Register</a>');
 	        } else {
 	        	$(".login-bubble").append('Welcome: ' + response + '<a class="vertical-divider"></a>' + '<a href="/CMPUT391F/Sources/jsp/logout.jsp">Log Out</a>');
-	        	$('div.section').show();
+	        	$('div.section:not(.admin-only)').show();
+	        	if (response.trim() == 'admin') {
+	        		$('.admin-only').show();
+	        	}
 	        }
 	        $('.login-bubble').data('user', response);
 	    },
@@ -70,7 +74,9 @@ $(document).ready(function() {
 		"searchByKeyword.html",
 		"searchByDate.html",
 		"searchByBoth.html",
-		"search.html"
+		"search.html",
+		"Sources/jsp/olapBoth.jsp",
+		"Sources/jsp/dataAnalysis.jsp"
 		);
 		
 		if (redirectPages.indexOf(pageNoQuery) >= 0) {
