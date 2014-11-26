@@ -18,7 +18,7 @@ $(document).ready(function() {
 				+'<div class="nav-option left"><a href="/CMPUT391F/upload.html">Upload</a></div>'
 				+'<div class="nav-option left"><a href="/CMPUT391F/search.html">Search</a></div>'
 				+'<div class="nav-option left admin-only" style="display:none"><a href="/CMPUT391F/Sources/jsp/olapBoth.jsp">Data Analysis</a></div>'
-				+'<div class="nav-option right" ><a href="/CMPUT391F/help.html"><img src="/CMPUT391F/Sources/images/help.png" height="20px"> Help</a></div>'
+				+'<div class="nav-option right" ><a href="/CMPUT391F/help/Help.html"><img src="/CMPUT391F/Sources/images/help.png" height="20px"> Help</a></div>'
 		+'</div></div></div>'
 	);
 
