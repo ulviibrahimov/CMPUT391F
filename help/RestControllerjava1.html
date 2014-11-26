@@ -42,52 +42,52 @@
 <div id="topic_content">
 		
 <p></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11">Get groups belong to:</span></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11">stm = conn.prepareStatement("SELECT groups.group_id, group_name, user_name "</span></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11"> + "FROM (groups INNER JOIN group_lists ON </span></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11">groups.group_id = group_lists.group_id) "</span></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11"> + "WHERE friend_id = ?");</span></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11"> stm.setString(1, userName);</span></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11">Upload image:</span></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11">"SELECT pic_id_seq.nextval from dual";</span></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11">stm = conn.prepareStatement("INSERT INTO images (PHOTO_ID, OWNER_NAME, </span></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11">PERMITTED, SUBJECT, PLACE, TIMING, DESCRIPTION, THUMBNAIL, PHOTO) "</span></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11"> + "VALUES(?, ?, ?, ?, ?, ?, ?, empty_blob(), empty_blob()</span></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11">)");</span></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11"> stm.setInt(1, pic_id);</span></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11"> stm.setString(2, userName);</span></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11"> stm.setInt(3, groupId);</span></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11"> stm.setString(4, subject);</span></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11"> stm.setString(5, location);</span></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11"> stm.setDate(6, date);</span></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11"> stm.setString(7, description);</span></p>
-<p class="rvps2"><span class="rvts11"><br/></span></p>
-<p class="rvps2"><span class="rvts11">"SELECT * FROM images WHERE photo_id = "+pic_id+" FOR UPDATE";</span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13">Get groups belong to:</span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("SELECT groups.group_id, group_name, user_name "</span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13"> + "FROM (groups INNER JOIN group_lists ON </span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13">groups.group_id = group_lists.group_id) "</span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13"> + "WHERE friend_id = ?");</span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13"> stm.setString(1, userName);</span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13">Upload image:</span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13">"SELECT pic_id_seq.nextval from dual";</span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("INSERT INTO images (PHOTO_ID, OWNER_NAME, </span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13">PERMITTED, SUBJECT, PLACE, TIMING, DESCRIPTION, THUMBNAIL, PHOTO) "</span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13"> + "VALUES(?, ?, ?, ?, ?, ?, ?, empty_blob(), empty_blob()</span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13">)");</span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13"> stm.setInt(1, pic_id);</span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13"> stm.setString(2, userName);</span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13"> stm.setInt(3, groupId);</span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13"> stm.setString(4, subject);</span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13"> stm.setString(5, location);</span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13"> stm.setDate(6, date);</span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13"> stm.setString(7, description);</span></p>
+<p class="rvps3"><span class="rvts13"><br/></span></p>
+<p class="rvps3"><span class="rvts13">"SELECT * FROM images WHERE photo_id = "+pic_id+" FOR UPDATE";</span></p>
 <p></p>
-<p class="rvps4"><span class="rvts12">Created with the Personal Edition of HelpNDoc: </span><a class="rvts13" href="http://www.helpndoc.com/feature-tour/create-ebooks-for-amazon-kindle">Full-featured Kindle eBooks generator</a></p>
+<p class="rvps2"><span class="rvts6">Created with the Personal Edition of HelpNDoc: </span><a class="rvts7" href="http://www.helpndoc.com/feature-tour/create-ebooks-for-amazon-kindle">Full-featured Kindle eBooks generator</a></p>
 </div>
 	
 	</body>
