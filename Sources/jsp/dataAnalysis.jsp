@@ -202,7 +202,7 @@
 				//out.println(query);
 				rset = stmt.executeQuery(query);
 				while (rset.next() ){
-					out.println("Subject "+modifyPrint(rset.getObject(4))+" "+modifyPrint(rset.getObject(2))+": "+(rset.getObject(1)).toString());
+					out.println("Subject "+modifyPrint(rset.getObject(3))+" "+modifyPrint(rset.getObject(2))+": "+(rset.getObject(1)).toString());
 					out.println("<br>");
 					//out.println("<br>");
 					i++;
@@ -254,7 +254,7 @@
 				}
 			}
 			else {
-				query = "SELECT count(i.photo_id), extract(year from i.timing), extract(month from i.timing), to_char(i.timing,'w'), i.owner_name, from images i "+endStatement + " group by extract(year from i.timing), extract(month from i.timing), to_char(i.timing,'w'), i.owner_name ";
+				query = "SELECT count(i.photo_id), extract(year from i.timing), extract(month from i.timing), to_char(i.timing,'w'), i.owner_name from images i "+endStatement + " group by extract(year from i.timing), extract(month from i.timing), to_char(i.timing,'w'), i.owner_name ";
 				//out.println(query);
 				rset = stmt.executeQuery(query);
 				while (rset.next() ){
@@ -293,7 +293,7 @@
 				//out.println(query);
 				rset = stmt.executeQuery(query);
 				while (rset.next() ){
-					out.println("Subject "+modifyPrint(rset.getObject(6))+" "+"Owner "+modifyPrint(rset.getObject(6))+" "+modifyPrint(rset.getObject(2))+"-"+modifyPrint(rset.getObject(3))+"(week "+modifyPrint(rset.getObject(4))+"): "+(rset.getObject(1)).toString());
+					out.println("Subject "+modifyPrint(rset.getObject(6))+" "+"Owner "+modifyPrint(rset.getObject(5))+" "+modifyPrint(rset.getObject(2))+"-"+modifyPrint(rset.getObject(3))+"(week "+modifyPrint(rset.getObject(4))+"): "+(rset.getObject(1)).toString());
 					out.println("<br>");
 					i++;
 				}
