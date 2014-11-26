@@ -8,6 +8,14 @@ import oracle.jdbc.driver.*;
 import java.text.*;
 import java.net.*;
 
+/**
+ * extend PictureBrowse.java
+ * use servlet to query and display a list of pictures
+ *
+ * @author  Xiaolu Wang
+ *
+**/
+
 public class myPicBrowse extends PictureBrowse{
 
     public String setQuery(){

@@ -1,6 +1,16 @@
 <%@ page import="java.sql.*" %>
 <%@ page import="services.UtilHelper" %>
-
+<%
+/**
+ *
+ * Retrieve parameters from olapBoth.jsp
+ * Use the parameter to set up query
+ * Display the result of the query
+ *
+ *  @author  Xiaolu Wang
+ *
+ */
+%>
 <!DOCTYPE HTML>
 <html lang="en">
   <head>
@@ -41,7 +51,7 @@
 	String dateEnd = request.getParameter("dateEnd");
 	String rangeSort = request.getParameter("Range");
 
-	
+
 	//printStatement=printStatement+"owner = " + owner +"  subject= " +subject +"  time period= "+ dataStart +"-"+dataEnd;
 	String endStatement="";
 	String printStatement="Search for: ";
@@ -102,7 +112,7 @@
 
 		stmt = conn.createStatement();
 
-
+		int i = 0;
 		String query="";
 		if (subjectSort==null && ownerSort==null && rangeSort.equals("")){
 			query = "SELECT count(*) from images i "+endStatement;
@@ -111,6 +121,7 @@
 			while (rset.next() ){
 				out.println((rset.getObject(1)).toString());
 				out.println("<br>");
+				i++;
 			}
 		}
 		else if (subjectSort!=null && ownerSort==null && rangeSort.equals("")){
@@ -121,6 +132,7 @@
 				out.println("Subject "+modifyPrint(rset.getObject(2))+": "+(rset.getObject(1)).toString());
 				out.println("<br>");
 				//out.println("<br>");
+				i++;
 			}
 
 		}
@@ -132,6 +144,7 @@
 				out.println("Owner "+modifyPrint(rset.getObject(2))+": "+(rset.getObject(1)).toString());
 				out.println("<br>");
 				//out.println("<br>");
+				i++;
 			}
 		}
 		else if (subjectSort!=null && ownerSort!=null && rangeSort.equals("")){
@@ -142,6 +155,7 @@
 				out.println("Owner "+modifyPrint(rset.getObject(2))+" Subject "+modifyPrint(rset.getObject(3))+": "+(rset.getObject(1)).toString());
 				out.println("<br>");
 				//out.println("<br>");
+				i++;
 			}
 		}
 		else if (subjectSort==null && ownerSort==null && !rangeSort.equals("")){
@@ -154,6 +168,7 @@
 					out.println(modifyPrint(rset.getObject(2))+": "+(rset.getObject(1)).toString());
 					out.println("<br>");
 					//out.println("<br>");
+					i++;
 				}
 			}
 			else if (rangeSort.equals("month")){
@@ -164,6 +179,7 @@
 					out.println(modifyPrint(rset.getObject(2))+"-"+modifyPrint(rset.getObject(3))+": "+(rset.getObject(1)).toString());
 					out.println("<br>");
 					//out.println("<br>");
+					i++;
 				}
 			}
 			else {
@@ -174,6 +190,7 @@
 					out.println(modifyPrint(rset.getObject(2))+"-"+modifyPrint(rset.getObject(3))+"(week "+modifyPrint(rset.getObject(4))+"): "+(rset.getObject(1)).toString());
 					out.println("<br>");
 					//out.println("<br>");
+					i++;
 				}
 			}
 
@@ -188,6 +205,7 @@
 					out.println("Subject "+modifyPrint(rset.getObject(4))+" "+modifyPrint(rset.getObject(2))+": "+(rset.getObject(1)).toString());
 					out.println("<br>");
 					//out.println("<br>");
+					i++;
 				}
 			}
 			else if (rangeSort.equals("month")){
@@ -198,6 +216,7 @@
 					out.println("Subject "+modifyPrint(rset.getObject(4))+" "+modifyPrint(rset.getObject(2))+"-"+modifyPrint(rset.getObject(3))+": "+(rset.getObject(1)).toString());
 					out.println("<br>");
 					//out.println("<br>");
+					i++;
 				}
 			}
 			else {
@@ -207,6 +226,7 @@
 				while (rset.next() ){
 					out.println("Subject "+modifyPrint(rset.getObject(5))+" "+modifyPrint(rset.getObject(2))+"-"+modifyPrint(rset.getObject(3))+"(week "+modifyPrint(rset.getObject(4))+"): "+(rset.getObject(1)).toString());
 					out.println("<br>");
+					i++;
 				}
 			}
 
@@ -220,6 +240,7 @@
 				while (rset.next() ){
 					out.println("Owner "+modifyPrint(rset.getObject(3))+" "+modifyPrint(rset.getObject(2))+": "+(rset.getObject(1)).toString());
 					out.println("<br>");
+					i++;
 				}
 			}
 			else if (rangeSort.equals("month")){
@@ -229,6 +250,7 @@
 				while (rset.next() ){
 					out.println("Owner "+modifyPrint(rset.getObject(4))+" "+modifyPrint(rset.getObject(2))+"-"+modifyPrint(rset.getObject(3))+": "+(rset.getObject(1)).toString());
 					out.println("<br>");
+					i++;
 				}
 			}
 			else {
@@ -238,6 +260,7 @@
 				while (rset.next() ){
 					out.println("Owner "+modifyPrint(rset.getObject(5))+" "+modifyPrint(rset.getObject(2))+"-"+modifyPrint(rset.getObject(3))+"(week "+modifyPrint(rset.getObject(4))+"): "+(rset.getObject(1)).toString());
 					out.println("<br>");
+					i++;
 				}
 			}
 
@@ -252,6 +275,7 @@
 				while (rset.next() ){
 					out.println("Subject "+modifyPrint(rset.getObject(4))+" "+"Owner "+modifyPrint(rset.getObject(3))+" "+modifyPrint(rset.getObject(2))+": "+(rset.getObject(1)).toString());
 					out.println("<br>");
+					i++;
 				}
 			}
 			else if (rangeSort.equals("month")){
@@ -261,6 +285,7 @@
 				while (rset.next() ){
 					out.println("Subject "+modifyPrint(rset.getObject(5))+" "+"Owner "+modifyPrint(rset.getObject(4))+" "+modifyPrint(rset.getObject(2))+"-"+modifyPrint(rset.getObject(3))+": "+(rset.getObject(1)).toString());
 					out.println("<br>");
+					i++;
 				}
 			}
 			else {
@@ -270,10 +295,13 @@
 				while (rset.next() ){
 					out.println("Subject "+modifyPrint(rset.getObject(6))+" "+"Owner "+modifyPrint(rset.getObject(6))+" "+modifyPrint(rset.getObject(2))+"-"+modifyPrint(rset.getObject(3))+"(week "+modifyPrint(rset.getObject(4))+"): "+(rset.getObject(1)).toString());
 					out.println("<br>");
+					i++;
 				}
 			}
 
 		}
+		if (i==0)
+			out.println("0");
 
 	}
 	else

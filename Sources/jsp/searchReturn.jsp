@@ -17,6 +17,24 @@
 
 
 <%
+
+/**
+ *
+ * Sourse code: indexExample.jsp from http://luscar.cs.ualberta.ca:8080/yuan/index.html
+ *
+ * This servlet use servlet to query and display a list of pictures that 
+ * is according the search inputs.
+ *
+ * The request must come with a query string as follows:
+ *    searchReturn.jsp?1-car-null-null-null: search with only keyword "car"
+ *    searchReturn.jsp?3-car-01/01/2010-31/12/2016-recentFirst: 
+ *	    search keyword "car", date between 01/01/2010-31/12/2016
+ *	    and display image in resent first order
+ *
+ *  @author  Xiaolu Wang
+ *
+ */
+
 	// Is user logged in?
 	String name = (String) session.getAttribute("user");
 	if (name == null) {

@@ -4,8 +4,16 @@
 
 <%
 	
-
-	//retrieves the text field paramters from searchStart.html
+/**
+ *
+ * Sourse code: indexExample.jsp from http://luscar.cs.ualberta.ca:8080/yuan/index.html
+ *
+ * This servlet retrieve the parameters for search and send request to 
+ * searchResult.jsp
+ *
+ *  @author  Xiaolu Wang
+ *
+ */
 
 	String type  = request.getQueryString();
 	String keywords = request.getParameter("key");

@@ -1,4 +1,3 @@
-
 import services.UtilHelper;
 import java.io.*;
 import java.util.*;
@@ -9,7 +8,14 @@ import oracle.jdbc.driver.*;
 import java.text.*;
 import java.net.*;
 
-
+/**
+ * Sourse code: PictureBrowse.java from http://luscar.cs.ualberta.ca:8080/yuan/index.html
+ * 
+ * use servlet to query and display a list of pictures
+ *
+ * @author  Xiaolu Wang
+ *
+**/
 public class PictureBrowse extends HttpServlet implements SingleThreadModel {
     
     public String name;

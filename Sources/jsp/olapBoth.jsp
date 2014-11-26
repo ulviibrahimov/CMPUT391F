@@ -1,6 +1,15 @@
 <%@ page import="java.sql.*" %>
 <%@ page import="services.UtilHelper" %>
-
+<%
+/**
+ *
+ * input page for the data analysis
+ * send parameters to dataAnalysis.jsp 
+ *
+ *  @author  Xiaolu Wang
+ *
+ */
+%>
 <!DOCTYPE HTML>
 <html lang="en">
   <head>
@@ -23,8 +32,8 @@
         <p>Please, fill out the form below to search the database for analysis</p>
         <table>
         <tbody><tr>
-        <td>Select an owner:</td>
-        <td><select name="User">
+        <td>Select an user:</td>
+        <td><select name="Owner">
 <%      
 	Connection conn = null;  
 	try{

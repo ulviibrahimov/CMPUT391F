@@ -4,6 +4,25 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import java.sql.*;
 
+/**
+ *
+ * Sourse code: GetOnePic.java from http://luscar.cs.ualberta.ca:8080/yuan/index.html
+ *
+ *  This servlet sends one picture stored in the table below to the client 
+ *  who requested the servlet.
+ *
+ * images (photo_id int, owner_name varchar(24), permitted int,
+ * 	subject varchar(128), place varchar(128), timing date,
+ * 	description varchar(2048),thumbnail blob, photo blob)
+ *
+ *  The request must come with a query string as follows:
+ *    GetOnePic?dis12: sends the thumbnail in images with photso_id = 12
+ *    GetOnePic?big12: sends the photo in images with photo_id = 12
+ *
+ *  @author  Xiaolu Wang
+ *
+ */
+
 public class GetOnePic extends HttpServlet 
     implements SingleThreadModel {
 
