@@ -55,6 +55,8 @@
 <p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11"> stm.setString(1, userName);</span></p>
 <p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11">Get groups belong to but not owned:</span></p>
 <p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11">stm = conn.prepareStatement("SELECT groups.group_id, group_name, user_name FROM </span></p>
@@ -67,6 +69,8 @@
 <p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11"> stm.setString(2, userName);</span></p>
 <p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11">Get all groups (admin):</span></p>
 <p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11">SELECT group_id, group_name, user_name</span></p>
@@ -74,6 +78,8 @@
 <p class="rvps2"><span class="rvts11"> FROM groups</span></p>
 <p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11"> WHERE group_id &lt;&gt; 1 AND group_id &lt;&gt; 2;</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11">Create group:</span></p>
 <p class="rvps2"><span class="rvts11"><br/></span></p>
@@ -103,6 +109,8 @@
 <p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11"> stm.setString(4, notice);</span></p>
 <p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11">Leave group:</span></p>
 <p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11">stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");</span></p>
@@ -126,6 +134,8 @@
 <p class="rvps2"><span class="rvts11"> stm.setInt(1, groupId);</span></p>
 <p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11"> stm.setString(2, userName);</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11">Add user to group:</span></p>
 <p class="rvps2"><span class="rvts11"><br/></span></p>
@@ -151,6 +161,8 @@
 <p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11"> stm.setString(4, notice);</span></p>
 <p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11">Remove user from group:</span></p>
 <p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11">stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");</span></p>
@@ -175,6 +187,8 @@
 <p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11"> stm.setString(2, userName);</span></p>
 <p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11">Disband (delete) group:</span></p>
 <p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11">stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");</span></p>
@@ -197,6 +211,8 @@
 <p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11"> stm.setInt(1, groupId);</span></p>
 <p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11">Transfer group ownership:</span></p>
 <p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11">stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");</span></p>
@@ -209,6 +225,8 @@
 <p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11"> stm.setInt(2, groupId);</span></p>
 <p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11">Change group name:</span></p>
 <p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11">stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");</span></p>
@@ -220,6 +238,60 @@
 <p class="rvps2"><span class="rvts11"> stm.setString(1, newName);</span></p>
 <p class="rvps2"><span class="rvts11"><br/></span></p>
 <p class="rvps2"><span class="rvts11"> stm.setInt(2, groupId);</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11">Get image information:</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11">stm = conn.prepareStatement("SELECT photo_id, owner_name, permitted, subject, place, </span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11">timing, description, photo "</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"> + "FROM images "</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"> stm.setInt(1, picId);</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11">Get groups belong to:</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11">stm = conn.prepareStatement("SELECT groups.group_id, group_name, user_name "</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"> + "FROM (groups INNER JOIN group_lists ON </span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11">groups.group_id = group_lists.group_id) "</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"> + "WHERE friend_id = ?");</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"> stm.setString(1, userName);</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11">Save/Update image info:</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11">stm = conn.prepareStatement("SELECT owner_name "</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"> + "FROM images "</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"> stm.setInt(1, picId);</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11">stm = conn.prepareStatement("UPDATE images "</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"> + "SET PERMITTED=?, SUBJECT=?, PLACE=?, </span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11">TIMING=?, DESCRIPTION=? "</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"> + "WHERE photo_id = ?");</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"> stm.setInt(1, groupId);</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"> stm.setString(2, subject);</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"> stm.setString(3, location);</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"> stm.setDate(4, date);</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"> stm.setString(5, description);</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"> stm.setInt(6, picId);</span></p>
 <p></p>
 <p class="rvps4"><span class="rvts12">Created with the Personal Edition of HelpNDoc: </span><a class="rvts13" href="http://www.helpndoc.com">Free Web Help generator</a></p>
 </div>
