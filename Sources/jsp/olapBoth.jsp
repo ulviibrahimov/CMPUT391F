@@ -32,7 +32,7 @@
         <p>Please, fill out the form below to search the database for analysis</p>
         <table>
         <tbody><tr>
-        <td>Select an user:</td>
+        <td>Select a user:</td>
         <td><select name="Owner">
 <%      
 	Connection conn = null;  
@@ -90,7 +90,6 @@
 		</SELECT></TD>
 	</TR>
 	<TR><TD><P><input type="submit" name="analysisSubmit" value="submit"></TD></TR>
-	<TR><TD><a href="dataAnalysis.html"> Return </a></TD></TR>
 
 	</div>
 </body>
