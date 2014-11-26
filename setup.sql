@@ -4,12 +4,12 @@
  *              Fall, 2014
  *  Author:     Prof. Li-Yan Yuan
  */
-
 DROP TABLE images;
 DROP TABLE group_lists;
 DROP TABLE groups;
 DROP TABLE persons;
 DROP TABLE users;
+
 
 CREATE TABLE users (
    user_name varchar(24),
@@ -29,6 +29,7 @@ CREATE TABLE persons (
    UNIQUE (email),
    FOREIGN KEY (user_name) REFERENCES users
 );
+
 
 CREATE TABLE groups (
    group_id   int,
@@ -67,18 +68,3 @@ CREATE TABLE images (
    FOREIGN KEY(owner_name) REFERENCES users,
    FOREIGN KEY(permitted) REFERENCES groups
 );
-
--- Our custom SQL setup commands
-
-INSERT INTO users values('admin', 'secret', SYSDATE);
-INSERT INTO persons values('admin', null, null, null, null, null);
-
-
-
-DROP SEQUENCE pic_id_seq;
-CREATE SEQUENCE pic_id_seq;
-
-DROP SEQUENCE group_id_seq;
-CREATE SEQUENCE group_id_seq START WITH 3;
-
-
