@@ -1,7 +1,7 @@
 ﻿<html>
 	
 <head>
-	<title>Uploading module</title>
+	<title>dataAnalysis.jsp</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="generator" content="HelpNDoc Personal Edition 4.6.2.573">
 	<meta name="keywords" content="">
@@ -30,7 +30,7 @@
 			}
 			else if (top && top.FrameTOC && top.FrameTOC.SelectTocItem)
 			{
-				top.FrameTOC.SelectTocItem("Uploadingmodule");
+				top.FrameTOC.SelectTocItem("dataAnalysisjsp1");
 			}
 		});
 	</script>
@@ -42,8 +42,12 @@
 <div id="topic_content">
 		
 <p></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11">SELECT count (i.photo_id), extract(year from i.timing), extract(month from i.timing), to_char(i.timing,'w'), i.owner_name, i.subject from images i "+endStatement + " group by extract(year from i.timing), extract(month from i.timing), to_char(i.timing,'w'), i.owner_name, i.subject where i.owner_name = '"+owner+"' and i.subject = '"+ subject+"' and i.timing between to_date('" + dateStart+ "', 'DD/MM/YYYY') AND to_date('" + dateEnd+ "', 'DD/MM/YYYY')</span></p>
 <p></p>
-<p class="rvps4"><span class="rvts12">Created with the Personal Edition of HelpNDoc: </span><a class="rvts13" href="http://www.helpndoc.com/feature-tour">Easily create PDF Help documents</a></p>
+<p class="rvps4"><span class="rvts12">Created with the Personal Edition of HelpNDoc: </span><a class="rvts13" href="http://www.helpndoc.com/feature-tour">Easily create Help documents</a></p>
 </div>
 	
 	</body>

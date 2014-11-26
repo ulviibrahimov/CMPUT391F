@@ -1,7 +1,7 @@
 ﻿<html>
 	
 <head>
-	<title>Uploading module</title>
+	<title>popularPicBrowse.java</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="generator" content="HelpNDoc Personal Edition 4.6.2.573">
 	<meta name="keywords" content="">
@@ -30,7 +30,7 @@
 			}
 			else if (top && top.FrameTOC && top.FrameTOC.SelectTocItem)
 			{
-				top.FrameTOC.SelectTocItem("Uploadingmodule");
+				top.FrameTOC.SelectTocItem("popularPicBrowsejava1");
 			}
 		});
 	</script>
@@ -42,8 +42,14 @@
 <div id="topic_content">
 		
 <p></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11">for general user: "select i.photo_id, count(v.name) as rank from images i, viewed v where i.photo_id = v.photo_id group by i.photo_id having i.photo_id in (select distinct i.photo_id from images i, group_lists g where (g.friend_id = '"+name+"' and g.group_id = i.permitted) or i.owner_name='"+name+"' or i.permitted=1) order by rank desc "</span></p>
+<p class="rvps2"><span class="rvts11"><br/></span></p>
+<p class="rvps2"><span class="rvts11">for ‘admin’ : "select i.photo_id, count(v.name) as rank from images i, viewed v where i.photo_id = v.photo_id group by i.photo_id "</span></p>
 <p></p>
-<p class="rvps4"><span class="rvts12">Created with the Personal Edition of HelpNDoc: </span><a class="rvts13" href="http://www.helpndoc.com/feature-tour">Easily create PDF Help documents</a></p>
+<p class="rvps4"><span class="rvts12">Created with the Personal Edition of HelpNDoc: </span><a class="rvts13" href="http://www.helpndoc.com/create-epub-ebooks">Write EPub books for the iPad</a></p>
 </div>
 	
 	</body>
