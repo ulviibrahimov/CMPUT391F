@@ -1,7 +1,7 @@
 Installation Guide
 
 Pre-requisites:
-Tomcat 6.0.35 or greater installed.
+Tomcat 6.0.35 or greater installed. For example you should have the path: "home/catalina/webapps".
 Oracle database to connect to.
 JDK 6 Update 45 or greater installed.
 Using Linux OS version 3.2.0-70-generic or greater.
