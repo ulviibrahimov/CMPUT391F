@@ -11,7 +11,7 @@ sqlplus $d9/$d10<<THEEND
 
 whenever sqlerror exit 1;
 
-@setupscrip.sql
+@setupscript.sql
 
 quit;
 
@@ -19,21 +19,21 @@ quit;
 THEEND
 
 echo "Compiling UtilHelper.java"
-javac -cp WEB-INF/classes:.:WEB-INF/lib/*:. WEB-INF/classes/services/UtilHelper.java
+javac -cp WEB-INF/classes:.:WEB-INF/lib/*:Sources/jar/* WEB-INF/classes/services/UtilHelper.java
 echo "Compiling UtilHelper.java"
-javac -cp WEB-INF/classes:.:WEB-INF/lib/*:. WEB-INF/classes/RestController.java
+javac -cp WEB-INF/classes:.:WEB-INF/lib/*:Sources/jar/* WEB-INF/classes/RestController.java
 echo "Compiling UtilHelper.java"
-javac -cp WEB-INF/classes:.:WEB-INF/lib/*:.  WEB-INF/classes/GetBigPic.java
+javac -cp WEB-INF/classes:.:WEB-INF/lib/*:Sources/jar/*  WEB-INF/classes/GetBigPic.java
 echo "Compiling UtilHelper.java"
-javac -cp WEB-INF/classes:.:WEB-INF/lib/*:.  WEB-INF/classes/GetOnePic.java
+javac -cp WEB-INF/classes:.:WEB-INF/lib/*:Sources/jar/*  WEB-INF/classes/GetOnePic.java
 echo "Compiling UtilHelper.java"
-javac -cp WEB-INF/classes:.:WEB-INF/lib/*:.  WEB-INF/classes/groupPicBrowse.java
+javac -cp WEB-INF/classes:.:WEB-INF/lib/*:Sources/jar/*  WEB-INF/classes/groupPicBrowse.java
 echo "Compiling UtilHelper.java"
-javac -cp WEB-INF/classes:.:WEB-INF/lib/*:.  WEB-INF/classes/myPicBrowse.java
+javac -cp WEB-INF/classes:.:WEB-INF/lib/*:Sources/jar/*  WEB-INF/classes/myPicBrowse.java
 echo "Compiling UtilHelper.java"
-javac -cp WEB-INF/classes:.:WEB-INF/lib/*:.  WEB-INF/classes/PictureBrowse.java
+javac -cp WEB-INF/classes:.:WEB-INF/lib/*:Sources/jar/*  WEB-INF/classes/PictureBrowse.java
 echo "Compiling UtilHelper.java"
-javac -cp WEB-INF/classes:.:WEB-INF/lib/*:.  WEB-INF/classes/publicPicBrowse.java
+javac -cp WEB-INF/classes:.:WEB-INF/lib/*:Sources/jar/*  WEB-INF/classes/publicPicBrowse.java
 echo "Compiling UtilHelper.java"
-javac -cp WEB-INF/classes:.:WEB-INF/lib/*:.  WEB-INF/classes/popularPicBrowse.java
+javac -cp WEB-INF/classes:.:WEB-INF/lib/*:Sources/jar/*  WEB-INF/classes/popularPicBrowse.java
 echo "Installation complete!"
