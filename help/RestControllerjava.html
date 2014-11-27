@@ -42,258 +42,258 @@
 <div id="topic_content">
 		
 <p></p>
-<p class="rvps3"><span class="rvts8"><br/></span></p>
-<p class="rvps3"><span class="rvts8"><br/></span></p>
-<p class="rvps3"><span class="rvts8"><br/></span></p>
-<p class="rvps3"><span class="rvts13">Get groups owned:</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("SELECT group_id, group_name "</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> + "FROM groups "</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">+ "WHERE user_name = ?");</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setString(1, userName);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">Get groups belong to but not owned:</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("SELECT groups.group_id, group_name, user_name FROM </span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">(groups INNER JOIN group_lists ON groups.group_id = group_lists.group_id) WHERE friend_id </span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">= ? AND user_name &lt;&gt; ?");</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setString(1, userName);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setString(2, userName);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">Get all groups (admin):</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">SELECT group_id, group_name, user_name</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> FROM groups</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> WHERE group_id &lt;&gt; 1 AND group_id &lt;&gt; 2;</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">Create group:</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">SELECT group_id_seq.nextval from dual;</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">PreparedStatement stm = conn.prepareStatement("INSERT INTO groups (GROUP_ID, </span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">USER_NAME, GROUP_NAME, DATE_CREATED) VALUES(?, ?, ?, ?)");</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(1, group_id);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setString(2, userName);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setString(3, groupName);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setDate(4, date);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("INSERT INTO group_lists (GROUP_ID, FRIEND_ID, </span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">DATE_ADDED, NOTICE) VALUES(?, ?, ?, ?)");</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(1, group_id);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setString(2, userName);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setDate(3, date);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setString(4, notice);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">Leave group:</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("UPDATE images SET permitted = ? WHERE permitted = ? </span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">AND owner_name = ?");</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(1, 2);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(2, groupId);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setString(3, userName);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("DELETE FROM group_lists WHERE group_id = ? AND friend_id </span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">= ?");</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setString(2, userName);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">Add user to group:</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("SELECT user_name FROM users WHERE user_name = ?");</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setString(1, user);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("INSERT INTO group_lists (group_id, friend_id, date_added, </span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">notice) "</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> + "VALUES (?, ?, ?, ?) ");</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setString(2, user);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setDate(3, date);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setString(4, notice);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">Remove user from group:</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("UPDATE images SET permitted = ? WHERE permitted = ? </span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">AND owner_name = ?");</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(1, 2);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(2, groupId);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setString(3, userName);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("DELETE FROM group_lists WHERE group_id = ? AND friend_id </span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">= ?");</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setString(2, userName);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">Disband (delete) group:</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("UPDATE images SET permitted = ? WHERE permitted = ?");</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(1, 2);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(2, groupId);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("DELETE FROM group_lists WHERE group_id = ?");</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.executeUpdate();</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("DELETE FROM groups WHERE group_id = ?");</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">Transfer group ownership:</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("UPDATE groups SET user_name = ? WHERE group_id = ?");</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setString(1, newOwner);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(2, groupId);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">Change group name:</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("UPDATE groups SET group_name = ? WHERE group_id = ?");</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setString(1, newName);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(2, groupId);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">Get image information:</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("SELECT photo_id, owner_name, permitted, subject, place, </span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">timing, description, photo "</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> + "FROM images "</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(1, picId);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">Get groups belong to:</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("SELECT groups.group_id, group_name, user_name "</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> + "FROM (groups INNER JOIN group_lists ON </span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">groups.group_id = group_lists.group_id) "</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> + "WHERE friend_id = ?");</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setString(1, userName);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">Save/Update image info:</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("SELECT owner_name "</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> + "FROM images "</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(1, picId);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">stm = conn.prepareStatement("UPDATE images "</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> + "SET PERMITTED=?, SUBJECT=?, PLACE=?, </span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13">TIMING=?, DESCRIPTION=? "</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> + "WHERE photo_id = ?");</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setString(2, subject);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setString(3, location);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setDate(4, date);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setString(5, description);</span></p>
-<p class="rvps3"><span class="rvts13"><br/></span></p>
-<p class="rvps3"><span class="rvts13"> stm.setInt(6, picId);</span></p>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps2"><span class="rvts6"><br/></span></p>
+<p class="rvps2"><span class="rvts13">Get groups owned:</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("SELECT group_id, group_name "</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> + "FROM groups "</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">+ "WHERE user_name = ?");</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setString(1, userName);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">Get groups belong to but not owned:</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("SELECT groups.group_id, group_name, user_name FROM </span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">(groups INNER JOIN group_lists ON groups.group_id = group_lists.group_id) WHERE friend_id </span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">= ? AND user_name &lt;&gt; ?");</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setString(1, userName);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setString(2, userName);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">Get all groups (admin):</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">SELECT group_id, group_name, user_name</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> FROM groups</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> WHERE group_id &lt;&gt; 1 AND group_id &lt;&gt; 2;</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">Create group:</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">SELECT group_id_seq.nextval from dual;</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">PreparedStatement stm = conn.prepareStatement("INSERT INTO groups (GROUP_ID, </span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">USER_NAME, GROUP_NAME, DATE_CREATED) VALUES(?, ?, ?, ?)");</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(1, group_id);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setString(2, userName);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setString(3, groupName);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setDate(4, date);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("INSERT INTO group_lists (GROUP_ID, FRIEND_ID, </span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">DATE_ADDED, NOTICE) VALUES(?, ?, ?, ?)");</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(1, group_id);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setString(2, userName);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setDate(3, date);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setString(4, notice);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">Leave group:</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("UPDATE images SET permitted = ? WHERE permitted = ? </span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">AND owner_name = ?");</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(1, 2);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(2, groupId);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setString(3, userName);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("DELETE FROM group_lists WHERE group_id = ? AND friend_id </span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">= ?");</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setString(2, userName);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">Add user to group:</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("SELECT user_name FROM users WHERE user_name = ?");</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setString(1, user);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("INSERT INTO group_lists (group_id, friend_id, date_added, </span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">notice) "</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> + "VALUES (?, ?, ?, ?) ");</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setString(2, user);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setDate(3, date);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setString(4, notice);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">Remove user from group:</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("UPDATE images SET permitted = ? WHERE permitted = ? </span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">AND owner_name = ?");</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(1, 2);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(2, groupId);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setString(3, userName);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("DELETE FROM group_lists WHERE group_id = ? AND friend_id </span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">= ?");</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setString(2, userName);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">Disband (delete) group:</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("UPDATE images SET permitted = ? WHERE permitted = ?");</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(1, 2);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(2, groupId);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("DELETE FROM group_lists WHERE group_id = ?");</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.executeUpdate();</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("DELETE FROM groups WHERE group_id = ?");</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">Transfer group ownership:</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("UPDATE groups SET user_name = ? WHERE group_id = ?");</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setString(1, newOwner);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(2, groupId);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">Change group name:</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("SELECT user_name FROM groups WHERE group_id = ?");</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("UPDATE groups SET group_name = ? WHERE group_id = ?");</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setString(1, newName);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(2, groupId);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">Get image information:</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("SELECT photo_id, owner_name, permitted, subject, place, </span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">timing, description, photo "</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> + "FROM images "</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(1, picId);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">Get groups belong to:</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("SELECT groups.group_id, group_name, user_name "</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> + "FROM (groups INNER JOIN group_lists ON </span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">groups.group_id = group_lists.group_id) "</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> + "WHERE friend_id = ?");</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setString(1, userName);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">Save/Update image info:</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("SELECT owner_name "</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> + "FROM images "</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(1, picId);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">stm = conn.prepareStatement("UPDATE images "</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> + "SET PERMITTED=?, SUBJECT=?, PLACE=?, </span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13">TIMING=?, DESCRIPTION=? "</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> + "WHERE photo_id = ?");</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(1, groupId);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setString(2, subject);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setString(3, location);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setDate(4, date);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setString(5, description);</span></p>
+<p class="rvps2"><span class="rvts13"><br/></span></p>
+<p class="rvps2"><span class="rvts13"> stm.setInt(6, picId);</span></p>
 <p></p>
-<p class="rvps2"><span class="rvts6">Created with the Personal Edition of HelpNDoc: </span><a class="rvts7" href="http://www.helpndoc.com">Free Web Help generator</a></p>
+<p class="rvps4"><span class="rvts11">Created with the Personal Edition of HelpNDoc: </span><a class="rvts12" href="http://www.helpndoc.com">Free Web Help generator</a></p>
 </div>
 	
 	</body>
