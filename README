@@ -1,0 +1,34 @@
+Installation Guide
+
+Pre-requisites:
+Tomcat 6.0.35 or greater installed.
+Oracle database to connect to.
+JDK 6 Update 45 or greater installed.
+Using Linux OS version 3.2.0-70-generic or greater.
+
+Download:
+If you haven't already, download a zip file of the repository from:
+https://github.com/ulviibrahimov/CMPUT391F
+
+Save this file and then extract it to your Tomcat's /wepapps/ directory.  You should now have a directory that looks like this (not all files listed):
+-webapps
+	-CMPUT391F
+		-help
+		-MEAT-INF
+		-Sources
+		-WEB-INF
+
+You may need to rename the extracted folder to "CMPUT391F" or the webapp will not work.
+
+Configure:
+Now you should configure your connection.  This is done by editing the connectionConfig.txt file found in the root directory of CMPUT391F.
+
+Here you should replace the three lines after "START" with the database connection string, followed a newline, username, newline, and password for the database.  Be careful not change any other line or the next step may fail!
+
+Setup database and compile:
+Just run the makefile that is provided in the root directory of CMPUT391F.
+
+Congratulations:
+You should be done!  Try visiting the wepapp!
+(You have been provided with a default admin account, username:'admin', password:'secret')
+
